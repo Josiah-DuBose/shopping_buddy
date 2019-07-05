@@ -1,10 +1,10 @@
 import React from 'react';
 import { createSwitchNavigator, createStackNavigator, createAppContainer } from 'react-navigation';
-import ListsPage from './screens/ListsPage.js';
-import ListPage from './screens/ListPage.js';
-import ProfilePage from './screens/ProfilePage.js';
-import Auth from './screens/Auth.js';
-import AuthLoadingScreen from './screens/AuthLoadingScreen.js';
+import ProfilePage from './screens/ProfilePage';
+import ListPage from './screens/ListPage';
+import ListsPage from './screens/ListsPage';
+import AuthPage from './screens/AuthPage';
+import AuthLoadingScreen from './screens/AuthLoadingScreen';
 
 const HomeRoutes = createStackNavigator({
 	Profile: ProfilePage,
@@ -12,7 +12,7 @@ const HomeRoutes = createStackNavigator({
 	List: ListPage
 });
 
-const InitialRoute = createStackNavigator({ Login: Auth });
+const InitialRoute = createStackNavigator({ Login: AuthPage });
 
 export default createAppContainer(createSwitchNavigator(
   	{

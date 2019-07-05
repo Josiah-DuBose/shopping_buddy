@@ -1,17 +1,15 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-class ProfilePage extends React.Component {
+export default class ProfilePage extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.description}>Profile Page</Text>
+                <Text style={styles.description}>Profile</Text>
             </View>
         );
     }
 }
-
-export default ProfilePage;
 
 const styles = StyleSheet.create({
     description: {

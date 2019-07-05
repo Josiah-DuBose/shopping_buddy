@@ -1,16 +1,22 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Login, Registration } from '../components';
 
-export default class Auth extends Component {
+export default class AuthPage extends Component {
     constructor(props){
         super(props);
         this.state = {
-            showLogin: false
+            showLogin: false,
+            signInTitle: 'Please sign in',
+            registrationTitle: 'Please register for an account.'
         };
         this.pickForm = this.pickForm.bind(this);
         this.viewToggle = this.viewToggle.bind(this);
     }
+
+    // static navigationOptions = {
+    //     title: this.state.showLogin ? this.state.signInTitle : this.state.registrationTitle,
+    // };
 
     pickForm() {
         if(!this.state.showLogin){
@@ -33,10 +39,10 @@ export default class Auth extends Component {
     }
 }
 
-const styles = {
+const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
     }
-};
+});

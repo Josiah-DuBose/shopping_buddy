@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-class ListPage extends React.Component {
+export default class ListPage extends Component {
     render() {
         return (
             <View style={styles.container}>
@@ -10,8 +10,6 @@ class ListPage extends React.Component {
         );
     }
 }
-
-export default ListPage;
 
 const styles = StyleSheet.create({
     description: {
