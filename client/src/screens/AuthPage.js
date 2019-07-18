@@ -11,7 +11,6 @@ export default class AuthPage extends Component {
             registrationTitle: 'Please register for an account.'
         };
         this.pickForm = this.pickForm.bind(this);
-        this.viewToggle = this.viewToggle.bind(this);
     }
 
     // static navigationOptions = {
@@ -20,13 +19,14 @@ export default class AuthPage extends Component {
 
     pickForm() {
         if(!this.state.showLogin){
-            return( <Registration viewToggle={this.viewToggle}/> );
+            return( <Registration viewToggle={ () => this.viewToggle() }/> );
         } else {
-            return( <Login viewToggle={this.viewToggle}/> );
+            return( <Login viewToggle={ () => this.viewToggle() }/> );
         }
     }
 
     viewToggle() {
+        console.log("viewToggle", this.state)
         this.setState({ showLogin: !this.state.showLogin });
     }
 
