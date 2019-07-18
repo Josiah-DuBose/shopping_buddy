@@ -1,14 +1,14 @@
-import confidence
-
+const Confidence = require('confidence');
 const manifest = {
     database: {
         uri: process.env.DB_URI,
-        secret: process.env.SECRET
+        // secret: process.env.SECRET,
+        useNewUrlParser: true
     }
 };
 
 store = new Confidence.Store(manifest);
 
-export default function get(key) {
-    return store.get(key, criteria);
+module.exports.get = (key) => {
+    return store.get(key);
 }
