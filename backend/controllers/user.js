@@ -1,12 +1,15 @@
 const mongoose = require('mongoose');
+const utils = require('../helpers/util');
 
-exports.get = async (id) => {
+exports.get = async (id, internal) => {
     try {
         const User = mongoose.model('User');
-        const user = await User.findOne({username: id}, {hash: 0, salt: 0, __v: 0});
+        const user = internal ?
+            await User.findOne({username: id}) :
+            await User.findOne({username: id}, {hash: 0, salt: 0, __v: 0});
         return user;
     } catch(err) {
-        throw('Error retrieving users', err);
+        throw(utils.createError(500, 'User retrieve error', err));
     }
 }
 
@@ -16,7 +19,7 @@ exports.list = async (req) => {
         const users = await User.find({}, {hash: 0, salt: 0, __v: 0});
         return users;
     } catch(err) {
-        throw('Error retrieving users', err);
+        throw(utils.createError(500, 'User retrieve error', err));
     }
 }
 
@@ -31,6 +34,31 @@ exports.create = async (req) => {
         await newUser.save();
         return newUser.userJSON();
     } catch(err) {
-        throw('Error creating user', err);
+        throw(utils.createError(500, 'User create error', err));
+    }
+}
+
+exports.login = async (req) => {
+    try {
+        const User = mongoose.model('User');
+        const userProfile = await exports.get(req.body.username, true);
+        if (!userProfile) {
+            return {
+                message: 'User not found',
+                status: 'Fail'
+            };
+        } else {
+            const validPassword = userProfile.validPassword(req.body.password);
+            if (!validPassword) {
+                return {
+                    message: 'Invalid password',
+                    status: 'Fail'
+                }
+            } else{
+                return userProfile.userJSON();
+            }
+        }
+    } catch(err) {
+        throw utils.createError(500, 'Login error', err);
     }
 }

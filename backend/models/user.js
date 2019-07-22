@@ -37,6 +37,7 @@ schema.methods.setPassword = function(password) {
 };
 
 schema.methods.validPassword = function(password) {
+    if (!password) { return false }
     const hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
     return this.hash === hash;
 };

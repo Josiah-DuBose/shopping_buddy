@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
+const _ = require('lodash');
 const expressValidator = require('express-validator');
 const mongoose = require('mongoose');
 const port = process.env.PORT || 8550;
@@ -17,6 +18,17 @@ app.use(bodyParser.json());
 
 // Define Routes
 routes(app);
+
+// Error handler
+app.use(function (err, req, res, next) {
+    if (!_.isEmpty(err)) {
+        res.status(_.get(err, 'code', 500));
+        res.json({
+            title: _.get(err, 'title', 'Error'),
+            detail: _.get(err, 'detail', err).toString()
+        });
+    }
+});
 
 app.listen(port, () => console.log(`API listening on port ${port}!`))
 
