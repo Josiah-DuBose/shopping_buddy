@@ -15,11 +15,20 @@ const schema = new mongoose.Schema({
         type: String,
         required: [true, 'Must specify a username.'],
     },
-    active: true,
+    active: {
+        type: Boolean,
+        default: true
+    },
     hash: String,
     salt: String,
-    created: new Date.now(),
-    updated: new Date.now()
+    created: {
+        type: Date,
+        default: Date.now()
+    },
+    updated: {
+        type: Date,
+        default: Date.now()
+    },
 });
 
 schema.methods.setPassword = function(password) {

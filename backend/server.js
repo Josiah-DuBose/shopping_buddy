@@ -13,9 +13,7 @@ require('./models/user');
 //Connect to DB;
 mongoose.connect(process.env.DB_URI, {useNewUrlParser: true});
 
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+app.use(bodyParser.json());
 
 // Define Routes
 routes(app);
