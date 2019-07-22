@@ -8,7 +8,7 @@ router.route('/list').get(async (req, res) => {
         const response = await userController.list(req);
         res.json(response);
     } catch(err) {
-        console.error(`List users: Error retrieving users = `, err);
+        console.error(err);
     }
 });
 
@@ -17,7 +17,7 @@ router.route('/create').post(async (req, res) => {
         const response = await userController.create(req);
         res.json(response);
     } catch (err) {
-        console.error(`\n\nError creating user = `, err);
+        console.error(err);
     }
 });
 

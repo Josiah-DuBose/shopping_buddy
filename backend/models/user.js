@@ -15,12 +15,14 @@ const schema = new mongoose.Schema({
         type: String,
         required: [true, 'Must specify a username.'],
     },
+    active: true,
     hash: String,
-    salt: String
-}, {timestamp: true});
+    salt: String,
+    created: new Date.now(),
+    updated: new Date.now()
+});
 
 schema.methods.setPassword = function(password) {
-    console.log("setPassword", password);
     this.salt = crypto.randomBytes(16).toString('hex');
     this.hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
 };
