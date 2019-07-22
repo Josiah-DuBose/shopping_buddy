@@ -5,20 +5,20 @@ const expressValidator = require('express-validator');
 const mongoose = require('mongoose');
 const port = process.env.PORT || 8550;
 const app = express();
+const routes = require('./routes');
 
 // Models
 require('./models/user');
 
-// Routers
-const userRouter = require('./routes/user');
-
 //Connect to DB;
 mongoose.connect(process.env.DB_URI, {useNewUrlParser: true});
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 
 // Define Routes
-app.use('/api/v1/users', userRouter);
+routes(app);
 
 app.listen(port, () => console.log(`API listening on port ${port}!`))
 
