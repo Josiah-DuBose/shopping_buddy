@@ -50,4 +50,5 @@ schema.methods.userJSON = () =>{
 };
 
 schema.plugin(uniqueValidator, {message: 'Email is already taken.'});
+
 mongoose.model('User', schema);

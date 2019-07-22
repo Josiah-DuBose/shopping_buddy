@@ -1,8 +1,9 @@
-const listsRoute = require('./lists');
+const app = require('../server')();
 const userRoute = require('./user');
-const itemRoute = require('./item');
-const app = require('./server');
+// const listRoute = require('./list');
+// const itemRoute = require('./item');
 
+console.log("\n\napp", app)
 app.use('/api/v1/users', userRoute);
-app.use('/api/v1/items', itemRoute);
-app.use('/api/v1/list', listRoute);
+// app.use('/api/v1/items', itemRoute);
+// app.use('/api/v1/list', listRoute);
