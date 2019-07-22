@@ -1,21 +1,25 @@
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import { Login, Registration } from '../components';
+import { Button } from '../components/shared';
 
 export default class AuthPage extends Component {
     constructor(props){
         super(props);
         this.state = {
-            showLogin: false,
-            signInTitle: 'Please sign in',
-            registrationTitle: 'Please register for an account.'
+            showLogin: props.showLogin || false,
+            title: ''
         };
+
+        this.viewToggle = this.viewToggle.bind(this);
         this.pickForm = this.pickForm.bind(this);
     }
 
-    // static navigationOptions = {
-    //     title: this.state.showLogin ? this.state.signInTitle : this.state.registrationTitle,
-    // };
+    componentDidMount() {
+        this.setState({
+            title: this.state.showLogin? 'Please sign in.': 'Please register for an account.'
+        });
+    }
 
     pickForm() {
         if(!this.state.showLogin){
@@ -26,14 +30,16 @@ export default class AuthPage extends Component {
     }
 
     viewToggle() {
-        console.log("viewToggle", this.state)
         this.setState({ showLogin: !this.state.showLogin });
     }
 
     render() {
         return(
             <View style={styles.container}>
-               { this.pickForm() }
+                <Text style={styles.description}>{this.state.title}</Text>
+                { this.pickForm() }
+                <Text style={Object.assign({}, styles.description, styles.secondDes)}> Already have an account?</Text>
+                <Button buttonText='Login' onPress={this.viewToggle}></Button>
             </View>
         );
     }
@@ -44,5 +50,14 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    description: {
+        marginBottom: 20,
+        fontSize: 18,
+        textAlign: 'center',
+        color: '#656565'
+    },
+    secondDes: {
+        marginTop: 20
     }
 });

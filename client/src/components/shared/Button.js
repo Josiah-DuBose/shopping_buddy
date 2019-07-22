@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 const Button = ({onPress, buttonText}) => {
-    console.log("buttonText", buttonText)
     return (
         <View style={{flexDirection: 'row'}}>
             <TouchableOpacity onPress={onPress} style={styles.button}>
