@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const _ = require('lodash');
+const path  = require('path');
 const expressValidator = require('express-validator');
 const mongoose = require('mongoose');
 const port = process.env.PORT || 8550;
@@ -14,7 +15,11 @@ require('./models/user');
 //Connect to DB;
 mongoose.connect(process.env.DB_URI, {useNewUrlParser: true});
 
+// Parsers
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Define Routes
 routes(app);
@@ -30,6 +35,7 @@ app.use(function (err, req, res, next) {
     }
 });
 
+
 app.listen(port, () => console.log(`API listening on port ${port}!`))
 
-module.exports = { app };
+module.exports = app;

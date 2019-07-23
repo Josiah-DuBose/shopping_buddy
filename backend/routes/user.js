@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/user');
+const isAuthenticated = require('../middlewares/auth').isAuthenticated;
 
-router.route('/:id').get(async (req, res, next) => {
+router.route('/').get(isAuthenticated, async (req, res, next) => {
     try {
-        const response = await userController.get(req.params['id']);
+        const response = await userController.list(req);
         res.json(response);
     } catch(err) {
         console.error(err);
@@ -12,9 +13,9 @@ router.route('/:id').get(async (req, res, next) => {
     }
 });
 
-router.route('/list').get(async (req, res, next) => {
+router.route('/:id').get(isAuthenticated, async (req, res, next) => {
     try {
-        const response = await userController.list(req);
+        const response = await userController.get(req.params['id']);
         res.json(response);
     } catch(err) {
         console.error(err);
@@ -41,6 +42,5 @@ router.route('/login').post(async (req, res, next) => {
         next(err);
     }
 });
-
 
 module.exports = router;
