@@ -50,7 +50,7 @@ schema.methods.generateJWT = function() {
     return jwt.sign({
         id: this._id,
         username: this.username,
-        exp: parseInt(exp.getTime() / 1000),
+        exp: Date.now() + 43200000, // 12hr
     }, secret);
 };
 
