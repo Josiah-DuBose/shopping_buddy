@@ -16,8 +16,7 @@ const schema = new mongoose.Schema({
     },
     store: {
         type: String
-    },
-    _list: {type: Schema.Types.ObjectId, ref: 'List'}
+    }
 });
 
 // Getter

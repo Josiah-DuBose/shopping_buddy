@@ -5,19 +5,19 @@ const schema = new mongoose.Schema({
         type: Number,
         default: 0.00
     },
-    items: [{ type: Schema.Types.ObjectId, ref: 'Item' }],
+    items: [String],
     name: {
         type: String
     }
 });
 
 // Getter
-schema.path('price').get(function(num) {
+schema.path('total').get(function(num) {
   return (num / 100).toFixed(2);
 });
 
 // Setter
-schema.path('price').set(function(num) {
+schema.path('total').set(function(num) {
   return num * 100;
 });
 
