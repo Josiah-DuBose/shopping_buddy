@@ -1,5 +1,4 @@
 const mongoose  = require('mongoose');
-const ObjectId = require('mongodb').ObjectID;
 
 const schema = new mongoose.Schema({
     total: {
@@ -16,18 +15,17 @@ const schema = new mongoose.Schema({
 
 schema.methods.getItems = async function(items) {
     const Item = mongoose.model('Item');
-    const docs = await Item.find({
-        '_id': {
-            $in: items.map(item => ObjectId(item))
-        }
-    });
-    return docs || [];
+    const arr = items.map(item => new mongoose.Types.ObjectId(item));
+    const docs = await Item.find({}).where('_id').in(arr).exec();
+    return docs;
 }
 
-schema.methods.listJSON = function() {
+schema.methods.listJSON = async function() {
+    const items = await schema.methods.getItems(this.items);
+    const total = items.reduce((total, item) => total + item.price, 0.00);
     return {
-        total: this.total,
-        items: schema.methods.getItems(this.items),
+        total: total,
+        items: items,
         name: this.name
     }
 };
