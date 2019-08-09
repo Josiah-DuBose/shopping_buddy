@@ -1,25 +1,39 @@
 const mongoose  = require('mongoose');
+const ObjectId = require('mongodb').ObjectID;
 
 const schema = new mongoose.Schema({
     total: {
         type: Number,
         default: 0.00
     },
-    items: [String],
+    items:{
+        type: [String]
+    },
     name: {
         type: String
     }
 });
+    
+schema.methods.getTotal = function(total) {
+  return (total / 100).toFixed(2);
+};
 
-// Getter
-schema.path('total').get(function(num) {
-  return (num / 100).toFixed(2);
-});
+schema.methods.getItems = async function(items) {
+    const Item = mongoose.model('Item');
+    const docs = await Item.find({
+        '_id': {
+            $in: items.map(item => ObjectId(item))
+        }
+    });
+    return docs || [];
+}
 
-// Setter
-schema.path('total').set(function(num) {
-  return num * 100;
-});
-
+schema.methods.listJSON = function() {
+    return {
+        total: schema.methods.getTotal(this.total),
+        items: schema.methods.getItems(this.items),
+        name: this.name
+    }
+};
 
 mongoose.model('List', schema);

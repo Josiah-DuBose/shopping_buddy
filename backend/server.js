@@ -12,6 +12,7 @@ const routes = require('./routes');
 // Models
 require('./models/user');
 require('./models/list');
+require('./models/item');
 
 //Connect to DB;
 mongoose.connect(process.env.DB_URI, {useNewUrlParser: true});

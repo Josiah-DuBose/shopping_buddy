@@ -6,7 +6,7 @@ exports.get = async (id) => {
     try {
         const List = mongoose.model('List');
         const list = await List.findOne({_id: id})
-        return list;
+        return list.listJSON();
     } catch(err) {
         throw(utils.createError(500, 'List retrieve error', err));
     }
@@ -16,7 +16,7 @@ exports.list = async (req) => {
     try {
         const List = mongoose.model('List');
         const lists = await List.find({});
-        return lists;
+        return lists.map(list => list.listJSON());
     } catch(err) {
         throw(utils.createError(500, 'List retrieve error', err));
     }
@@ -30,8 +30,8 @@ exports.create = async (req) => {
             items: req.body.items || [],
             name: req.body.name
         });
-        return list;
+        return listJSON();
     } catch(err) {
-        throw(utils.createError(500, 'User create error', err));
+        throw(utils.createError(500, 'List create error', err));
     }
 }
