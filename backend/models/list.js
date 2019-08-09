@@ -13,10 +13,6 @@ const schema = new mongoose.Schema({
         type: String
     }
 });
-    
-schema.methods.getTotal = function(total) {
-  return (total / 100).toFixed(2);
-};
 
 schema.methods.getItems = async function(items) {
     const Item = mongoose.model('Item');
@@ -30,7 +26,7 @@ schema.methods.getItems = async function(items) {
 
 schema.methods.listJSON = function() {
     return {
-        total: schema.methods.getTotal(this.total),
+        total: this.total,
         items: schema.methods.getItems(this.items),
         name: this.name
     }

@@ -30,9 +30,9 @@ exports.create = async (req) => {
             name: req.body.name,
             section: req.body.section,
             qty: req.body.qty,
-            store: req.body.store
+            store: req.body.stores
         });
-        return item.itemJSON();
+        return item;
     } catch(err) {
         throw(utils.createError(500, 'Item create error', err));
     }
