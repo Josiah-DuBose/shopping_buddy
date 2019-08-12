@@ -6,7 +6,7 @@ exports.get = async (id) => {
     try {
         const Item = mongoose.model('Item');
         const item = await Item.findOne({_id: id})
-        return item.itemJSON();
+        return item;
     } catch(err) {
         throw(utils.createError(500, 'Item retrieve error', err));
     }
@@ -16,7 +16,7 @@ exports.list = async (req) => {
     try {
         const Item = mongoose.model('Item');
         const items = await Item.find({});
-        return items.map(item => item.itemJSON());
+        return items;
     } catch(err) {
         throw(utils.createError(500, 'Item retrieve error', err));
     }
