@@ -1,27 +1,77 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { Loading, Input, Button } from './shared';
+import AsyncStorage from '@react-native-community/async-storage';
+
 
 class Registration extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            username: '',
             email: '',
             password: '',
             password_confirmation: '',
             error: '',
             loading: false
         };
+        this.confirmPass = this.confirmPass.bind(this);
+        this.submitForm = this.submitForm.bind(this);
     }
 
-    submitForm() {
-        console.log("press");
+    async submitForm() {
+        this.setState({error: ''});
+        try {
+            const response = await fetch('http://localhost:8550/api/v1/users/create', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: this.state.username,
+                    email: this.state.email,
+                    password: this.state.password
+                }),
+            });
+            const json = await response.json();
+
+            if (response.ok) {
+                if (json && json.token) {
+                    AsyncStorage.setItem('userToken', json.token);
+                    this.props.navigation.navigate('Lists');
+                }
+            } else {
+                throw json;
+            }
+
+        } catch(err) {
+            this.setState({error: err.detail});
+        }
+    }
+
+    confirmPass(password) {
+        this.setState({ password_confirmation: password});
+
+        if (password && this.state.password !== password) {
+            this.setState({error: 'Passwords do not match.'});
+        } else{
+            this.setState({error: ''});
+        }
     }
 
     render() {
-        const { email, password, password_confirmation, error, loading } = this.state;
+        const { username, email, password, password_confirmation, error, loading } = this.state;
         return (
             <View style={styles.form}>
+                <View style={styles.section}>
+                    <Input
+                        placeholder="Username"
+                        label="Username"
+                        value={username}
+                        onChangeText={username => this.setState({ username })}
+                    />
+                </View>
                 <View style={styles.section}>
                     <Input
                         placeholder="user@email.com"
@@ -33,7 +83,7 @@ class Registration extends Component {
                 <View style={styles.section}>
                     <Input
                         secureTextEntry
-                        placeholder="password"
+                        placeholder="Password"
                         label="Password"
                         value={password}
                         onChangeText={password => this.setState({ password })}
@@ -42,10 +92,10 @@ class Registration extends Component {
                 <View style={styles.section}>
                     <Input
                         secureTextEntry
-                        placeholder="confirm password"
+                        placeholder="Confirm Password"
                         label="Confirm Password"
                         value={password_confirmation}
-                        onChangeText={password_confirmation => this.setState({ password_confirmation })}
+                        onChangeText={(password_confirmation) => this.confirmPass(password_confirmation) }
                     />
                 </View>
                 <Text style={styles.errorText}>

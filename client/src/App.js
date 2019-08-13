@@ -6,11 +6,16 @@ import ListsPage from './screens/ListsPage';
 import AuthPage from './screens/AuthPage';
 import AuthLoadingScreen from './screens/AuthLoadingScreen';
 
-const HomeRoutes = createStackNavigator({
-	Profile: ProfilePage,
-	Lists: ListsPage,
-	List: ListPage
-});
+const HomeRoutes = createStackNavigator(
+    {
+        Lists: ListsPage,
+        Profile: ProfilePage,
+	    List: ListPage
+    },
+    {
+        initialRouteName: 'Lists',
+    }
+);
 
 const InitialRoute = createStackNavigator({ Login: AuthPage });
 
