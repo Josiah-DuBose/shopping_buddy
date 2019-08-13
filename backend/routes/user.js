@@ -24,6 +24,7 @@ router.route('/:id').get(isAuthenticated, async (req, res, next) => {
 });
 
 router.route('/create').post(async (req, res, next) => {
+    console.log("create", req)
     try {
         const response = await userController.create(req);
         res.json(response);
