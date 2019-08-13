@@ -20,7 +20,15 @@ class Registration extends Component {
     }
 
     async submitForm() {
+        if (!this.state.username || !this.state.password ||
+            !this.state.password_confirmation || !this.state.email
+        )
+        {
+            this.setState({error: 'Must fill in all fields.'});
+            return;
+        }
         this.setState({error: ''});
+
         try {
             const response = await fetch('http://localhost:8550/api/v1/users/create', {
                 method: 'POST',
@@ -61,7 +69,9 @@ class Registration extends Component {
     }
 
     render() {
-        const { username, email, password, password_confirmation, error, loading } = this.state;
+        const {
+            username, email, password, password_confirmation, error, loading
+        } = this.state;
         return (
             <View style={styles.form}>
                 <View style={styles.section}>

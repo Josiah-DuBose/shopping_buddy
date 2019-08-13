@@ -1,5 +1,10 @@
 import React from 'react';
-import { createSwitchNavigator, createStackNavigator, createAppContainer } from 'react-navigation';
+import {
+    createSwitchNavigator,
+    createStackNavigator,
+    createAppContainer,
+    createBottomTabNavigator 
+} from 'react-navigation';
 import ProfilePage from './screens/ProfilePage';
 import ListPage from './screens/ListPage';
 import ListsPage from './screens/ListsPage';
