@@ -8,7 +8,9 @@ export default class AuthPage extends Component {
         super(props);
         this.state = {
             showLogin: props.showLogin || false,
-            title: ''
+            title: '',
+            buttonText: '',
+            pageText: ''
         };
 
         this.viewToggle = this.viewToggle.bind(this);
@@ -16,9 +18,25 @@ export default class AuthPage extends Component {
     }
 
     componentDidMount() {
-        this.setState({
-            title: this.state.showLogin? 'Please sign in.': 'Please register for an account.'
-        });
+        this.resetUIState();
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.state.showLogin !== prevState.showLogin) {
+            this.resetUIState();
+        }
+    }
+
+    resetUIState() {
+        if(this.state.showLogin){
+            this.setState({buttonText: 'Register'});
+            this.setState({title: 'Please sign in.'});
+            this.setState({pageText: 'Do not have an account?'});
+        } else {
+            this.setState({buttonText: 'Login'});
+            this.setState({title: 'Please register for an account.'})
+            this.setState({pageText: 'Already have an account?'});
+        }
     }
 
     pickForm() {
@@ -31,15 +49,17 @@ export default class AuthPage extends Component {
 
     viewToggle() {
         this.setState({ showLogin: !this.state.showLogin });
+        this.resetUIState();
     }
 
     render() {
+        const { title, buttonText, pageText } = this.state;
         return(
             <View style={styles.container}>
-                <Text style={styles.description}>{this.state.title}</Text>
+                <Text style={styles.description}>{title}</Text>
                 { this.pickForm() }
-                <Text style={Object.assign({}, styles.description, styles.secondDes)}> Already have an account?</Text>
-                <Button buttonText='Login' onPress={this.viewToggle}></Button>
+                <Text style={Object.assign({}, styles.description, styles.secondDes)}>{pageText}</Text>
+                <Button buttonText={buttonText} onPress={this.viewToggle}></Button>
             </View>
         );
     }

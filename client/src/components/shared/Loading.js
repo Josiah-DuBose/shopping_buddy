@@ -1,10 +1,14 @@
 import React from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, Text } from 'react-native';
 
-const Loading = ({ size }) => {
+const Loading = ({ size, msg }) => {
+    const loadingMsg = msg || 'Loading';
     return (
         <View style={styles.spinnerContainer}>
             <ActivityIndicator size={size}/>
+            <Text>
+                {loadingMsg}
+            </Text>
         </View>
     );
 };

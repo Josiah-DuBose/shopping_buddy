@@ -11,14 +11,37 @@ export default class AuthLoadingScreen extends Component {
 
     fetchToken = async () => {
         const userToken = await AsyncStorage.getItem('userToken');
-        console.log('userToken', userToken);
-        this.props.navigation.navigate(userToken ? 'App' : 'Auth');
+        let authOk = false;
+        if (userToken) {
+            try {
+                const response = await fetch('http://localhost:8550/api/v1/users/check-token', {
+                    method: 'Post',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        token: userToken
+                    })
+                });
+                const json = await response.json();
+
+                if (response.ok) {
+                    authOk = json.token;
+                } else {
+                    throw json;
+                }
+            } catch(err) {
+                console.log("error", err);
+            }
+        }
+        this.props.navigation.navigate(authOk ? 'App' : 'Auth');
     };
 
     render() {
         return (
             <View style={styles.container}>
-                <Loading size={'large'}/>
+                <Loading size={'large'} msg={'Loading'}/>
             </View>
         );
     }
