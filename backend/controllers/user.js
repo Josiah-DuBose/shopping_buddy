@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const utils = require('../helpers/util');
+const _ = require('lodash');
+const jwt = require('jsonwebtoken');
 
 exports.get = async (id, internal) => {
     try {
@@ -60,5 +62,21 @@ exports.login = async (req) => {
         }
     } catch(err) {
         throw utils.createError(500, 'Login error', err);
+    }
+}
+
+exports.isAuthenticated = async (req) => {
+    const token = req.body.token;
+    if (token) {
+        try {
+            const result = await jwt.verify(token, process.env.SECRET);
+            if (Date.now() >= result.exp) {
+                return {token: false};
+            } else {
+                return {token: true};
+            }
+        } catch(err) {
+            throw utils.createError(500, 'Token verify error', err);
+        }
     }
 }

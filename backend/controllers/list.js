@@ -16,7 +16,14 @@ exports.list = async (req) => {
     try {
         const List = mongoose.model('List');
         const lists = await List.find({});
-        return lists.map(list => list.listJSON());
+        const listAr = [];
+        //TODO use mongoose method to retrieve related records instead of loop.
+        for (let i = 0; i < lists.length; i++) {
+            const populatedList = await lists[i].listJSON();
+            listAr.push(populatedList);
+        }
+
+        return listAr;
     } catch(err) {
         throw(utils.createError(500, 'List retrieve error', err));
     }

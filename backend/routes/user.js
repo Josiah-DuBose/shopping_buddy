@@ -44,4 +44,14 @@ router.route('/login').post(async (req, res, next) => {
     }
 });
 
+router.route('/check-token').post(async (req, res, next) => {
+    try {
+        const response = await userController.isAuthenticated(req);
+        res.json(response);
+    } catch (err) {
+        console.error(err);
+        next(err);
+    }
+});
+
 module.exports = router;
