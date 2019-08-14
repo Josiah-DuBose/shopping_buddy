@@ -29,11 +29,11 @@ routes(app);
 // Error handler
 app.use(function (err, req, res, next) {
     if (!_.isEmpty(err)) {
-        res.status(_.get(err, 'code', 500));
+        res.status(_.get(err, 'statusCode', 500));
         res.json({
             title: _.get(err, 'title', 'Error'),
             detail: _.get(err, 'detail', err).toString(),
-            statueCode: _.get(err, 'code', 500)
+            statusCode: _.get(err, 'statusCode', 500)
         });
     }
 });

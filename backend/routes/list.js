@@ -5,7 +5,9 @@ const isAuthenticated = require('../middlewares/auth').isAuthenticated;
 
 router.route('/').get(isAuthenticated, async (req, res, next) => {
     try {
+        console.log("req.headers", req.headers)
         const response = await listController.list(req);
+        console.log("response", response);
         res.json(response);
     } catch(err) {
         console.error(err);

@@ -3,11 +3,10 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import NavigationBar from 'react-native-navbar';
 
 const Navigation = ({navigator, backButton}) => {
-    console.log("navigator", navigator)
     let nav;
     const titleConfig = {
         title: 'Shopping Buddy',
-        handler: () => navigator.navigate('Lists'),
+        handler: () => navigator.navigate('App'),
     };
     const leftButtonConfig = {
         title: 'Back',

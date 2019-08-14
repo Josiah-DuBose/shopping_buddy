@@ -3,7 +3,6 @@ import { View, StyleSheet, Text } from 'react-native';
 import { Loading, Input, Button } from './shared';
 import AsyncStorage from '@react-native-community/async-storage';
 
-
 class Login extends Component {
     constructor(props) {
         super(props);
@@ -21,7 +20,7 @@ class Login extends Component {
             this.setState({error: 'Must enter password and username'});
             return;
         }
-        this.setState({error: ''});
+        this.setState({error: '', loading: true});
         try {
             const response = await fetch('http://localhost:8550/api/v1/users/login', {
                 method: 'POST',
@@ -34,12 +33,11 @@ class Login extends Component {
                     password: this.state.password
                 }),
             });
-            const json = await response.json();
 
+            const json = await response.json();
             if (response.ok) {
                 if (json && json.token) {
-                    AsyncStorage.setItem('userToken', json.token);
-                    this.props.navigation.navigate('Lists');
+                    await AsyncStorage.setItem('userToken', json.token);
                 }
             } else {
                 throw json;
@@ -47,6 +45,9 @@ class Login extends Component {
 
         } catch(err) {
             this.setState({error: err.detail});
+        } finally {
+            this.setState({loading: false});
+            this.props.navigation.navigate('App');
         }
     }
 
@@ -76,7 +77,7 @@ class Login extends Component {
                 </Text>
                 { !loading ?
                     <Button buttonText='Login' onPress={this.submitForm}></Button> :
-                    <Loading size={'large'} />
+                    <Loading size={'large'} msg={'Logging in'}/>
                 }
             </View>
         );

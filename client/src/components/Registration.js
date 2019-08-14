@@ -27,9 +27,10 @@ class Registration extends Component {
             this.setState({error: 'Must fill in all fields.'});
             return;
         }
-        this.setState({error: ''});
+        this.setState({error: '', loading: true});
 
         try {
+            //TODO Abstract all api methods into service.
             const response = await fetch('http://localhost:8550/api/v1/users/create', {
                 method: 'POST',
                 headers: {
@@ -46,8 +47,7 @@ class Registration extends Component {
 
             if (response.ok) {
                 if (json && json.token) {
-                    AsyncStorage.setItem('userToken', json.token);
-                    this.props.navigation.navigate('Lists');
+                    await AsyncStorage.setItem('userToken', json.token);
                 }
             } else {
                 throw json;
@@ -55,6 +55,9 @@ class Registration extends Component {
 
         } catch(err) {
             this.setState({error: err.detail});
+        } finally {
+            this.setState({loading: false});
+            this.props.navigation.navigate('App');
         }
     }
 
@@ -113,7 +116,7 @@ class Registration extends Component {
                 </Text>
                 { !loading ?
                     <Button buttonText='Register' onPress={this.submitForm}></Button> :
-                    <Loading size={'large'} />
+                    <Loading size={'large'} msg={'Creating user'}/>
                 }
             </View>
         );

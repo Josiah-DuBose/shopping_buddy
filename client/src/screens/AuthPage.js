@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { Login, Registration } from '../components';
-import { Button } from '../components/shared';
+import { Button, Navigation } from '../components/shared';
 
 export default class AuthPage extends Component {
     constructor(props){
         super(props);
         this.state = {
-            showLogin: props.showLogin || false,
+            showLogin: true,
             title: '',
             buttonText: '',
             pageText: ''
@@ -40,10 +40,11 @@ export default class AuthPage extends Component {
     }
 
     pickForm() {
+        const nav = this.props.navigation;
         if(!this.state.showLogin){
-            return( <Registration viewToggle={ () => this.viewToggle() }/> );
+            return( <Registration navigation={nav} viewToggle={ () => this.viewToggle() }/> );
         } else {
-            return( <Login viewToggle={ () => this.viewToggle() }/> );
+            return( <Login navigation={nav} viewToggle={ () => this.viewToggle() }/> );
         }
     }
 
@@ -55,18 +56,22 @@ export default class AuthPage extends Component {
     render() {
         const { title, buttonText, pageText } = this.state;
         return(
-            <View style={styles.container}>
-                <Text style={styles.description}>{title}</Text>
-                { this.pickForm() }
-                <Text style={Object.assign({}, styles.description, styles.secondDes)}>{pageText}</Text>
-                <Button buttonText={buttonText} onPress={this.viewToggle}></Button>
-            </View>
+            <React.Fragment>
+                <Navigation navigator={this.props.navigation} backButton={false}/>
+                <View style={styles.container}>
+                    <Text style={styles.description}>{title}</Text>
+                    { this.pickForm() }
+                    <Text style={Object.assign({}, styles.description, styles.secondDes)}>{pageText}</Text>
+                    <Button buttonText={buttonText} onPress={this.viewToggle}></Button>
+                </View>
+            </React.Fragment>
         );
     }
 }
 
 const styles = StyleSheet.create({
     container: {
+        marginBottom: 200,
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'

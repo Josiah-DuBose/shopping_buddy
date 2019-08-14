@@ -13,7 +13,7 @@ export default class ListsPage extends Component {
         };
     }
 
-    componentWillMount(){
+    componentDidMount(){
         this.getLists();
     }
 
@@ -21,6 +21,7 @@ export default class ListsPage extends Component {
         this.setState({loading: true});
         const token = await AsyncStorage.getItem('userToken');
         try {
+            //TODO Abstract all api methods into service.
             const response = await fetch('http://localhost:8550/api/v1/lists', {
                 method: 'Get',
                 headers: {
@@ -30,7 +31,6 @@ export default class ListsPage extends Component {
                 }
             });
             const json = await response.json();
-            console.log("json", json);
             if (response.ok) {
                 if (json && json.token) {
                     this.setState({lists: json})
@@ -38,11 +38,14 @@ export default class ListsPage extends Component {
             } else {
                 throw json;
             }
-            this.setState({loading: false});
         } catch(err) {
-            console.log("err", err)
-            this.setState({loading: false});
+
             this.setState({error: err.detail});
+            if (err.statusCode === 401) {
+                this.props.navigation.navigate('Auth');
+            }
+        } finally {
+            this.setState({loading: false});
         }
     }
 

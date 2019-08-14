@@ -6,14 +6,23 @@ import AsyncStorage from '@react-native-community/async-storage';
 export default class AuthLoadingScreen extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            error: '',
+            loading: false,
+        };
+    }
+
+    componentDidMount() {
         this.fetchToken();
     }
 
     fetchToken = async () => {
+        this.setState({loading: true});
         const userToken = await AsyncStorage.getItem('userToken');
         let authOk = false;
         if (userToken) {
             try {
+                //TODO Abstract all api methods into service.
                 const response = await fetch('http://localhost:8550/api/v1/users/check-token', {
                     method: 'Post',
                     headers: {
@@ -31,8 +40,11 @@ export default class AuthLoadingScreen extends Component {
                 } else {
                     throw json;
                 }
-            } catch(err) {
-                console.log("error", err);
+            }
+            catch(err) {}
+
+            finally {
+                this.setState({loading: false});
             }
         }
         this.props.navigation.navigate(authOk ? 'App' : 'Auth');
