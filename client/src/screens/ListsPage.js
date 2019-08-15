@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Loading, Input, Button, Navigation } from '../components/shared';
 import AsyncStorage from '@react-native-community/async-storage';
+import apiRequest from '../services/apiRequest';
 
 export default class ListsPage extends Component {
     constructor(props) {
@@ -19,34 +20,9 @@ export default class ListsPage extends Component {
 
     async getLists() {
         this.setState({loading: true});
-        const token = await AsyncStorage.getItem('userToken');
-        try {
-            //TODO Abstract all api methods into service.
-            const response = await fetch('http://localhost:8550/api/v1/lists', {
-                method: 'Get',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    Authroization: `Bearer ${token}`
-                }
-            });
-            const json = await response.json();
-            if (response.ok) {
-                if (json && json.token) {
-                    this.setState({lists: json})
-                }
-            } else {
-                throw json;
-            }
-        } catch(err) {
-
-            this.setState({error: err.detail});
-            if (err.statusCode === 401) {
-                this.props.navigation.navigate('Auth');
-            }
-        } finally {
-            this.setState({loading: false});
-        }
+        const lists = await apiRequest({url: 'lists', method:'Get', auth: true});
+        this.setState({lists: lists, loading: false});
+        console.log("this.state.lists", this.state.lists);
     }
 
     render() {
@@ -54,11 +30,12 @@ export default class ListsPage extends Component {
         return (
             <React.Fragment>
                 <Navigation navigator={this.props.navigation} backButton={false}/>
-                {loading ? <Loading size={'large'} msg={'Loading lists'} /> :
-                    <View style={styles.container}>
+                <View style={styles.container}>
+                    {loading ?
+                        <Loading size={'large'} msg={'Loading lists'} /> :
                         <Text style={styles.description}>Lists</Text>
-                    </View>
-                }
+                    }
+                </View>
             </React.Fragment>
         );
     }
@@ -72,6 +49,7 @@ const styles = StyleSheet.create({
         color: '#656565'
     },
     container: {
+        marginBottom: 275,
         padding: 30,
     }
 });

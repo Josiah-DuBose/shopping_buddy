@@ -9,6 +9,7 @@
   "dependencies": {
     "@react-native-community/async-storage": "^1.5.0",
     "braces": "^3.0.2",
+    "fetch-intercept": "^2.3.1",
     "lodash": "^4.17.15",
     "mem": "^5.1.1",
     "parse": "^2.4.0",
