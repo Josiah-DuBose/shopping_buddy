@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, FlatList } from 'react-native';
 import { Loading, Input, Button, Navigation } from '../components/shared';
 import AsyncStorage from '@react-native-community/async-storage';
 import apiRequest from '../services/apiRequest';
@@ -33,7 +33,14 @@ export default class ListsPage extends Component {
                 <View style={styles.container}>
                     {loading ?
                         <Loading size={'large'} msg={'Loading lists'} /> :
-                        <Text style={styles.description}>Lists</Text>
+                        <View style={styles.listsContainer}>
+                            <Text style={styles.description}>Your Lists</Text>
+                            <FlatList
+                                data={lists}
+                                renderItem={({item}) => <Text style={styles.item}>{item.name}</Text>}
+                                keyExtractor={(item, index) => index.toString()}
+                            />
+                        </View>
                     }
                 </View>
             </React.Fragment>
@@ -43,13 +50,23 @@ export default class ListsPage extends Component {
 
 const styles = StyleSheet.create({
     description: {
-        marginBottom: 450,
         fontSize: 18,
         textAlign: 'center',
-        color: '#656565'
+        color: '#656565',
+        paddingBottom: 10
     },
     container: {
         marginBottom: 275,
         padding: 30,
+    },
+    listsContainer: {
+        marginTop: 150,
+        borderWidth: 2,
+        borderColor: 'grey'
+    },
+    item: {
+        fontSize: 18,
+        height: 44,
+        textAlign: 'center',
     }
 });

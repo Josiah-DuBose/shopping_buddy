@@ -27,43 +27,35 @@ class Registration extends Component {
             this.setState({error: 'Must fill in all fields.'});
             return;
         }
+
         this.setState({error: '', loading: true});
 
+        const options = {
+            url: 'users/create',
+            method: 'POST',
+            body: JSON.stringify({
+                username: this.state.username,
+                email: this.state.email,
+                password: this.state.password
+            }),
+        };
+
         try {
-            //TODO Abstract all api methods into service.
-            const response = await fetch('http://localhost:8550/api/v1/users/create', {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    username: this.state.username,
-                    email: this.state.email,
-                    password: this.state.password
-                }),
-            });
-            const json = await response.json();
-
-            if (response.ok) {
-                if (json && json.token) {
-                    await AsyncStorage.setItem('userToken', json.token);
-                }
-            } else {
-                throw json;
+            const userSession = await apiRequest(options);
+            if (userSession) {
+                await AsyncStorage.setItem('userSession', userSession);
+                await AsyncStorage.setItem('userToken', userSession.token);
             }
-
+            this.props.navigation.navigate('App');
         } catch(err) {
-            this.setState({error: err.detail});
+            alert(err);
         } finally {
             this.setState({loading: false});
-            this.props.navigation.navigate('App');
         }
     }
 
     confirmPass(password) {
         this.setState({ password_confirmation: password});
-
         if (password && this.state.password !== password) {
             this.setState({error: 'Passwords do not match.'});
         } else{
@@ -108,7 +100,9 @@ class Registration extends Component {
                         placeholder="Confirm Password"
                         label="Confirm Password"
                         value={password_confirmation}
-                        onChangeText={(password_confirmation) => this.confirmPass(password_confirmation) }
+                        onChangeText={
+                            (password_confirmation) => this.confirmPass(password_confirmation)
+                        }
                     />
                 </View>
                 <Text style={styles.errorText}>

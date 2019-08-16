@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { Loading, Input, Button } from './shared';
 import AsyncStorage from '@react-native-community/async-storage';
+import apiRequest from '../services/apiRequest';
 
 class Login extends Component {
     constructor(props) {
@@ -20,35 +21,30 @@ class Login extends Component {
             this.setState({error: 'Must enter password and username'});
             return;
         }
+
         this.setState({error: '', loading: true});
+
+        const options = {
+            url: 'users/login',
+            method: 'POST',
+            body: JSON.stringify({
+                username: this.state.username,
+                password: this.state.password
+            }),
+        };
         try {
-            const response = await fetch('http://localhost:8550/api/v1/users/login', {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    username: this.state.username,
-                    password: this.state.password
-                }),
-            });
-
-            const json = await response.json();
-            if (response.ok) {
-                if (json && json.token) {
-                    await AsyncStorage.setItem('userToken', json.token);
-                }
-            } else {
-                throw json;
+            const userSession = await apiRequest(options);
+            if (userSession) {
+                await AsyncStorage.setItem('userSession', userSession);
+                await AsyncStorage.setItem('userToken', userSession.token);
             }
-
+            this.props.navigation.navigate('App');
         } catch(err) {
-            this.setState({error: err.detail});
+            alert(err);
         } finally {
             this.setState({loading: false});
-            this.props.navigation.navigate('App');
         }
+
     }
 
     render() {

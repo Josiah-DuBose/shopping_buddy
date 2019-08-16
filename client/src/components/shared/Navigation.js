@@ -12,11 +12,15 @@ const Navigation = ({navigator, backButton}) => {
         title: 'Back',
         handler: () => alert('click')
     };
+    const rightButtonConfig = {
+        title: 'User',
+        handler: () => alert('click')
+    };
 
     if (backButton) {
-        nav = <NavigationBar title={titleConfig} leftButton={leftButtonConfig}/>;
+        nav = <NavigationBar title={titleConfig} leftButton={leftButtonConfig} rightButton={rightButtonConfig}/>;
     } else {
-        nav = <NavigationBar title={titleConfig}/>;
+        nav = <NavigationBar title={titleConfig} rightButton={rightButtonConfig}/>;
     }
 
     return (

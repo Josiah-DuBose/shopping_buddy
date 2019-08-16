@@ -5,7 +5,6 @@ const API_HOST = config.api.host;
 const API_BASE = config.api.baseUrl;
 
 const request = async function(options) {
-    const token = await AsyncStorage.getItem('userToken');
     try {
         const reqOptions = {
             method: options.method,
@@ -16,10 +15,16 @@ const request = async function(options) {
         };
 
         if (options.auth) {
-            reqOptions.headers['Authroization'] = `Bearer ${token}`;
+            const token = await AsyncStorage.getItem('userToken');
+            reqOptions.headers['Authorization'] = `Bearer ${token}`;
         }
 
+        if (options.body) {
+            reqOptions.body = options.body;
+        }
+        console.log('reqOptions', reqOptions)
         const response = await fetch(`${API_HOST}/${API_BASE}/${options.url}`, reqOptions);
+        console.log("reqResponse", response);
         const json = await response.json();
 
         if (response.ok && json) {
@@ -31,11 +36,9 @@ const request = async function(options) {
         alert(err.detail);
         if (err.statusCode === 401) {
             this.props.navigation.navigate('Auth');
+            alert('Session expired, please log in again.')
         }
     }
 }
-
-
-
 
 export default request;
