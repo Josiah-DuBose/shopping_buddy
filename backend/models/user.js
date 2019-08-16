@@ -1,4 +1,5 @@
 const mongoose  = require('mongoose');
+const Schema = mongoose.Schema;
 const uniqueValidator = require('mongoose-unique-validator');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
@@ -29,6 +30,9 @@ const schema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
+    lists: [
+        { type: Schema.Types.ObjectId, ref: 'List' }
+    ],
 });
 
 schema.methods.setPassword = function(password) {
@@ -54,12 +58,18 @@ schema.methods.generateJWT = function() {
     }, secret);
 };
 
-schema.methods.userJSON = function(){
-    return {
+schema.methods.userJSON = function(token){
+    const user = {
         username: this.username,
         email: this.email,
-        token: schema.methods.generateJWT(),
-    };
+        id: this._id,
+        updated: this.updated,
+        active: this.active
+    }
+    if (token) {
+        user.token = schema.methods.generateJWT();
+    }
+    return user;
 };
 
 schema.plugin(uniqueValidator, {message: 'Email is already taken.'});

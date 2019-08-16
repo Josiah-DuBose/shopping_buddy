@@ -15,29 +15,22 @@ exports.get = async (id) => {
 exports.list = async (req) => {
     try {
         const List = mongoose.model('List');
-        const lists = await List.find({});
-        const listAr = [];
-        //TODO use mongoose method to retrieve related records instead of loop.
-        for (let i = 0; i < lists.length; i++) {
-            const populatedList = await lists[i].listJSON();
-            listAr.push(populatedList);
-        }
-
-        return listAr;
+        const lists = await List.find({}).populate('items');
+        return lists.map(list => list.listJSON());
     } catch(err) {
-        throw(utils.createError(500, 'List retrieve error', err));
+        throw(utils.createError(500, 'Lists retrieve error', err));
     }
 }
 
 exports.create = async (req) => {
     try {
         const List = mongoose.model('List');
-        let list = await List.create({
-            total: req.body.total || 0.00,
-            items: req.body.items || [],
+        const list = await List.create({
+            total: 0.00,
+            items: [],
             name: req.body.name
         });
-        return listJSON();
+        return list.listJSON();
     } catch(err) {
         throw(utils.createError(500, 'List create error', err));
     }

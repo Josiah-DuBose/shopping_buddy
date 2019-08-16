@@ -5,9 +5,7 @@ const isAuthenticated = require('../middlewares/auth').isAuthenticated;
 
 router.route('/').get(isAuthenticated, async (req, res, next) => {
     try {
-        console.log("req.headers", req.headers)
         const response = await listController.list(req);
-        console.log("response", response);
         res.json(response);
     } catch(err) {
         console.error(err);
@@ -25,7 +23,7 @@ router.route('/:id').get(isAuthenticated, async (req, res, next) => {
     }
 });
 
-router.route('/create').post(async (req, res, next) => {
+router.route('/create').post(isAuthenticated, async (req, res, next) => {
     try {
         const response = await listController.create(req);
         res.json(response);

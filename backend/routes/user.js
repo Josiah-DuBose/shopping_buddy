@@ -13,9 +13,10 @@ router.route('/').get(isAuthenticated, async (req, res, next) => {
     }
 });
 
-router.route('/:id').get(isAuthenticated, async (req, res, next) => {
+router.route('/:username').get(isAuthenticated, async (req, res, next) => {
     try {
-        const response = await userController.get(req.params['id']);
+        console.log(req.params);
+        const response = await userController.get(req.params['username']);
         res.json(response);
     } catch(err) {
         console.error(err);

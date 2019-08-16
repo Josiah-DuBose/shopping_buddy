@@ -23,7 +23,7 @@ router.route('/:id').get(isAuthenticated, async (req, res, next) => {
     }
 });
 
-router.route('/create').post(async (req, res, next) => {
+router.route('/create').post(isAuthenticated, async (req, res, next) => {
     try {
         const response = await itemController.create(req);
         res.json(response);

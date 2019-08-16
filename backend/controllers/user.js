@@ -3,15 +3,25 @@ const utils = require('../helpers/util');
 const _ = require('lodash');
 const jwt = require('jsonwebtoken');
 
-exports.get = async (id, internal) => {
+exports.get = async (username) => {
     try {
         const User = mongoose.model('User');
-        const user = internal ?
-            await User.findOne({username: id}) :
-            await User.findOne({username: id}, {hash: 0, salt: 0, __v: 0});
-        return user;
+        const user = await User.findOne(
+            {username: username},
+            {hash: 0, salt: 0, __v: 0}
+        );
+
+        if (!user) {
+            throw { message: 'User not found.', code: 404 };
+        }
+
+        return user.userJSON(true);
     } catch(err) {
-        throw(utils.createError(500, 'User retrieve error', err));
+        throw(utils.createError(
+            err.code || 500,
+            'User retrieve error',
+            err.message || err)
+        );
     }
 }
 
@@ -19,9 +29,9 @@ exports.list = async (req) => {
     try {
         const User = mongoose.model('User');
         const users = await User.find({}, {hash: 0, salt: 0, __v: 0});
-        return users;
+        return users.map(user => user.userJSON());
     } catch(err) {
-        throw(utils.createError(500, 'User retrieve error', err));
+        throw(utils.createError(500, 'Users retrieve error', err));
     }
 }
 
@@ -34,7 +44,7 @@ exports.create = async (req) => {
         });
         newUser.setPassword(req.body.password);
         await newUser.save();
-        return newUser.userJSON();
+        return newUser.userJSON(true);
     } catch(err) {
         throw(utils.createError(500, 'User create error', err));
     }
@@ -57,7 +67,7 @@ exports.login = async (req) => {
                     status: 'Fail'
                 }
             } else{
-                return userProfile.userJSON();
+                return userProfile.userJSON(true);
             }
         }
     } catch(err) {
