@@ -1,26 +1,32 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import NavigationBar from 'react-native-navbar';
+import { ClickIcon } from '../shared';
 
-const Navigation = ({navigator, backButton}) => {
+const Navigation = ({navigator, navButtons}) => {
     let nav;
     const titleConfig = {
         title: 'Shopping Buddy',
         handler: () => navigator.navigate('App'),
     };
+
     const leftButtonConfig = {
         title: 'Back',
-        handler: () => alert('click')
-    };
-    const rightButtonConfig = {
-        title: 'User',
-        handler: () => alert('click')
+        handler: () => {
+            alert('click');
+        }
     };
 
-    if (backButton) {
+    const rightIconClick = () => {
+        alert('right clicked');
+    }
+
+    const rightButtonConfig = <ClickIcon name="user" size={25} onPress={rightIconClick} />
+
+    if (navButtons) {
         nav = <NavigationBar title={titleConfig} leftButton={leftButtonConfig} rightButton={rightButtonConfig}/>;
     } else {
-        nav = <NavigationBar title={titleConfig} rightButton={rightButtonConfig}/>;
+        nav = <NavigationBar title={titleConfig}/>;
     }
 
     return (
@@ -34,7 +40,9 @@ const Navigation = ({navigator, backButton}) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        maxWidth: 350
     },
+
 });
 
 export { Navigation }
