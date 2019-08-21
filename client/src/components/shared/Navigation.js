@@ -1,59 +1,50 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import NavigationBar from 'react-native-navbar';
-import { Toolbar } from 'react-native-material-ui';
 import { ClickIcon } from '../shared';
 
-const Navigation = ({navigator, navButtons}) => {
-    let nav;
+
+const Navigation = ({navigator, navButtons, title}) => {
+    let nav, selected, dropdown=true;
     const titleConfig = {
-        title: 'Shopping Buddy',
+        title: title || 'Shopping Buddy',
         handler: () => navigator.navigate('App'),
     };
 
-    const leftButtonConfig = {
-        title: 'Back',
-        handler: () => {
-            alert('click');
-        }
-    };
+    // const leftIconClick = () => {
+    //     navigator.goBack();
+    // }
 
     const rightIconClick = () => {
-        alert('right clicked');
+        console.log("navigator", navigator)
+        navigator.navigate('Profile');
     }
 
     const rightButtonConfig = <ClickIcon name="user" size={25} onPress={rightIconClick} />
 
-    // if (navButtons) {
-    //     nav = <NavigationBar title={titleConfig} leftButton={leftButtonConfig} rightButton={rightButtonConfig}/>;
-    // } else {
-    //     nav = <NavigationBar title={titleConfig}/>;
-    // }
+    // const leftButtonConfig = <ClickIcon name="arrow-left" size={25} onPress={leftIconClick} />
 
-    nav = <Toolbar centerElement="Title"
-        rightElement={{
-            menu: {
-                icon: "user",
-                labels: ["Profile", "Logout"]
-            }
-        }}
-        onRightElementPress={ (label) => { console.log(label) }}
-      />
+    if (navButtons) {
+        nav = <NavigationBar containerStyle={styles.navContainer} title={titleConfig} rightButton={rightButtonConfig}/>;
+    } else {
+        nav = <NavigationBar containerStyle={styles.navContainer} title={titleConfig}/>;
+    }
 
     return (
-        <View style={styles.container}>
+        <React.Fragment>
             {nav}
-        </View>
+        </React.Fragment>
     );
 
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        maxWidth: 350
-    },
-
+    navContainer: {
+        backgroundColor: 'blue',
+        maxWidth: '100%',
+        padding: '2%',
+        paddingBottom: '5%'
+    }
 });
 
 export { Navigation }
