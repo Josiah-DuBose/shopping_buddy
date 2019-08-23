@@ -34,7 +34,19 @@ export default class ListsPage extends Component {
                         <Loading size={'large'} msg={'Loading lists'} /> :
                         lists.map((list, index) => (
                             <ListItem key={index}
+                                style={{
+                                    borderWidth: 1,
+                                    borderColor: 'grey',
+                                    marginBottom: 4
+                                }}
                                 title={list.name}
+                                badge={{
+                                    value: list.items.length,
+                                    textStyle: { color: 'black' },
+                                    badgeStyle: {
+                                        backgroundColor: 'grey'
+                                    }
+                                }}
                             />
                         ))
                     }

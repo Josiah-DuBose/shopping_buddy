@@ -10,6 +10,10 @@ export default class ProfilePage extends Component {
             user: null,
             loading: true
         }
+
+    }
+
+    componentDidMount(){
         this.loadUser();
     }
 

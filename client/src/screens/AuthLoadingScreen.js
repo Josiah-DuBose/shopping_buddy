@@ -47,13 +47,13 @@ export default class AuthLoadingScreen extends Component {
                 this.setState({loading: false});
             }
         }
-        this.props.navigation.navigate(authOk ? 'App' : 'Auth');
+        this.props.navigation.navigate(authOk ? 'Home' : 'Auth');
     };
 
     render() {
         return (
             <View style={styles.container}>
-                <Loading size={'large'} msg={'Loading'}/>
+                <Loading size={'large'} msg={'Loading app'}/>
             </View>
         );
     }
