@@ -39,11 +39,11 @@ class Login extends Component {
                 delete userSession.token;
                 await AsyncStorage.setItem('userSession', userSession);
             }
-            this.props.navigation.navigate('App');
         } catch(err) {
             alert(err);
         } finally {
             this.setState({loading: false});
+            this.props.navigation.navigate('Home');
         }
 
     }

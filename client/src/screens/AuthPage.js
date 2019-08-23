@@ -57,7 +57,6 @@ export default class AuthPage extends Component {
         const { title, buttonText, pageText } = this.state;
         return(
             <React.Fragment>
-                <Navigation navigator={this.props.navigation} navButtons={false}/>
                 <View style={styles.container}>
                     <Text style={styles.description}>{title}</Text>
                     { this.pickForm() }

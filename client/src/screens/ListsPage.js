@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { ListItem } from 'react-native-elements'
 import { Loading, Input, Button, ClickIcon } from '../components/shared';
 import AsyncStorage from '@react-native-community/async-storage';
 import apiRequest from '../services/apiRequest';
@@ -31,13 +32,11 @@ export default class ListsPage extends Component {
                 <View style={styles.container}>
                     {loading ?
                         <Loading size={'large'} msg={'Loading lists'} /> :
-                        // <View style={styles.listsContainer}>
-                            <FlatList
-                                data={lists}
-                                renderItem={({item}) => <Text style={styles.item}>{item.name}</Text>}
-                                keyExtractor={(item, index) => index.toString()}
+                        lists.map((list, index) => (
+                            <ListItem key={index}
+                                title={list.name}
                             />
-                        // </View>
+                        ))
                     }
                 </View>
             </React.Fragment>

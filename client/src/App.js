@@ -52,15 +52,25 @@ const HomeRoutes = createStackNavigator(
     }
 );
 
-const InitialRoute = createStackNavigator({ Login: AuthPage });
+const AuthRoute = createStackNavigator({
+    Login: {
+        screen: AuthPage,
+        navigationOptions: {
+            title: 'Shopping Buddy',
+        }
+    }
+});
 
-export default createAppContainer(createSwitchNavigator(
+const AppContainer = createAppContainer(createSwitchNavigator(
   	{
     	AuthLoading: AuthLoadingScreen,
-    	App: HomeRoutes,
-    	Auth: InitialRoute,
+    	Home: HomeRoutes,
+    	Auth: AuthRoute,
   	},
   	{
     	initialRouteName: 'AuthLoading',
   	}
 ));
+
+export default () =>
+    <AppContainer />

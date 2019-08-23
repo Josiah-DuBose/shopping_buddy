@@ -46,7 +46,7 @@ class Registration extends Component {
                 await AsyncStorage.setItem('userSession', userSession);
                 await AsyncStorage.setItem('userToken', userSession.token);
             }
-            this.props.navigation.navigate('App');
+            this.props.navigation.navigate('Home');
         } catch(err) {
             alert(err);
         } finally {

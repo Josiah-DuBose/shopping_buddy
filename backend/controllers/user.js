@@ -53,7 +53,7 @@ exports.create = async (req) => {
 exports.login = async (req) => {
     try {
         const User = mongoose.model('User');
-        const userProfile = await exports.get(req.body.username, true);
+        const userProfile = await User.findOne({username: req.body.username});
         if (!userProfile) {
             return {
                 message: 'User not found',
