@@ -1,4 +1,4 @@
-import { Text } from 'react-native-elements';
+import { Text, Badge } from 'react-native-elements';
 
 export default {
     Text: {

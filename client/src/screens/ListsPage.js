@@ -36,6 +36,7 @@ export default class ListsPage extends Component {
                             <ListItem key={index}
                                 style={{
                                     borderWidth: 1,
+                                    borderRadius: 2,
                                     borderColor: 'grey',
                                     marginBottom: 4
                                 }}

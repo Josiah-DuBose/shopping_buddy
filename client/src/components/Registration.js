@@ -43,8 +43,9 @@ class Registration extends Component {
         try {
             const userSession = await apiRequest(options);
             if (userSession) {
-                await AsyncStorage.setItem('userSession', userSession);
                 await AsyncStorage.setItem('userToken', userSession.token);
+                delete userSession.token;
+                await AsyncStorage.setItem('userSession', JSON.stringify(userSession));
             }
             this.props.navigation.navigate('Home');
         } catch(err) {

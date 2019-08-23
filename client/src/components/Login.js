@@ -37,7 +37,7 @@ class Login extends Component {
             if (userSession) {
                 await AsyncStorage.setItem('userToken', userSession.token);
                 delete userSession.token;
-                await AsyncStorage.setItem('userSession', userSession);
+                await AsyncStorage.setItem('userSession', JSON.stringify(userSession));
             }
         } catch(err) {
             alert(err);

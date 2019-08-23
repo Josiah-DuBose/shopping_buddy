@@ -23,8 +23,8 @@ const styles = StyleSheet.create({
     button: {
         flex: 1,
         borderWidth: 3,
-        borderColor: 'mediumpurple',
-        backgroundColor: "rebeccapurple",
+        borderColor: 'grey',
+        backgroundColor: 'grey',
         borderRadius: 25,
         marginTop: 5,
         marginLeft: 50,

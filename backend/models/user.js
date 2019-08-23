@@ -33,6 +33,9 @@ const schema = new mongoose.Schema({
     lists: [
         { type: Schema.Types.ObjectId, ref: 'List' }
     ],
+    avatar: {
+        type: String
+    }
 });
 
 schema.methods.setPassword = function(password) {
