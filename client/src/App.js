@@ -9,6 +9,7 @@ import ProfilePage from './screens/ProfilePage';
 import ListPage from './screens/ListPage';
 import ListsPage from './screens/ListsPage';
 import AuthPage from './screens/AuthPage';
+import ItemPage from './screens/ItemPage';
 import AuthLoadingScreen from './screens/AuthLoadingScreen';
 import { ClickIcon } from './components/shared';
 
@@ -39,9 +40,23 @@ const HomeRoutes = createStackNavigator(
                 title: navigation.state.params.list.name,
                 headerRight: (
                     <ClickIcon styles={{ marginRight: 15}}
-                        name="user"
+                        name="plus-circle"
                         size={25}
-                        onPress={() => navigation.navigate('Profile')}
+                        onPress={() => navigation.navigate('Item')}
+                    />
+                )
+            })
+        },
+        Item: {
+            screen: ItemPage,
+            navigationOptions: ({ navigation }) => ({
+                title: navigation.state.params && navigation.state.params.item ?
+                    navigation.state.params.item.name : 'Create Item',
+                headerRight: (
+                    <ClickIcon styles={{ marginRight: 15}}
+                        name="save"
+                        size={25}
+                        onPress={() => navigation.navigate('List')}
                     />
                 )
             })

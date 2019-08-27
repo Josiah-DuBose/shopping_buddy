@@ -3,3 +3,4 @@ export * from './AuthLoadingScreen';
 export * from './ListPage';
 export * from './ListsPage';
 export * from './ProfilePage';
+export * from './ItemPage';

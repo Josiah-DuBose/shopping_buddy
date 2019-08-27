@@ -15,6 +15,7 @@ export default class ListPage extends Component {
 
     updateItem(item) {
         console.log("edit", item);
+        this.props.navigation.navigate('Item', {item})
     }
 
     itemPress(item) {
