@@ -1,26 +1,34 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { Loading, ListEntry } from '../components/shared';
+import { ListItem } from 'react-native-elements'
 
 export default class ListPage extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            saving: false,
+            list: this.props.navigation.state.params.list
+        };
+    }
+
     render() {
+        const {saving, list} = this.state;
         return (
-            <View style={styles.container}>
-                <Text style={styles.description}>List</Text>
+            <View>
+            {saving ? <Loading size={'large'} msg={'Loading Items'}/> :
+                list['items'].map((item, index) => (
+                    <ListEntry item={item} index={index} />
+                ))
+            }
             </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    description: {
-        marginBottom: 20,
-        fontSize: 18,
-        textAlign: 'center',
-        color: '#656565'
-    },
     container: {
-        padding: 30,
-        marginTop: 65,
         alignItems: 'center'
+
     }
 });

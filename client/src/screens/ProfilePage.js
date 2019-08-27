@@ -38,7 +38,7 @@ export default class ProfilePage extends Component {
             {loading ?
                 <Loading size={'large'} msg={'Loading User Data'} /> :
                 <React.Fragment>
-                    <Card title={`${user.username} details`}>
+                    <Card title={`${user.username}`}>
                         <View style={styles.userDataContainer}>
                             <Image
                                 style={styles.image}
@@ -61,10 +61,15 @@ const styles = StyleSheet.create({
     container: {
         padding: 30,
         marginTop: 65,
-        alignItems: 'center'
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.5,
+        shadowRadius: 1,
+        elevation: 1,
     },
     userDataContainer: {
-        paddingBottom: '1%'
+        paddingBottom: '1%',
     },
     username: {
         fontSize: 16

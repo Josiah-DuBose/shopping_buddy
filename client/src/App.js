@@ -36,7 +36,7 @@ const HomeRoutes = createStackNavigator(
 	    List: {
             screen: ListPage,
             navigationOptions: ({ navigation }) => ({
-                title: 'List Details',
+                title: navigation.state.params.list.name,
                 headerRight: (
                     <ClickIcon styles={{ marginRight: 15}}
                         name="user"

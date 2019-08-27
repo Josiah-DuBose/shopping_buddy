@@ -41,6 +41,7 @@ export default class ListsPage extends Component {
                                     marginBottom: 4
                                 }}
                                 title={list.name}
+                                subtitle={list.store}
                                 badge={{
                                     value: list.items.length,
                                     textStyle: { color: 'black' },
@@ -48,6 +49,8 @@ export default class ListsPage extends Component {
                                         backgroundColor: 'grey'
                                     }
                                 }}
+                                chevron={true}
+                                onPress={() => this.props.navigation.navigate('List', {list})}
                             />
                         ))
                     }
@@ -61,7 +64,11 @@ const styles = StyleSheet.create({
     container: {
         marginBottom: 275,
         padding: 30,
-        maxWidth: '100%'
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.5,
+        shadowRadius: 1,
+        elevation: 1,
     },
     listsContainer: {
         marginTop: 150,

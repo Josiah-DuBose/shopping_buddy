@@ -18,6 +18,9 @@ const schema = new mongoose.Schema({
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User'
+    },
+    store: {
+        type: String
     }
 });
 
