@@ -15,30 +15,19 @@ export default class ListPage extends Component {
 
     updateItem(item) {
         console.log("edit", item);
+    }
 
+    itemPress(item) {
+        item.done = !item.done;
+        this.setState({itemUpdated: !this.state.itemUpdated})
     }
 
     keyExtractor = (item, index) => index.toString()
 
     renderItem = ({ item }) => (
-        <ListItem title={item.name}
-            style={{
-                borderWidth: 1,
-                borderRadius: 2,
-                borderColor: 'grey',
-                marginBottom: 4
-            }}
-            checkmark={item.done}
-            onPress={() => {
-                item.done = !item.done;
-                this.setState({itemUpdated: !this.state.itemUpdated})
-            }}
-            leftIcon={
-                <ClickIcon styles={{ marginRight: 15}}
-                name="edit"
-                size={25}
-                onPress={() => this.updateItem(item)}/>
-            }
+        <ListEntry item={item}
+            onPress={() => this.itemPress(item)}
+            edit={() => this.updateItem(item)}
         />
     )
 
