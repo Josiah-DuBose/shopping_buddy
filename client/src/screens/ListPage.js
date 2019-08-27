@@ -1,21 +1,41 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import { Loading, ListEntry, ClickIcon } from '../components/shared';
-import { ListItem } from 'react-native-elements'
+import { ListItem } from 'react-native-elements';
+import apiRequest from '../services/apiRequest';
 
 export default class ListPage extends Component {
     constructor(props) {
         super(props)
         this.state = {
             saving: false,
-            list: this.props.navigation.state.params.list,
-            itemUpdated: false
+            loading: false,
+            listId: this.props.navigation.state.params.listId,
+            listName: this.props.navigation.state.params.listName,
+            list: {},
+            itemUpdated: false,
         };
     }
 
+    componentDidMount(){
+        this.getList();
+    }
+
+    async getList() {
+        this.setState({loading: true});
+        const list = await apiRequest({url: `lists/${this.state.listId}`, method:'Get', auth: true});
+        this.setState({list: list, loading: false});
+    }
+
     updateItem(item) {
-        console.log("edit", item);
-        this.props.navigation.navigate('Item', {item})
+        this.props.navigation.navigate(
+            'Item',
+            {
+                item: item,
+                listId: this.state.listId,
+                listName: this.state.listName
+            }
+        );
     }
 
     itemPress(item) {
@@ -33,15 +53,23 @@ export default class ListPage extends Component {
     )
 
     render() {
-        const {saving, list, itemUpdated} = this.state;
+        const {saving, loading, listId, list, itemUpdated} = this.state;
         return (
-            <FlatList
-                style={styles.listsContainer}
-                keyExtractor={this.keyExtractor}
-                data={list.items}
-                renderItem={this.renderItem}
-                extraData={itemUpdated}
-            />
+            <React.Fragment>
+            {
+                loading ? <Loading size={'large'} msg={'Loading list'} /> :
+                <View>
+                    <FlatList
+                        style={styles.listsContainer}
+                        keyExtractor={this.keyExtractor}
+                        data={list.items}
+                        renderItem={this.renderItem}
+                        extraData={itemUpdated}
+                    />
+                    <Text>{list.total}</Text>
+                </View>
+            }
+            </React.Fragment>
         );
     }
 }

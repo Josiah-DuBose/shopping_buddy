@@ -50,7 +50,7 @@ export default class ListsPage extends Component {
                                     }
                                 }}
                                 chevron={true}
-                                onPress={() => this.props.navigation.navigate('List', {list})}
+                                onPress={() => this.props.navigation.navigate('List', {listId: list._id, listName: list.name})}
                             />
                         ))
                     }

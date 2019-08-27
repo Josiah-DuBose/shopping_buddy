@@ -12,7 +12,8 @@ const schema = new mongoose.Schema({
         type: String
     },
     qty: {
-        type: Number
+        type: Number,
+        default: 1
     },
     done: {
         type: Boolean,

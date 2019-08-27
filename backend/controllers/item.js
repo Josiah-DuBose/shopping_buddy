@@ -37,3 +37,26 @@ exports.create = async (req) => {
         throw(utils.createError(500, 'Item create error', err));
     }
 }
+
+exports.updateOne = async (req, id) => {
+    try {
+        const Item = mongoose.model('Item');
+        let item = await Item.findOneAndUpdate(
+            {_id: id},
+            {
+                price: req.body.price,
+                name: req.body.name,
+                section: req.body.section,
+                qty: req.body.qty,
+                store: req.body.stores
+            },
+            {
+                new: true,
+                useFindAndModify: false
+            }
+        );
+        return item;
+    } catch(err) {
+        throw(utils.createError(500, 'Item update error', err));
+    }
+}

@@ -22,9 +22,8 @@ const request = async function(options) {
         if (options.body) {
             reqOptions.body = options.body;
         }
-        console.log('reqOptions', reqOptions)
+
         const response = await fetch(`${API_HOST}/${API_BASE}/${options.url}`, reqOptions);
-        console.log("reqResponse", response);
         const json = await response.json();
 
         if (response.ok && json) {

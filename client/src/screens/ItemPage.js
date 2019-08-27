@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import { Loading, ListEntry, ClickIcon } from '../components/shared';
-import { Input } from 'react-native-elements';
+import { Input, Button } from 'react-native-elements';
 import Entypo from 'react-native-vector-icons/Entypo';
+import apiRequest from '../services/apiRequest';
 
 export default class ItemPage extends Component {
     constructor(props) {
@@ -17,47 +18,114 @@ export default class ItemPage extends Component {
         this.state = {
             saving: false,
             item: this.props.navigation.state.params && this.props.navigation.state.params.item ?
-                this.props.navigation.state.params.item : newItem
+                this.props.navigation.state.params.item : newItem,
+            listId:  this.props.navigation.state.params.listId,
+            listName: this.props.navigation.state.params.listName
         };
-        console.log("this.state item",this.state);
-        this.updateItem = this.updateItem.bind(this);
+        this.saveItem = this.saveItem.bind(this);
     }
 
-    updateItem(value) {
-        console.log("value")
+    async saveItem(item) {
+        this.setState({item: item, saving: true});
+        const options = {
+            url: `items/${item._id}`,
+            method: 'PUT',
+            auth: true,
+            body: JSON.stringify({
+                name: item.name,
+                price: item.price,
+                section: item.section,
+                qty: item.qty
+            }),
+        };
+        await apiRequest(options);
+        this.props.navigation.push('List', {listId: this.state.listId, listName: this.state.listName});
     }
 
     render() {
         const { saving, item } = this.state;
-        return (
+        return ( // TODO: abstract into Input Component
             <View style={styles.container}>
                 <Input
-                    placeholder={item.name || 'Enter item name'}
+                    placeholder={'Enter item name'}
+                    value={item.name}
                     leftIconContainerStyle={styles.leftIconContainerStyle}
                     inputContainerStyle={styles.inputContainerStyle}
-                    onChangeText={(e) => item.name = e}
+                    onChangeText={name =>
+                        this.setState(state => {
+                          return {
+                            ...state,
+                            item: {
+                                ...state.item,
+                                name: name
+                            }
+                          };
+                        })
+                    }
                     leftIcon={<Entypo name={'edit'} size={20} />}
                 />
                 <Input
-                    placeholder={item.price || 'Enter item price'}
+                    placeholder={'Enter item price'}
+                    value={`${item.price}`}
+                    keyboardType={'number-pad'}
                     leftIconContainerStyle={styles.leftIconContainerStyle}
                     inputContainerStyle={styles.inputContainerStyle}
-                    onChangeText={(e) => item.price = e}
+                    onChangeText={price =>
+                        this.setState(state => {
+                          return {
+                            ...state,
+                            item: {
+                                ...state.item,
+                                price: price
+                            }
+                          };
+                        })
+                    }
                     leftIcon={<Entypo name={'price-tag'} size={20} />}
                 />
                 <Input
-                    placeholder={item.section || 'Enter item section'}
+                    placeholder={'Enter item section'}
+                    value={item.section}
                     leftIconContainerStyle={styles.leftIconContainerStyle}
                     inputContainerStyle={styles.inputContainerStyle}
-                    onChangeText={(e) => item.section = e}
+                    onChangeText={section =>
+                        this.setState(state => {
+                          return {
+                            ...state,
+                            item: {
+                                ...state.item,
+                                section: section
+                            }
+                          };
+                        })
+                    }
                     leftIcon={<Entypo name={'shopping-cart'} size={20} />}
                 />
                 <Input
-                    placeholder={item.qty || 'Enter item Qty'}
+                    placeholder={'Enter item Qty'}
+                    value={`${item.qty}`}
+                    keyboardType={'number-pad'}
                     leftIconContainerStyle={styles.leftIconContainerStyle}
                     inputContainerStyle={styles.inputContainerStyle}
-                    onChangeText={(e) => item.qty = e}
+                    onChangeText={qty =>
+                        this.setState(state => {
+                          return {
+                            ...state,
+                            item: {
+                                ...state.item,
+                                qty: qty
+                            }
+                          };
+                        })
+                    }
                     leftIcon={<Entypo name={'calculator'} size={20} />}
+                />
+                <Button buttonStyle={styles.button}
+                    icon={{name: 'save', type: 'entypo'}}
+                    title='Save Item'
+                    loadingRight={saving}
+                    rounded={true}
+                    onPress={() => this.saveItem(this.state.item)}
                 />
             </View>
         )
@@ -84,5 +152,10 @@ const styles = StyleSheet.create({
         maxWidth: '100%',
         marginTop: '1%',
         marginBottom: '1%'
+    },
+    button: {
+        maxWidth: '50%',
+        backgroundColor: 'grey',
+        marginLeft: '25%',
     }
 });

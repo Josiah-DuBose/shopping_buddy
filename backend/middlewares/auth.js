@@ -8,7 +8,6 @@ exports.isAuthenticated = async function(req, res, next) {
             try {
                 const token = auth.split(' ')[1];
                 const result = await jwt.verify(token, process.env.SECRET);
-                console.log("result", result);
                 // Check token is expired.
                 if (Date.now() >= result.exp) {
                     next(utils.createError(401, 'Auth Error', 'Session has expired, please login again.'));

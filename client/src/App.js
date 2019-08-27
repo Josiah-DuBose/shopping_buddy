@@ -37,7 +37,7 @@ const HomeRoutes = createStackNavigator(
 	    List: {
             screen: ListPage,
             navigationOptions: ({ navigation }) => ({
-                title: navigation.state.params.list.name,
+                title: navigation.state.params.listName,
                 headerRight: (
                     <ClickIcon styles={{ marginRight: 15}}
                         name="plus-circle"
@@ -52,13 +52,6 @@ const HomeRoutes = createStackNavigator(
             navigationOptions: ({ navigation }) => ({
                 title: navigation.state.params && navigation.state.params.item ?
                     navigation.state.params.item.name : 'Create Item',
-                headerRight: (
-                    <ClickIcon styles={{ marginRight: 15}}
-                        name="save"
-                        size={25}
-                        onPress={() => navigation.navigate('List')}
-                    />
-                )
             })
         }
     },

@@ -5,7 +5,7 @@ const utils = require('../helpers/util');
 exports.get = async (id) => {
     try {
         const List = mongoose.model('List');
-        const list = await List.findOne({_id: id})
+        const list = await List.findOne({_id: id}).populate('items');
         return list.listJSON();
     } catch(err) {
         throw(utils.createError(500, 'List retrieve error', err));
