@@ -3,6 +3,7 @@ import { StyleSheet, View, SectionList } from 'react-native';
 import { Loading, ListEntry } from '../components/shared';
 import { Text } from 'react-native-elements';
 import apiRequest from '../services/apiRequest';
+import console = require('console');
 
 export default class ListPage extends Component {
     constructor(props) {
@@ -40,16 +41,22 @@ export default class ListPage extends Component {
     }
 
     itemTotal(bool) {
-        console.log("this.state", this.state)
-        const allItems = bool ? this.state.items : this.state['items'].filter(item => item.done === true);
-        console.log("all", allItems);
-        const total = (allItems || []).reduce((total, item) => total + (item.price * item.qty), 0.00).toFixed(2);
+        let total = 0.00;
+        const allItems = [].concat(...this.state.list.items.map(set => {
+            if (bool) {
+                return set.data.filter(item => item.done === true);
+            } else {
+                return set.data;
+            }
+        }));
+        total = (allItems || []).reduce((total, item) => total + (item.price * item.qty), 0.00).toFixed(2);
         return total;
     };
 
     itemPress(item) {
         item.done = !item.done;
         this.setState({itemUpdated: !this.state.itemUpdated})
+        console.log("item", item);
         this.itemTotal();
     }
 
@@ -80,8 +87,8 @@ export default class ListPage extends Component {
                         extraData={itemUpdated}
                     />
                     <View style={styles.totalContainer}>
-                        <Text h5 style={styles.textHeader}>Done Total: ${this.itemTotal()}</Text>
-                        <Text h5 style={styles.textHeader}>List Total: ${this.itemTotal(true)}</Text>
+                        <Text style={styles.textHeader}>Done Total: ${this.itemTotal(true)}</Text>
+                        <Text style={styles.textHeader}>List Total: ${this.itemTotal()}</Text>
                     </View>
                 </View>
             }
