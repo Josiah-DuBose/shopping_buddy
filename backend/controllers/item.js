@@ -48,7 +48,8 @@ exports.updateOne = async (req, id) => {
                 name: req.body.name,
                 section: req.body.section,
                 qty: req.body.qty,
-                store: req.body.stores
+                store: req.body.stores,
+                done: req.body.done
             },
             {
                 new: true,

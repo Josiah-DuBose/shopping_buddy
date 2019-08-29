@@ -25,10 +25,7 @@ const schema = new mongoose.Schema({
 });
 
 schema.methods.listJSON = function() {
-    // Get list total.
-    const total = (this.items || []).reduce((total, item) => total + (item.price * item.qty), 0.00).toFixed(2);
     return {
-        total: total,
         items: schema.methods.formattedList(this.items),
         name: this.name,
         _id: this.id,

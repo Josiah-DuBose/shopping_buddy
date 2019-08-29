@@ -3,7 +3,6 @@ import { StyleSheet, View, SectionList } from 'react-native';
 import { Loading, ListEntry } from '../components/shared';
 import { Text } from 'react-native-elements';
 import apiRequest from '../services/apiRequest';
-import console = require('console');
 
 export default class ListPage extends Component {
     constructor(props) {
@@ -53,11 +52,30 @@ export default class ListPage extends Component {
         return total;
     };
 
-    itemPress(item) {
+    async itemPress(item) {
         item.done = !item.done;
         this.setState({itemUpdated: !this.state.itemUpdated})
         console.log("item", item);
         this.itemTotal();
+        // Update Item, TODO: abstract item save into service(used in multiple places).
+        try {
+            const itemOptions = {
+                url: `items/${item._id}`,
+                method: 'PUT',
+                auth: true,
+                body: JSON.stringify({
+                    name: item.name,
+                    price: item.price,
+                    section: item.section,
+                    qty: item.qty,
+                    done: item.done
+                }),
+            };
+            const resp = await apiRequest(itemOptions);
+            console.log("resp", resp)
+        } catch(err) {
+            alert(err)
+        }
     }
 
     renderItem(item, index) {

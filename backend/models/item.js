@@ -1,4 +1,5 @@
 const mongoose  = require('mongoose');
+const Schema = mongoose.Schema;
 
 const schema = new mongoose.Schema({
     price: {
@@ -18,6 +19,10 @@ const schema = new mongoose.Schema({
     done: {
         type: Boolean,
         default: false
+    },
+    list: {
+        type: Schema.Types.ObjectId,
+        ref: 'List'
     }
 });
 

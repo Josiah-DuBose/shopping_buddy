@@ -6,7 +6,6 @@ exports.get = async (id) => {
     try {
         const List = mongoose.model('List');
         const list = await List.findOne({_id: id}).populate('items');
-        console.log("list.listJSON()", list.listJSON());
         return list.listJSON();
     } catch(err) {
         throw(utils.createError(500, 'List retrieve error', err));
