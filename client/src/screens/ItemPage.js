@@ -20,26 +20,44 @@ export default class ItemPage extends Component {
             item: this.props.navigation.state.params && this.props.navigation.state.params.item ?
                 this.props.navigation.state.params.item : newItem,
             listId:  this.props.navigation.state.params.listId,
-            listName: this.props.navigation.state.params.listName
+            listName: this.props.navigation.state.params.listName,
+            create: !(this.props.navigation.state.params.item)
         };
         this.saveItem = this.saveItem.bind(this);
     }
 
     async saveItem(item) {
         this.setState({item: item, saving: true});
-        const options = {
-            url: `items/${item._id}`,
-            method: 'PUT',
-            auth: true,
-            body: JSON.stringify({
-                name: item.name,
-                price: item.price,
-                section: item.section,
-                qty: item.qty
-            }),
-        };
-        await apiRequest(options);
-        this.props.navigation.push('List', {listId: this.state.listId, listName: this.state.listName});
+        const create = this.state.create;
+        try {
+            const itemOptions = {
+                url: create ? `items/create` : `items/${item._id}`,
+                method: create ? 'POST' : 'PUT',
+                auth: true,
+                body: JSON.stringify({
+                    name: item.name,
+                    price: item.price,
+                    section: item.section,
+                    qty: item.qty
+                }),
+            };
+            const itemResp = await apiRequest(itemOptions);
+            if (itemResp) {
+                const listOptions = {
+                    url: `lists/${this.state.listId}`,
+                    method: 'PUT',
+                    auth: true,
+                    body: JSON.stringify({
+                       newItem: itemResp._id
+                    }),
+                };
+                await apiRequest(listOptions);
+            }
+        } catch(err) {
+            alert(err);
+        } finally {
+            this.props.navigation.push('List', {listId: this.state.listId, listName: this.state.listName});
+        }
     }
 
     render() {

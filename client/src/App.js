@@ -42,7 +42,10 @@ const HomeRoutes = createStackNavigator(
                     <ClickIcon styles={{ marginRight: 15}}
                         name="plus-circle"
                         size={25}
-                        onPress={() => navigation.navigate('Item')}
+                        onPress={() => navigation.navigate('Item', {
+                            listId: navigation.state.params.listId, 
+                            listName: navigation.state.params.listName
+                        })}
                     />
                 )
             })
