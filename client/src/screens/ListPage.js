@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
-import { Loading, ListEntry, ClickIcon } from '../components/shared';
-import { ListItem } from 'react-native-elements';
+import { StyleSheet, View, FlatList } from 'react-native';
+import { Loading, ListEntry } from '../components/shared';
+import { Text } from 'react-native-elements';
 import apiRequest from '../services/apiRequest';
 
 export default class ListPage extends Component {
@@ -53,7 +53,7 @@ export default class ListPage extends Component {
     )
 
     render() {
-        const {saving, loading, listId, list, itemUpdated} = this.state;
+        const { loading, list, itemUpdated} = this.state;
         return (
             <React.Fragment>
             {
@@ -66,7 +66,9 @@ export default class ListPage extends Component {
                         renderItem={this.renderItem}
                         extraData={itemUpdated}
                     />
-                    <Text>{list.total}</Text>
+                    <View style={styles.totalContainer}>
+                        <Text h4 style={styles.total}>Total: ${list.total}</Text>
+                    </View>
                 </View>
             }
             </React.Fragment>
@@ -80,4 +82,11 @@ const styles = StyleSheet.create({
         marginLeft: '5%',
         marginTop: '4%'
     },
+    totalContainer: {
+        fontSize: 18,
+        height: 44,
+    },
+    total: {
+        textAlign: 'center'
+    }
 });

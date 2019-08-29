@@ -6,6 +6,7 @@ import { ClickIcon } from './';
 const ListEntry = ({item, onPress, edit}) => {
     return (
         <ListItem title={item.name}
+            subtitle={`$${(item.price * item.qty).toFixed(2)}`}
            style={{
                borderWidth: 1,
                borderRadius: 2,
@@ -21,6 +22,7 @@ const ListEntry = ({item, onPress, edit}) => {
                     onPress={edit}
                 />
            }
+           rightTitle={`QTY:${item.qty}`}
        />
     );
 }
