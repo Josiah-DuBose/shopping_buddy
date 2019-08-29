@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
+import { StyleSheet, View, SectionList } from 'react-native';
 import { Loading, ListEntry } from '../components/shared';
 import { Text } from 'react-native-elements';
 import apiRequest from '../services/apiRequest';
@@ -12,9 +12,10 @@ export default class ListPage extends Component {
             loading: false,
             listId: this.props.navigation.state.params.listId,
             listName: this.props.navigation.state.params.listName,
-            list: {},
-            itemUpdated: false,
+            list: {items: []},
+            itemUpdated: false
         };
+        this.itemTotal = this.itemTotal.bind(this);
     }
 
     componentDidMount(){
@@ -38,36 +39,49 @@ export default class ListPage extends Component {
         );
     }
 
+    itemTotal(bool) {
+        console.log("this.state", this.state)
+        const allItems = bool ? this.state.items : this.state['items'].filter(item => item.done === true);
+        console.log("all", allItems);
+        const total = (allItems || []).reduce((total, item) => total + (item.price * item.qty), 0.00).toFixed(2);
+        return total;
+    };
+
     itemPress(item) {
         item.done = !item.done;
         this.setState({itemUpdated: !this.state.itemUpdated})
+        this.itemTotal();
     }
 
-    keyExtractor = (item, index) => index.toString()
-
-    renderItem = ({ item }) => (
-        <ListEntry item={item}
-            onPress={() => this.itemPress(item)}
-            edit={() => this.updateItem(item)}
-        />
-    )
+    renderItem(item, index) {
+        return  (
+            <ListEntry item={item} index={index}
+                onPress={() => this.itemPress(item)}
+                edit={() => this.updateItem(item)}
+            />
+        );
+    }
 
     render() {
-        const { loading, list, itemUpdated} = this.state;
+        const {list, loading, itemUpdated} = this.state;
         return (
             <React.Fragment>
             {
                 loading ? <Loading size={'large'} msg={'Loading list'} /> :
                 <View>
-                    <FlatList
+                    <SectionList
                         style={styles.listsContainer}
-                        keyExtractor={this.keyExtractor}
-                        data={list.items}
-                        renderItem={this.renderItem}
+                        renderItem={({item, index, section}) => this.renderItem(item, index)}
+                        renderSectionHeader={({section: {title}}) => (
+                            <Text style={styles.textHeader}>{title}</Text>
+                        )}
+                        sections={list.items}
+                        keyExtractor={(item, index) => item + index}
                         extraData={itemUpdated}
                     />
                     <View style={styles.totalContainer}>
-                        <Text h4 style={styles.total}>Total: ${list.total}</Text>
+                        <Text h5 style={styles.textHeader}>Done Total: ${this.itemTotal()}</Text>
+                        <Text h5 style={styles.textHeader}>List Total: ${this.itemTotal(true)}</Text>
                     </View>
                 </View>
             }
@@ -82,11 +96,13 @@ const styles = StyleSheet.create({
         marginLeft: '5%',
         marginTop: '4%'
     },
-    totalContainer: {
+    textHeader: {
+        textAlign: 'center',
         fontSize: 18,
-        height: 44,
+        fontWeight: 'bold',
+        paddingTop: '5%'
     },
-    total: {
-        textAlign: 'center'
+    totalContainer: {
+
     }
 });

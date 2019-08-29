@@ -1,11 +1,10 @@
 import React from 'react';
-import { Text, View } from 'react-native';
 import { ListItem } from 'react-native-elements'
 import { ClickIcon } from './';
 
-const ListEntry = ({item, onPress, edit}) => {
+const ListEntry = ({item, index, onPress, edit}) => {
     return (
-        <ListItem title={item.name}
+        <ListItem title={item.name} key={index}
             subtitle={`$${(item.price * item.qty).toFixed(2)}`}
            style={{
                borderWidth: 1,

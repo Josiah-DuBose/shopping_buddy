@@ -29,11 +29,28 @@ schema.methods.listJSON = function() {
     const total = (this.items || []).reduce((total, item) => total + (item.price * item.qty), 0.00).toFixed(2);
     return {
         total: total,
-        items: this.items,
+        items: schema.methods.formattedList(this.items),
         name: this.name,
         _id: this.id,
         store: this.store
     }
 };
+
+schema.methods.formattedList = function(items) {
+    const sections = [];
+    try {
+        items.forEach(item => {
+            const indexOfItem = sections.findIndex(section => section.title === item.section);
+            if (indexOfItem < 0) {
+                sections.push({title: item.section, data: [item]});
+            } else {
+                sections[indexOfItem]['data'].push(item);
+            }
+        });
+        return sections;
+    } catch(err) {
+        console.error(err);
+    }
+}
 
 mongoose.model('List', schema);

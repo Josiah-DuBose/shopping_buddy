@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
-import { Loading, ListEntry, ClickIcon } from '../components/shared';
+import { StyleSheet, View } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import Entypo from 'react-native-vector-icons/Entypo';
 import apiRequest from '../services/apiRequest';
@@ -42,7 +41,9 @@ export default class ItemPage extends Component {
                 }),
             };
             const itemResp = await apiRequest(itemOptions);
-            if (itemResp) {
+
+            // Add item to list if action was a create.
+            if (itemResp && create) {
                 const listOptions = {
                     url: `lists/${this.state.listId}`,
                     method: 'PUT',
