@@ -44,7 +44,7 @@ export default class ItemPage extends Component {
 
             // Add item to list if action was a create.
             if (itemResp && create) {
-                const listOptions = {
+                const listOptions = { // TODO: Create list/item services for api calls.
                     url: `lists/${this.state.listId}`,
                     method: 'PUT',
                     auth: true,

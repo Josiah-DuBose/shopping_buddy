@@ -39,6 +39,38 @@ export default class ListPage extends Component {
         );
     }
 
+    async removeItem(item) {
+        this.setState({loading: true});
+        console.log("removeItem", item)
+        const list = this.state.list
+        const setIndex = list.items.findIndex(ele => ele.title === item.section);
+        console.log("setIndex", setIndex);
+        const itemSet = list.items[setIndex];
+        console.log("itemSet", itemSet);
+        const itemIndex = itemSet.data.findIndex(ele => ele._id === item._id);
+        itemSet.data.splice(itemIndex, 1);
+        if (!itemSet.data.length) {
+            list.items.splice(setIndex, 1);
+        }
+        console.log("items after", list.items);
+        try {
+            const listOptions = {
+                url: `lists/${this.state.listId}`,
+                method: 'PUT',
+                auth: true,
+                body: JSON.stringify({
+                   items: [].concat(...this.state.list.items.map(set => set.data))
+                    
+                }),
+            };
+            const resp = await apiRequest(listOptions);
+            console.log("resp", resp);
+            this.setState({list: resp, loading: false})
+        } catch(err) {
+            alert(err)
+        }
+    }
+
     itemTotal(bool) {
         let total = 0.00;
         const allItems = [].concat(...this.state.list.items.map(set => {
@@ -55,9 +87,8 @@ export default class ListPage extends Component {
     async itemPress(item) {
         item.done = !item.done;
         this.setState({itemUpdated: !this.state.itemUpdated})
-        console.log("item", item);
         this.itemTotal();
-        // Update Item, TODO: abstract item save into service(used in multiple places).
+        // Update Item, TODO: abstract item save into service(save item is used in multiple places).
         try {
             const itemOptions = {
                 url: `items/${item._id}`,
@@ -71,8 +102,7 @@ export default class ListPage extends Component {
                     done: item.done
                 }),
             };
-            const resp = await apiRequest(itemOptions);
-            console.log("resp", resp)
+            await apiRequest(itemOptions);
         } catch(err) {
             alert(err)
         }
@@ -83,6 +113,7 @@ export default class ListPage extends Component {
             <ListEntry item={item} index={index}
                 onPress={() => this.itemPress(item)}
                 edit={() => this.updateItem(item)}
+                deleteItem={() => this.removeItem(item)}
             />
         );
     }
@@ -94,20 +125,26 @@ export default class ListPage extends Component {
             {
                 loading ? <Loading size={'large'} msg={'Loading list'} /> :
                 <View>
-                    <SectionList
-                        style={styles.listsContainer}
-                        renderItem={({item, index, section}) => this.renderItem(item, index)}
-                        renderSectionHeader={({section: {title}}) => (
-                            <Text style={styles.textHeader}>{title}</Text>
-                        )}
-                        sections={list.items}
-                        keyExtractor={(item, index) => item + index}
-                        extraData={itemUpdated}
-                    />
-                    <View style={styles.totalContainer}>
-                        <Text style={styles.textHeader}>Done Total: ${this.itemTotal(true)}</Text>
-                        <Text style={styles.textHeader}>List Total: ${this.itemTotal()}</Text>
-                    </View>
+                    { list.items.length? 
+                        <SectionList
+                            style={styles.listsContainer}
+                            renderItem={({item, index, section}) => this.renderItem(item, index)}
+                            renderSectionHeader={({section: {title}}) => (
+                                <Text style={styles.textHeader}>{title}</Text>
+                            )}
+                            sections={list.items}
+                            keyExtractor={(item, index) => item + index}
+                            extraData={itemUpdated}
+                        /> :
+                        <Text style={styles.textHeader}>No items yet, add one above.</Text>
+                    }
+                    { list.items.length ?
+                        <View style={styles.totalContainer}>
+                            <Text style={styles.textHeader}>Done Total: ${this.itemTotal(true)}</Text>
+                            <Text style={styles.textHeader}>List Total: ${this.itemTotal()}</Text>
+                        </View> :
+                        null
+                    }
                 </View>
             }
             </React.Fragment>

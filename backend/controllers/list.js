@@ -39,26 +39,22 @@ exports.create = async (req) => {
 }
 
 exports.updateOne = async (req, id) => {
+    console.log("req", req.body)
     try {
         const List = mongoose.model('List');
         const updateBody = req.body.newItem ? 
             {
                 $push: { items: req.body.newItem }
             } :
-            {
-                total: req.body.total,
-                items: req.body.items,
-                name: req.body.name,
-                store: req.body.store,
-                user: req.body.user
-            }
+            Object.assign({}, req.body);
         let list = await List.findOneAndUpdate({_id: id}, updateBody,
             {
                 new: true,
                 useFindAndModify: false
             }
         );
-        return list;
+        list = await list.populate('items');
+        return list.listJSON();
     } catch(err) {
         throw(utils.createError(500, 'Item update error', err));
     }
