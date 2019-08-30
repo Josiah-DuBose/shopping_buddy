@@ -39,7 +39,6 @@ exports.create = async (req) => {
 }
 
 exports.updateOne = async (req, id) => {
-    console.log("req", req.body)
     try {
         const List = mongoose.model('List');
         const updateBody = req.body.newItem ? 
@@ -52,8 +51,7 @@ exports.updateOne = async (req, id) => {
                 new: true,
                 useFindAndModify: false
             }
-        );
-        list = await list.populate('items');
+        ).populate('items');
         return list.listJSON();
     } catch(err) {
         throw(utils.createError(500, 'Item update error', err));

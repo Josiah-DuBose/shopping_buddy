@@ -41,33 +41,34 @@ export default class ListPage extends Component {
 
     async removeItem(item) {
         this.setState({loading: true});
-        console.log("removeItem", item)
-        const list = this.state.list
+        const list = this.state.list;
         const setIndex = list.items.findIndex(ele => ele.title === item.section);
-        console.log("setIndex", setIndex);
         const itemSet = list.items[setIndex];
-        console.log("itemSet", itemSet);
         const itemIndex = itemSet.data.findIndex(ele => ele._id === item._id);
+        
+        // Remove item and set if set is empty.
         itemSet.data.splice(itemIndex, 1);
         if (!itemSet.data.length) {
             list.items.splice(setIndex, 1);
         }
-        console.log("items after", list.items);
+        
+        //Build list of item ids and make update to list.
+        const items = ([].concat(...this.state.list.items.map(set => set.data))).map(ele => ele._id);
         try {
             const listOptions = {
                 url: `lists/${this.state.listId}`,
                 method: 'PUT',
                 auth: true,
                 body: JSON.stringify({
-                   items: [].concat(...this.state.list.items.map(set => set.data))
-                    
+                   items: items
                 }),
             };
             const resp = await apiRequest(listOptions);
-            console.log("resp", resp);
-            this.setState({list: resp, loading: false})
+            this.setState({list: resp});
         } catch(err) {
             alert(err)
+        } finally {
+            this.setState({loading: false});
         }
     }
 
