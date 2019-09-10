@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { ListItem } from 'react-native-elements'
-import { Loading, Input, Button, ClickIcon } from '../components/shared';
-import AsyncStorage from '@react-native-community/async-storage';
+import { StyleSheet, View } from 'react-native';
+import { ListItem, Text } from 'react-native-elements'
+import { Loading } from '../components/shared';
 import apiRequest from '../services/apiRequest';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default class ListsPage extends Component {
     constructor(props) {
@@ -21,17 +21,19 @@ export default class ListsPage extends Component {
 
     async getLists() {
         this.setState({loading: true});
-        const lists = await apiRequest({url: 'lists', method:'Get', auth: true});
+        const userID = await AsyncStorage.getItem('userID');
+        const lists = await apiRequest({url: `lists/by-user/${userID}`, method:'Get', auth: true});
         this.setState({lists: lists, loading: false});
     }
 
     render() {
-        const { lists, error, loading } = this.state;
+        const { lists, loading } = this.state;
         return (
             <React.Fragment>
                 <View style={styles.container}>
                     {loading ?
                         <Loading size={'large'} msg={'Loading lists'} /> :
+                        lists && lists.length ?
                         lists.map((list, index) => (
                             <ListItem key={index}
                                 style={{
@@ -52,7 +54,8 @@ export default class ListsPage extends Component {
                                 chevron={true}
                                 onPress={() => this.props.navigation.navigate('List', {listId: list._id, listName: list.name})}
                             />
-                        ))
+                        )) :
+                        <Text style={styles.textHeader}>No Lists yet, add one above.</Text>
                     }
                 </View>
             </React.Fragment>
@@ -80,5 +83,11 @@ const styles = StyleSheet.create({
         fontSize: 18,
         height: 44,
         textAlign: 'center',
+    },
+    textHeader: {
+        textAlign: 'center',
+        fontSize: 18,
+        fontWeight: 'bold',
+        paddingTop: '5%'
     }
 });

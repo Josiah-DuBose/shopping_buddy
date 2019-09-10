@@ -51,13 +51,14 @@ schema.methods.validPassword = function(password) {
 
 schema.methods.generateJWT = function() {
     const today = new Date();
-    const exp = new Date(today);
-    exp.setDate(today.getDate() + 60);
+    // disabling exp for now, tokens will not expire:
+    // const exp = new Date(today);
+    // exp.setDate(today.getDate() + 60);
 
     return jwt.sign({
         id: this._id,
         username: this.username,
-        exp: Date.now() + 43200000, // 12hr
+        // exp: Date.now() + 43200000, // 12hr
     }, secret);
 };
 

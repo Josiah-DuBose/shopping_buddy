@@ -55,23 +55,23 @@ exports.login = async (req) => {
         const User = mongoose.model('User');
         const userProfile = await User.findOne({username: req.body.username});
         if (!userProfile) {
-            return {
+            throw {
                 message: 'User not found',
-                status: 'Fail'
+                code: 404
             };
         } else {
             const validPassword = userProfile.validPassword(req.body.password);
             if (!validPassword) {
-                return {
+                throw {
                     message: 'Invalid password',
-                    status: 'Fail'
+                    code: 401
                 }
             } else{
                 return userProfile.userJSON(true);
             }
         }
     } catch(err) {
-        throw utils.createError(500, 'Login error', err);
+        throw utils.createError(err.code || 500, 'Login error', err.message || 'Unknown error');
     }
 }
 

@@ -10,6 +10,7 @@ import ListPage from './screens/ListPage';
 import ListsPage from './screens/ListsPage';
 import AuthPage from './screens/AuthPage';
 import ItemPage from './screens/ItemPage';
+import ListCreate from './screens/ListCreate';
 import AuthLoadingScreen from './screens/AuthLoadingScreen';
 import { ClickIcon } from './components/shared';
 
@@ -19,11 +20,18 @@ const HomeRoutes = createStackNavigator(
             screen: ListsPage,
             navigationOptions: ({ navigation }) => ({
                 title: 'Lists',
-                headerRight: (
+                headerLeft: (
                     <ClickIcon styles={{ marginRight: 15}}
-                        name="user"
+                        name="gear"
                         size={25}
                         onPress={() => navigation.navigate('Profile')}
+                    />
+                ),
+                headerRight: (
+                    <ClickIcon styles={{ marginRight: 15}}
+                        name="plus-circle"
+                        size={25}
+                        onPress={() => navigation.push('ListCreate')}
                     />
                 )
             })
@@ -42,12 +50,19 @@ const HomeRoutes = createStackNavigator(
                     <ClickIcon styles={{ marginRight: 15}}
                         name="plus-circle"
                         size={25}
-                        onPress={() => navigation.navigate('Item', {
+                        onPress={() => navigation.push('Item', {
                             listId: navigation.state.params.listId, 
                             listName: navigation.state.params.listName
                         })}
                     />
                 )
+            })
+        },
+        ListCreate: {
+            screen: ListCreate,
+            navigationOptions: ({ navigation }) => ({
+                title: navigation.state.params && navigation.state.params.list ?
+                navigation.state.params.list.name : 'Create List'
             })
         },
         Item: {

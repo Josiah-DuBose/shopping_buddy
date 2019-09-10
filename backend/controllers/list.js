@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const utils = require('../helpers/util');
 
-
 exports.get = async (id) => {
     try {
         const List = mongoose.model('List');
@@ -12,10 +11,20 @@ exports.get = async (id) => {
     }
 }
 
-exports.list = async (req) => {
+exports.list = async () => {
     try {
         const List = mongoose.model('List');
         const lists = await List.find({}).populate('items');
+        return lists.map(list => list.listJSON());
+    } catch(err) {
+        throw(utils.createError(500, 'Lists retrieve error', err));
+    }
+}
+
+exports.byUser = async (userId) => {
+    try {
+        const List = mongoose.model('List');
+        const lists = await List.find({user: userId}).populate('items');
         return lists.map(list => list.listJSON());
     } catch(err) {
         throw(utils.createError(500, 'Lists retrieve error', err));

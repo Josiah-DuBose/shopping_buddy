@@ -32,20 +32,15 @@ class Login extends Component {
                 password: this.state.password
             }),
         };
-        try {
-            const userSession = await apiRequest(options);
-            if (userSession) {
-                await AsyncStorage.setItem('userToken', userSession.token);
-                delete userSession.token;
-                await AsyncStorage.setItem('userSession', JSON.stringify(userSession));
-            }
-        } catch(err) {
-            alert(err);
-        } finally {
-            this.setState({loading: false});
+        const userSession = await apiRequest(options);
+        if (userSession) {
+            await AsyncStorage.setItem('userToken', userSession.token);
+            delete userSession.token;
+            await AsyncStorage.setItem('userID', userSession._id);
+            await AsyncStorage.setItem('userSession', JSON.stringify(userSession));
             this.props.navigation.navigate('Home');
         }
-
+        this.setState({loading: false});
     }
 
     render() {

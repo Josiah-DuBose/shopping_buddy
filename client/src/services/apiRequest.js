@@ -23,9 +23,14 @@ const request = async function(options) {
             reqOptions.body = options.body;
         }
 
+        if (options.user) {
+            const userID = await AsyncStorage.getItem('userID');
+            reqOptions.body['user'] = userID;
+        }
+
         const response = await fetch(`${API_HOST}/${API_BASE}/${options.url}`, reqOptions);
         const json = await response.json();
-
+        
         if (response.ok && json) {
             return json;
         } else {
@@ -33,7 +38,7 @@ const request = async function(options) {
         }
     } catch(err) {
         alert(err.detail);
-        if (err.statusCode === 401) {
+        if (err.statusCode === 401 && this.props.navigation.state.routeName !== 'Auth') {
             this.props.navigation.navigate('Auth');
             alert('Session expired, please log in again.')
         }

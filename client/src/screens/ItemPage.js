@@ -57,6 +57,7 @@ export default class ItemPage extends Component {
         } catch(err) {
             alert(err);
         } finally {
+            this.setState({saving: false});
             this.props.navigation.push('List', {listId: this.state.listId, listName: this.state.listName});
         }
     }

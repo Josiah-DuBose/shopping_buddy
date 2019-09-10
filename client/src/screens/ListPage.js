@@ -46,7 +46,7 @@ export default class ListPage extends Component {
         const itemSet = list.items[setIndex];
         const itemIndex = itemSet.data.findIndex(ele => ele._id === item._id);
         
-        // Remove item and set if set is empty.
+         // Remove item and set if set is empty.
         itemSet.data.splice(itemIndex, 1);
         if (!itemSet.data.length) {
             list.items.splice(setIndex, 1);
