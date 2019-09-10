@@ -27,20 +27,21 @@ class Login extends Component {
         const options = {
             url: 'users/login',
             method: 'POST',
-            body: JSON.stringify({
+            body: {
                 username: this.state.username,
                 password: this.state.password
-            }),
+            },
         };
         const userSession = await apiRequest(options);
         if (userSession) {
             await AsyncStorage.setItem('userToken', userSession.token);
+            await AsyncStorage.setItem('userID', userSession.id);
             delete userSession.token;
-            await AsyncStorage.setItem('userID', userSession._id);
+            delete userSession.id
             await AsyncStorage.setItem('userSession', JSON.stringify(userSession));
+            this.setState({loading: false});
             this.props.navigation.navigate('Home');
         }
-        this.setState({loading: false});
     }
 
     render() {

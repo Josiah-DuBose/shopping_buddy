@@ -23,9 +23,13 @@ exports.list = async () => {
 
 exports.byUser = async (userId) => {
     try {
+        console.log("userId", userId)
         const List = mongoose.model('List');
         const lists = await List.find({user: userId}).populate('items');
-        return lists.map(list => list.listJSON());
+        if (lists.length) {
+            return lists.map(list => list.listJSON());
+        }
+        return [];
     } catch(err) {
         throw(utils.createError(500, 'Lists retrieve error', err));
     }
@@ -34,6 +38,7 @@ exports.byUser = async (userId) => {
 exports.create = async (req) => {
     try {
         const List = mongoose.model('List');
+        console.log("req", req.body);
         const list = await List.create({
             total: 0.00,
             items: [],

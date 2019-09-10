@@ -26,13 +26,13 @@ export default class ProfilePage extends Component {
 
     async logout() {
         await AsyncStorage.removeItem('userToken');
-        this.setState({user: null});
+        await AsyncStorage.removeItem('userSession');
+        await AsyncStorage.removeItem('userID');
         this.props.navigation.navigate('Auth');
     }
 
     render() {
         const {user, loading} = this.state;
-        console.log("user", user);
         return (
             <View style={styles.container}>
             {loading ?

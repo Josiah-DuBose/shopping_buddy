@@ -15,7 +15,7 @@ export default class ListCreate extends Component {
             saving: false,
             list: this.props.navigation.state.params && this.props.navigation.state.params.list ?
                 this.props.navigation.state.params.list : newList,
-            create: !(this.props.navigation.state.params.list)
+            create: !(this.props.navigation.state.params && this.props.navigation.state.params.list)
         };
         this.saveList = this.saveList.bind(this);
     }
@@ -24,25 +24,20 @@ export default class ListCreate extends Component {
         this.setState({saving: true});
         const create = this.state.create;
         const list = this.state.list;
-
-        try {
-            const listOptions = {
-                url: create ? `lists/create` : `lists/${list._id}`,
-                method: create ? 'POST' : 'PUT',
-                auth: true,
-                user: true,
-                body: JSON.stringify({
-                    name: list.name,
-                    store: list.store
-                })
-            };
-            await apiRequest(listOptions);
-        } catch(err) {
-            alert(err);
-        } finally {
-            this.setState({saving: false});
-            this.props.navigation.push('Lists');
-        }
+        const listOptions = {
+            url: create ? `lists/create` : `lists/${list._id}`,
+            method: create ? 'POST' : 'PUT',
+            auth: true,
+            user: true,
+            body: {
+                name: list.name,
+                store: list.store
+            }
+        };
+        
+        await apiRequest(listOptions);
+        this.setState({saving: false});
+        this.props.navigation.push('Lists');
     }
 
     render() {
@@ -58,7 +53,7 @@ export default class ListCreate extends Component {
                         this.setState(state => {
                           return {
                             ...state,
-                            item: {
+                            list: {
                                 ...state.list,
                                 name: name
                             }
@@ -76,14 +71,14 @@ export default class ListCreate extends Component {
                         this.setState(state => {
                           return {
                             ...state,
-                            item: {
+                            list: {
                                 ...state.list,
                                 store: store
                             }
                           };
                         })
                     }
-                    leftIcon={<Entypo name={'price-tag'} size={20} />}
+                    leftIcon={<Entypo name={'shopping-bag'} size={20} />}
                 />
                 <Button buttonStyle={styles.button}
                     icon={{name: 'save', type: 'entypo'}}

@@ -21,8 +21,8 @@ const HomeRoutes = createStackNavigator(
             navigationOptions: ({ navigation }) => ({
                 title: 'Lists',
                 headerLeft: (
-                    <ClickIcon styles={{ marginRight: 15}}
-                        name="gear"
+                    <ClickIcon styles={{ marginLeft: 15}}
+                        name="user"
                         size={25}
                         onPress={() => navigation.navigate('Profile')}
                     />

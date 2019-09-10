@@ -59,9 +59,9 @@ export default class ListPage extends Component {
                 url: `lists/${this.state.listId}`,
                 method: 'PUT',
                 auth: true,
-                body: JSON.stringify({
+                body: {
                    items: items
-                }),
+                },
             };
             const resp = await apiRequest(listOptions);
             this.setState({list: resp});
@@ -95,13 +95,13 @@ export default class ListPage extends Component {
                 url: `items/${item._id}`,
                 method: 'PUT',
                 auth: true,
-                body: JSON.stringify({
+                body: {
                     name: item.name,
                     price: item.price,
                     section: item.section,
                     qty: item.qty,
                     done: item.done
-                }),
+                },
             };
             await apiRequest(itemOptions);
         } catch(err) {

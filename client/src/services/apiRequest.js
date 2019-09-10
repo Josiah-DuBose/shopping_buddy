@@ -27,6 +27,7 @@ const request = async function(options) {
             const userID = await AsyncStorage.getItem('userID');
             reqOptions.body['user'] = userID;
         }
+        reqOptions.body = JSON.stringify(reqOptions.body);
 
         const response = await fetch(`${API_HOST}/${API_BASE}/${options.url}`, reqOptions);
         const json = await response.json();

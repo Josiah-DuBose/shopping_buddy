@@ -20,7 +20,7 @@ export default class ItemPage extends Component {
                 this.props.navigation.state.params.item : newItem,
             listId:  this.props.navigation.state.params.listId,
             listName: this.props.navigation.state.params.listName,
-            create: !(this.props.navigation.state.params.item)
+            create: !(this.props.navigation.state.params && this.props.navigation.state.params.item)
         };
         this.saveItem = this.saveItem.bind(this);
     }
@@ -33,12 +33,12 @@ export default class ItemPage extends Component {
                 url: create ? `items/create` : `items/${item._id}`,
                 method: create ? 'POST' : 'PUT',
                 auth: true,
-                body: JSON.stringify({
+                body: {
                     name: item.name,
                     price: item.price,
                     section: item.section,
                     qty: item.qty
-                }),
+                },
             };
             const itemResp = await apiRequest(itemOptions);
 
@@ -48,9 +48,9 @@ export default class ItemPage extends Component {
                     url: `lists/${this.state.listId}`,
                     method: 'PUT',
                     auth: true,
-                    body: JSON.stringify({
+                    body: {
                        newItem: itemResp._id
-                    }),
+                    },
                 };
                 await apiRequest(listOptions);
             }

@@ -33,11 +33,11 @@ class Registration extends Component {
         const options = {
             url: 'users/create',
             method: 'POST',
-            body: JSON.stringify({
+            body: {
                 username: this.state.username,
                 email: this.state.email,
                 password: this.state.password
-            }),
+            },
         };
 
         try {
