@@ -54,11 +54,11 @@ export default class ItemPage extends Component {
                 };
                 await apiRequest(listOptions);
             }
+            this.props.navigation.push('List', {listId: this.state.listId, listName: this.state.listName});
         } catch(err) {
             alert(err);
         } finally {
             this.setState({saving: false});
-            this.props.navigation.push('List', {listId: this.state.listId, listName: this.state.listName});
         }
     }
 

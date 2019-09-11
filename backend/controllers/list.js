@@ -38,7 +38,6 @@ exports.byUser = async (userId) => {
 exports.create = async (req) => {
     try {
         const List = mongoose.model('List');
-        console.log("req", req.body);
         const list = await List.create({
             total: 0.00,
             items: [],
