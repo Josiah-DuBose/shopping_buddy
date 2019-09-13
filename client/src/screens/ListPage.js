@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, SectionList } from 'react-native';
-import { Loading, ListEntry } from '../components/shared';
+import { Loading, ListEntry, NothingHere } from '../components/shared';
 import { Text } from 'react-native-elements';
 import apiRequest from '../services/apiRequest';
 import Swipeout from 'react-native-swipeout';
@@ -147,7 +147,7 @@ export default class ListPage extends Component {
                             keyExtractor={(item, index) => item + index}
                             extraData={itemUpdated}
                         /> :
-                        <Text style={styles.noItemsText}>No items yet, add one above.</Text>
+                        <NothingHere label={'items'} />
                     }
                     { list.items.length ?
                         <View style={styles.totalContainer}>
@@ -172,13 +172,6 @@ const styles = StyleSheet.create({
         borderRadius: 2,
         borderColor: '#90a4ae',
         padding: 15,
-    },
-    noItemsText: {
-        textAlign: 'center',
-        fontSize: 20,
-        padding: 2,
-        fontWeight: 'bold',
-        flexDirection: 'row',
     },
     'Dry Goods': {
         borderWidth: 1,

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { ListItem, Text } from 'react-native-elements'
-import { Loading } from '../components/shared';
+import { ListItem } from 'react-native-elements'
+import { Loading, NothingHere } from '../components/shared';
 import apiRequest from '../services/apiRequest';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -50,7 +50,7 @@ export default class ListsPage extends Component {
                                 onPress={() => this.props.navigation.navigate('List', {listId: list._id, listName: list.name})}
                             />
                         )) :
-                        <Text style={styles.textHeader}>No Lists yet, add one above.</Text>
+                        <NothingHere label={'lists'} />
                     }
                 </View>
             </React.Fragment>
