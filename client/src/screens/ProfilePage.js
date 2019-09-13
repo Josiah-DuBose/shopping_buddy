@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
-import { Card } from 'react-native-elements'
+import { Card, Button } from 'react-native-elements'
 import AsyncStorage from '@react-native-community/async-storage';
-import { Loading, Input, Button } from '../components/shared';
+import { Loading } from '../components/shared';
 
 export default class ProfilePage extends Component {
     constructor(props) {
@@ -49,7 +49,11 @@ export default class ProfilePage extends Component {
                             <Text style={styles.username}>email: {user.email}</Text>
                         </View>
                     </Card>
-                    <Button buttonText='Logout' onPress={this.logout}></Button>
+                    <Button buttonStyle={styles.button}
+                        title='Logout'
+                        rounded={true}
+                        onPress={() => this.logout()}
+                    />
                 </React.Fragment>
             }
             </View>
@@ -74,5 +78,11 @@ const styles = StyleSheet.create({
     username: {
         fontSize: 16
     },
-    image: {},
+    button: {
+        maxWidth: '50%',
+        backgroundColor: 'grey',
+        marginLeft: '25%',
+        marginTop: '5%'
+    },
+    image: {}
 });

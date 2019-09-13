@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Login, Registration } from '../components';
-import { Button, Navigation } from '../components/shared';
+import { Button, Text } from 'react-native-elements';
 
 export default class AuthPage extends Component {
     constructor(props){
@@ -29,13 +29,19 @@ export default class AuthPage extends Component {
 
     resetUIState() {
         if(this.state.showLogin){
-            this.setState({buttonText: 'Register'});
-            this.setState({title: 'Please sign in.'});
-            this.setState({pageText: 'Do not have an account?'});
+            this.setState({
+                buttonText: 'Register', 
+                buttonIcon: {name: 'add-user', type: 'entypo'},
+                title: 'Login', 
+                pageText: 'Create account?'
+            });
         } else {
-            this.setState({buttonText: 'Login'});
-            this.setState({title: 'Please register for an account.'})
-            this.setState({pageText: 'Already have an account?'});
+            this.setState({
+                buttonText: 'Login',
+                buttonIcon: {name: 'login', type: 'entypo'},
+                title: 'Register',
+                pageText: 'Already have an account?'
+            });
         }
     }
 
@@ -54,14 +60,19 @@ export default class AuthPage extends Component {
     }
 
     render() {
-        const { title, buttonText, pageText } = this.state;
+        const { title, buttonText, buttonIcon, pageText } = this.state;
         return(
             <React.Fragment>
                 <View style={styles.container}>
                     <Text style={styles.description}>{title}</Text>
                     { this.pickForm() }
                     <Text style={Object.assign({}, styles.description, styles.secondDes)}>{pageText}</Text>
-                    <Button buttonText={buttonText} onPress={this.viewToggle}></Button>
+                    <Button buttonStyle={styles.button}
+                        title={buttonText}
+                        rounded={true}
+                        icon={buttonIcon}
+                        onPress={() => this.viewToggle()}>
+                    </Button>
                 </View>
             </React.Fragment>
         );
@@ -70,18 +81,21 @@ export default class AuthPage extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        marginBottom: 200,
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
+        marginTop: '30%'
     },
     description: {
-        marginBottom: 20,
-        fontSize: 18,
+        fontWeight: 'bold',
+        fontSize: 20,
         textAlign: 'center',
         color: '#656565'
     },
     secondDes: {
-        marginTop: 20
+        marginTop: 20,
+        paddingBottom: '5%'
+    },
+    button: {
+        maxWidth: '50%',
+        backgroundColor: 'grey',
+        marginLeft: '25%'
     }
 });

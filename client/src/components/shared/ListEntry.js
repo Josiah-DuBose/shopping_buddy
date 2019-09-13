@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListItem } from 'react-native-elements'
+import { ListItem } from 'react-native-elements';
 import { ClickIcon } from './';
 
 const ListEntry = ({item, index, onPress, edit, deleteItem}) => {

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
-import { Loading, Input, Button } from './shared';
+import { View, StyleSheet } from 'react-native';
+import { Loading } from './shared';
+import { Input, Text, Button} from 'react-native-elements';
+import Entypo from 'react-native-vector-icons/Entypo';
 import AsyncStorage from '@react-native-community/async-storage';
 import apiRequest from '../services/apiRequest';
 
@@ -23,7 +25,6 @@ class Login extends Component {
         }
 
         this.setState({error: '', loading: true});
-
         const options = {
             url: 'users/login',
             method: 'POST',
@@ -50,17 +51,21 @@ class Login extends Component {
             <View style={styles.form}>
                 <View style={styles.section}>
                     <Input
+                        leftIcon={<Entypo name={'user'} size={20} />}
+                        leftIconContainerStyle={styles.leftIconContainerStyle}
+                        inputContainerStyle={styles.inputContainerStyle}
                         placeholder="Username"
-                        label="Username"
                         value={username}
                         onChangeText={username => this.setState({ username })}
                     />
                 </View>
                 <View style={styles.section}>
                     <Input
+                        leftIconContainerStyle={styles.leftIconContainerStyle}
+                        leftIcon={<Entypo name={'lock'} size={20} />}
+                        inputContainerStyle={styles.inputContainerStyle}
                         secureTextEntry
                         placeholder="Password"
-                        label="Password"
                         value={password}
                         onChangeText={password => this.setState({ password })}
                     />
@@ -69,7 +74,12 @@ class Login extends Component {
                     {error}
                 </Text>
                 { !loading ?
-                    <Button buttonText='Login' onPress={this.submitForm}></Button> :
+                    <Button buttonStyle={styles.button}
+                        title='Login'
+                        rounded={true}
+                        icon={{name: 'login', type: 'entypo'}}
+                        onPress={() => this.submitForm()}
+                    /> :
                     <Loading size={'large'} msg={'Logging in'}/>
                 }
             </View>
@@ -80,20 +90,32 @@ class Login extends Component {
 
 const styles = StyleSheet.create({
     form: {
-        width: '100%',
-        borderTopWidth: 1,
-        borderColor: '#ddd',
+        width: '96%',
+        marginLeft: '2%',
+        marginTop: '1%'
     },
     section: {
         flexDirection: 'row',
-        borderBottomWidth: 1,
-        backgroundColor: '#fff',
-        borderColor: '#ddd',
+    },
+    inputContainerStyle: {
+        borderWidth: 1,
+        borderColor: 'grey',
+        maxWidth: '100%',
+        marginTop: '1%',
+        marginBottom: '1%'
+    },
+    leftIconContainerStyle: {
+        paddingRight: '10%'
     },
     errorText: {
         alignSelf: 'center',
         fontSize: 18,
         color: 'red'
+    },
+    button: {
+        maxWidth: '50%',
+        backgroundColor: 'grey',
+        marginLeft: '25%',
     }
 });
 

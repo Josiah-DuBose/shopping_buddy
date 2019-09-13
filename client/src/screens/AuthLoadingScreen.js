@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Loading } from '../components/shared';
 import AsyncStorage from '@react-native-community/async-storage';
+import apiRequest from '../services/apiRequest';
 
 export default class AuthLoadingScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            error: '',
-            loading: false,
+            loading: false
         };
     }
 
@@ -21,32 +21,17 @@ export default class AuthLoadingScreen extends Component {
         const userToken = await AsyncStorage.getItem('userToken');
         let authOk = false;
         if (userToken) {
-            try {
-                //TODO Abstract all api methods into service.
-                const response = await fetch('http://localhost:8550/api/v1/users/check-token', {
-                    method: 'Post',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        token: userToken
-                    })
-                });
-                const json = await response.json();
-
-                if (response.ok) {
-                    authOk = json.token;
-                } else {
-                    throw json;
+            const options = {
+                url: 'users/check-token',
+                method: 'Post',
+                body: {
+                    token: userToken
                 }
-            }
-            catch(err) {}
-
-            finally {
-                this.setState({loading: false});
-            }
+            };
+            const response = await apiRequest(options);
+            authOk = response.token;
         }
+        this.setState({loading: false});
         this.props.navigation.navigate(authOk ? 'Home' : 'Auth');
     };
 
