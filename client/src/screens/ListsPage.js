@@ -36,12 +36,7 @@ export default class ListsPage extends Component {
                         lists && lists.length ?
                         lists.map((list, index) => (
                             <ListItem key={index}
-                                style={{
-                                    borderWidth: 1,
-                                    borderRadius: 2,
-                                    borderColor: 'grey',
-                                    marginBottom: 4
-                                }}
+                                style={styles.listsContainer}
                                 title={list.name}
                                 subtitle={list.store}
                                 badge={{
@@ -65,19 +60,13 @@ export default class ListsPage extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        marginBottom: 275,
-        padding: 30,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.5,
-        shadowRadius: 1,
-        elevation: 1,
+        padding: 10,
     },
     listsContainer: {
-        marginTop: 150,
         borderWidth: 2,
+        borderRadius: 2,
         borderColor: 'grey',
-        maxWidth: '100%'
+        paddingBottom: 5
     },
     item: {
         fontSize: 18,

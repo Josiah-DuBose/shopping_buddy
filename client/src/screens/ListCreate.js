@@ -94,10 +94,9 @@ export default class ListCreate extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        marginBottom: 275,
-        padding: 5,
+        padding: 10,
         borderWidth: 1,
-        borderColor: 'grey',
+        borderColor: '#90a4ae',
         maxWidth: '90%',
         marginLeft: '5%',
         marginTop: '5%'
@@ -107,14 +106,14 @@ const styles = StyleSheet.create({
     },
     inputContainerStyle: {
         borderWidth: 1,
-        borderColor: 'grey',
+        borderColor: '#90a4ae',
         maxWidth: '100%',
         marginTop: '1%',
         marginBottom: '1%'
     },
     button: {
         maxWidth: '50%',
-        backgroundColor: 'grey',
+        backgroundColor: '#90a4ae',
         marginLeft: '25%',
     }
 });

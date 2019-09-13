@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     },
     inputContainerStyle: {
         borderWidth: 1,
-        borderColor: 'grey',
+        borderColor: '#90a4ae',
         maxWidth: '100%',
         marginTop: '1%',
         marginBottom: '1%'
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
     },
     button: {
         maxWidth: '50%',
-        backgroundColor: 'grey',
+        backgroundColor: '#90a4ae',
         marginLeft: '25%',
     }
 });

@@ -3,6 +3,7 @@ import { StyleSheet, View, SectionList } from 'react-native';
 import { Loading, ListEntry } from '../components/shared';
 import { Text } from 'react-native-elements';
 import apiRequest from '../services/apiRequest';
+import Swipeout from 'react-native-swipeout';
 
 export default class ListPage extends Component {
     constructor(props) {
@@ -46,7 +47,7 @@ export default class ListPage extends Component {
         const itemSet = list.items[setIndex];
         const itemIndex = itemSet.data.findIndex(ele => ele._id === item._id);
         
-         // Remove item and set if set is empty.
+        // Remove item and set if set is empty.
         itemSet.data.splice(itemIndex, 1);
         if (!itemSet.data.length) {
             list.items.splice(setIndex, 1);
@@ -110,12 +111,21 @@ export default class ListPage extends Component {
     }
 
     renderItem(item, index) {
+        const swipeoutButtons = [
+            {
+                text: 'Delete',
+                onPress: (() => this.removeItem(item)),
+                backgroundColor: '#f44336'
+            }
+        ];
         return  (
-            <ListEntry item={item} index={index}
-                onPress={() => this.itemPress(item)}
-                edit={() => this.updateItem(item)}
-                deleteItem={() => this.removeItem(item)}
-            />
+            <Swipeout autoClose={true} right={swipeoutButtons}>
+                <ListEntry item={item} index={index}
+                    onPress={() => this.itemPress(item)}
+                    edit={() => this.updateItem(item)}
+                />
+            </Swipeout>
+           
         );
     }
 
@@ -125,24 +135,24 @@ export default class ListPage extends Component {
             <React.Fragment>
             {
                 loading ? <Loading size={'large'} msg={'Loading list'} /> :
-                <View>
+                <View style={styles.container}>
                     { list.items.length? 
                         <SectionList
                             style={styles.listsContainer}
                             renderItem={({item, index, section}) => this.renderItem(item, index)}
                             renderSectionHeader={({section: {title}}) => (
-                                <Text style={styles.textHeader}>{title}</Text>
+                                <Text style={Object.assign({}, styles.textHeader, styles[title])}>{title}</Text>
                             )}
                             sections={list.items}
                             keyExtractor={(item, index) => item + index}
                             extraData={itemUpdated}
                         /> :
-                        <Text style={styles.textHeader}>No items yet, add one above.</Text>
+                        <Text style={styles.noItemsText}>No items yet, add one above.</Text>
                     }
                     { list.items.length ?
                         <View style={styles.totalContainer}>
-                            <Text style={styles.textHeader}>Done Total: ${this.itemTotal(true)}</Text>
-                            <Text style={styles.textHeader}>List Total: ${this.itemTotal()}</Text>
+                            <Text style={Object.assign({}, styles.totalText, styles.totalLeft)}>Done Total: ${this.itemTotal(true)}</Text>
+                            <Text style={Object.assign({}, styles.totalText, styles.totalRight)}>List Total: ${this.itemTotal()}</Text> 
                         </View> :
                         null
                     }
@@ -154,18 +164,39 @@ export default class ListPage extends Component {
 }
 
 const styles = StyleSheet.create({
-    listsContainer: {
-        maxWidth: '90%',
-        marginLeft: '5%',
-        marginTop: '4%'
+    container: {
+        padding: 10,
     },
-    textHeader: {
+    listsContainer: {
+        borderWidth: 1,
+        borderRadius: 2,
+        borderColor: '#90a4ae',
+        padding: 15,
+    },
+    noItemsText: {
         textAlign: 'center',
-        fontSize: 18,
+        fontSize: 20,
+        padding: 2,
         fontWeight: 'bold',
-        paddingTop: '5%'
+        flexDirection: 'row',
+    },
+    'Dry Goods': {
+        borderWidth: 1,
+        borderRadius: 2,
+        borderColor: '#90a4ae',
+        backgroundColor: '#ff8a65'
     },
     totalContainer: {
-
+        flexDirection: 'row',
+    },
+    totalText: {
+        fontSize: 15,
+        fontWeight: 'bold',
+    },
+    totalLeft: {
+        
+    },
+    totalRight: {
+        marginLeft: '28%'
     }
 });
