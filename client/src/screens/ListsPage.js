@@ -14,7 +14,10 @@ export default class ListsPage extends Component {
             error: '',
             loading: false,
         };
+
         this.removeList = this.removeList.bind(this);
+        this.getLists = this.getLists.bind(this);
+        this.updateList = this.updateList.bind(this);
     }
 
     componentDidMount(){
@@ -28,13 +31,16 @@ export default class ListsPage extends Component {
         this.setState({lists: lists, loading: false});
     }
 
-    removeList(list) {
-
+    async removeList(list) {
+        this.setState({loading: true});
+        await apiRequest({url: `lists/${list.id}`, method:'Delete', auth: true});
+        await this.getLists();
     }
 
     updateList(list) {
-
+        this.props.navigation.navigate('ListCreate', { list: list });
     }
+
     renderListItem(list, index) {
         const swipeoutButtons = [
             {
@@ -44,10 +50,11 @@ export default class ListsPage extends Component {
             },
             {
                 text: 'Edit',
-                onPress: (() => this.editList(list)),
+                onPress: (() => this.updateList(list)),
                 backgroundColor: '#90a4ae'
             }
         ];
+
         return (
             <Swipeout key={index} autoClose={true} right={swipeoutButtons}>
                 <ListItem key={index}
@@ -63,7 +70,7 @@ export default class ListsPage extends Component {
                     }}
                     chevron={true}
                     onPress={() => this.props.navigation.navigate('List', 
-                        {listId: list._id, listName: list.name})
+                        {listId: list.id, listName: list.name})
                     }
                 />
             </Swipeout>

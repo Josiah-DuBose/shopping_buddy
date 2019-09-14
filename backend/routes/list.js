@@ -33,6 +33,16 @@ router.route('/:id').get(isAuthenticated, async (req, res, next) => {
     }
 });
 
+router.route('/:id').delete(isAuthenticated, async (req, res, next) => {
+    try {
+        const response = await listController.deleteOne(req.params['id']);
+        res.json(response);
+    } catch(err) {
+        console.error(err);
+        next(err);
+    }
+});
+
 router.route('/:id').put(isAuthenticated, async (req, res, next) => {
     try {
         const response = await listController.updateOne(req, req.params['id']);

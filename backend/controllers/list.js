@@ -70,3 +70,13 @@ exports.updateOne = async (req, id) => {
         throw(utils.createError(500, 'Item update error', err));
     }
 }
+
+exports.deleteOne = async (id) => {
+    try {
+        const List = mongoose.model('List');
+        const resp = await List.remove({_id: id});
+        return resp;
+    } catch(err) {
+        throw(utils.createError(500, 'List delete error', err));
+    }
+}

@@ -25,7 +25,7 @@ export default class ListCreate extends Component {
         const create = this.state.create;
         const list = this.state.list;
         const listOptions = {
-            url: create ? `lists/create` : `lists/${list._id}`,
+            url: create ? `lists/create` : `lists/${list.id}`,
             method: create ? 'POST' : 'PUT',
             auth: true,
             user: true,

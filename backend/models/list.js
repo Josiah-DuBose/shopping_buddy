@@ -28,7 +28,7 @@ schema.methods.listJSON = function() {
     return {
         items: schema.methods.formattedList(this.items),
         name: this.name,
-        _id: this.id,
+        id: this.id,
         store: this.store
     }
 };
