@@ -9,6 +9,15 @@ import ListCreate from './screens/ListCreate';
 import AuthLoadingScreen from './screens/AuthLoadingScreen';
 import { ClickIcon, BackArrow } from './components/shared';
 
+const backProps = {
+    headerBackImage: <BackArrow />,
+    headerLeftContainerStyle: {paddingLeft: 10},
+    headerBackTitleStyle: {
+        paddingLeft: 5,
+        color: 'black'
+    }
+};
+
 const HomeRoutes = createStackNavigator(
     {
         Lists: {
@@ -28,13 +37,15 @@ const HomeRoutes = createStackNavigator(
                         size={25}
                         onPress={() => navigation.push('ListCreate')}
                     />
-                )
+                ),
+                headerBackTitle: 'back'
             })
         },
         Profile: {
             screen: ProfilePage,
             navigationOptions: ({ navigation }) => ({
                 title: 'Profile',
+                ...backProps
             })
         },
 	    List: {
@@ -51,14 +62,16 @@ const HomeRoutes = createStackNavigator(
                         })}
                     />
                 ),
-                headerBackTitle: 'back'
+                headerBackTitle: 'back',
+                ...backProps
             })
         },
         ListCreate: {
             screen: ListCreate,
             navigationOptions: ({ navigation }) => ({
                 title: navigation.state.params && navigation.state.params.list ?
-                navigation.state.params.list.name : 'Create List'
+                    navigation.state.params.list.name : 'Create List',
+                ...backProps
             })
         },
         Item: {
@@ -66,12 +79,7 @@ const HomeRoutes = createStackNavigator(
             navigationOptions: ({ navigation }) => ({
                 title: navigation.state.params && navigation.state.params.item ?
                     navigation.state.params.item.name : 'Create Item',
-                headerBackImage: <BackArrow />,
-                headerLeftContainerStyle: {paddingLeft: 10},
-                headerBackTitleStyle: {
-                    paddingLeft: 5,
-                    color: 'black'
-                }
+                ...backProps
             })
         }
     },
