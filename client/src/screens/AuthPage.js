@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     },
     button: {
         maxWidth: '50%',
-        backgroundColor: 'grey',
+        backgroundColor: '#90a4ae',
         marginLeft: '25%'
     }
 });

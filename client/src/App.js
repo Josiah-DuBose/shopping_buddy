@@ -14,7 +14,7 @@ const backProps = {
     headerLeftContainerStyle: {paddingLeft: 10},
     headerBackTitleStyle: {
         paddingLeft: 5,
-        color: 'black'
+        color: '#90a4ae'
     }
 };
 

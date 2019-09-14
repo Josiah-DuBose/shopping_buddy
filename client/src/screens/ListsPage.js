@@ -65,7 +65,7 @@ export default class ListsPage extends Component {
                         value: ([].concat(...list.items.map(set => set.data))).length,
                         textStyle: { color: 'black' },
                         badgeStyle: {
-                            backgroundColor: 'grey'
+                            backgroundColor: '#90a4ae'
                         }
                     }}
                     chevron={true}

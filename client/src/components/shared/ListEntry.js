@@ -9,7 +9,7 @@ const ListEntry = ({item, index, onPress, edit}) => {
             style={{
                 borderWidth: 1,
                 borderRadius: 2,
-                borderColor: 'grey'
+                borderColor: '#90a4ae'
             }}
             onPress={onPress}
             leftIcon={
