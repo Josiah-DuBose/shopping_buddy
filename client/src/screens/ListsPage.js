@@ -4,6 +4,7 @@ import { ListItem } from 'react-native-elements'
 import { Loading, NothingHere } from '../components/shared';
 import apiRequest from '../services/apiRequest';
 import AsyncStorage from '@react-native-community/async-storage';
+import Swipeout from 'react-native-swipeout';
 
 export default class ListsPage extends Component {
     constructor(props) {
@@ -13,6 +14,7 @@ export default class ListsPage extends Component {
             error: '',
             loading: false,
         };
+        this.removeList = this.removeList.bind(this);
     }
 
     componentDidMount(){
@@ -26,6 +28,48 @@ export default class ListsPage extends Component {
         this.setState({lists: lists, loading: false});
     }
 
+    removeList(list) {
+
+    }
+
+    updateList(list) {
+
+    }
+    renderListItem(list, index) {
+        const swipeoutButtons = [
+            {
+                text: 'Delete',
+                onPress: (() => this.removeList(list)),
+                backgroundColor: '#f44336'
+            },
+            {
+                text: 'Edit',
+                onPress: (() => this.editList(list)),
+                backgroundColor: '#90a4ae'
+            }
+        ];
+        return (
+            <Swipeout key={index} autoClose={true} right={swipeoutButtons}>
+                <ListItem key={index}
+                    style={styles.listsContainer}
+                    title={list.name}
+                    subtitle={list.store}
+                    badge={{
+                        value: ([].concat(...list.items.map(set => set.data))).length,
+                        textStyle: { color: 'black' },
+                        badgeStyle: {
+                            backgroundColor: 'grey'
+                        }
+                    }}
+                    chevron={true}
+                    onPress={() => this.props.navigation.navigate('List', 
+                        {listId: list._id, listName: list.name})
+                    }
+                />
+            </Swipeout>
+        );
+    }
+
     render() {
         const { lists, loading } = this.state;
         return (
@@ -34,22 +78,7 @@ export default class ListsPage extends Component {
                     {loading ?
                         <Loading size={'large'} msg={'Loading lists'} /> :
                         lists && lists.length ?
-                        lists.map((list, index) => (
-                            <ListItem key={index}
-                                style={styles.listsContainer}
-                                title={list.name}
-                                subtitle={list.store}
-                                badge={{
-                                    value: ([].concat(...list.items.map(set => set.data))).length,
-                                    textStyle: { color: 'black' },
-                                    badgeStyle: {
-                                        backgroundColor: 'grey'
-                                    }
-                                }}
-                                chevron={true}
-                                onPress={() => this.props.navigation.navigate('List', {listId: list._id, listName: list.name})}
-                            />
-                        )) :
+                        lists.map((list, index) => (this.renderListItem(list, index))):
                         <NothingHere label={'lists'} />
                     }
                 </View>
@@ -63,10 +92,9 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     listsContainer: {
-        borderWidth: 2,
+        borderWidth: 1,
         borderRadius: 2,
-        borderColor: 'grey',
-        paddingBottom: 5
+        borderColor: '#90a4ae'
     },
     item: {
         fontSize: 18,

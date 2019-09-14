@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-    createSwitchNavigator,
-    createStackNavigator,
-    createAppContainer,
-    createBottomTabNavigator
-} from 'react-navigation';
+import { createSwitchNavigator, createStackNavigator, createAppContainer } from 'react-navigation';
 import ProfilePage from './screens/ProfilePage';
 import ListPage from './screens/ListPage';
 import ListsPage from './screens/ListsPage';
@@ -12,7 +7,7 @@ import AuthPage from './screens/AuthPage';
 import ItemPage from './screens/ItemPage';
 import ListCreate from './screens/ListCreate';
 import AuthLoadingScreen from './screens/AuthLoadingScreen';
-import { ClickIcon } from './components/shared';
+import { ClickIcon, BackArrow } from './components/shared';
 
 const HomeRoutes = createStackNavigator(
     {
@@ -55,7 +50,8 @@ const HomeRoutes = createStackNavigator(
                             listName: navigation.state.params.listName
                         })}
                     />
-                )
+                ),
+                headerBackTitle: 'back'
             })
         },
         ListCreate: {
@@ -70,6 +66,12 @@ const HomeRoutes = createStackNavigator(
             navigationOptions: ({ navigation }) => ({
                 title: navigation.state.params && navigation.state.params.item ?
                     navigation.state.params.item.name : 'Create Item',
+                headerBackImage: <BackArrow />,
+                headerLeftContainerStyle: {paddingLeft: 10},
+                headerBackTitleStyle: {
+                    paddingLeft: 5,
+                    color: 'black'
+                }
             })
         }
     },
