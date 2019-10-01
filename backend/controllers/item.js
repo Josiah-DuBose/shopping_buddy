@@ -12,7 +12,17 @@ exports.get = async (id) => {
     }
 }
 
-exports.list = async (req) => {
+exports.byUser = async (userId) => {
+    try {
+        const Item = mongoose.model('Item');
+        const items = await Item.find({user: userId})
+        return items;
+    } catch(err) {
+        throw(utils.createError(500, 'Item by user retrieve error', err));
+    }
+}
+
+exports.list = async () => {
     try {
         const Item = mongoose.model('Item');
         const items = await Item.find({});
@@ -30,7 +40,8 @@ exports.create = async (req) => {
             name: req.body.name,
             section: req.body.section,
             qty: req.body.qty,
-            store: req.body.stores
+            store: req.body.stores,
+            user: req.body.user
         });
         return item;
     } catch(err) {
@@ -49,7 +60,8 @@ exports.updateOne = async (req, id) => {
                 section: req.body.section,
                 qty: req.body.qty,
                 store: req.body.stores,
-                done: req.body.done
+                done: req.body.done,
+                user: req.body.user
             },
             {
                 new: true,

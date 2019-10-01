@@ -33,6 +33,7 @@ export default class ItemPage extends Component {
                 url: create ? `items/create` : `items/${item._id}`,
                 method: create ? 'POST' : 'PUT',
                 auth: true,
+                user: true,
                 body: {
                     name: item.name,
                     price: item.price,
