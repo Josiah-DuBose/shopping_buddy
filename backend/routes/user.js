@@ -25,9 +25,18 @@ router.route('/:username').get(isAuthenticated, async (req, res, next) => {
 });
 
 router.route('/create').post(async (req, res, next) => {
-    console.log("create", req)
     try {
         const response = await userController.create(req);
+        res.json(response);
+    } catch (err) {
+        console.error(err);
+        next(err);
+    }
+});
+
+router.route('/:userId').put(async (req, res, next) => {
+    try {
+        const response = await userController.updateOne(req.params['userId'], req.body);
         res.json(response);
     } catch (err) {
         console.error(err);

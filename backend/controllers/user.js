@@ -50,6 +50,25 @@ exports.create = async (req) => {
     }
 }
 
+exports.updateOne = async (userId, body) => {
+    try {
+        const User = mongoose.model('User');
+        const user =  await User.findOneAndUpdate({_id: userId}, 
+            { 
+                email: body.email,
+                username: body.username
+            },
+            {
+                new: true,
+                useFindAndModify: false
+            }
+        );
+        return user.userJSON();
+    } catch(err) {
+        throw(utils.createError(500, 'User update error', err));
+    }
+}
+
 exports.login = async (req) => {
     try {
         const User = mongoose.model('User');
