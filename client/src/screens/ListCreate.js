@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Input, Button } from 'react-native-elements';
+import { Input, Button, withTheme } from 'react-native-elements';
 import Entypo from 'react-native-vector-icons/Entypo';
 import apiRequest from '../services/apiRequest';
 
-export default class ListCreate extends Component {
+class ListCreate extends Component {
     constructor(props) {
         super(props);
         const newList = {
@@ -15,7 +15,8 @@ export default class ListCreate extends Component {
             saving: false,
             list: this.props.navigation.state.params && this.props.navigation.state.params.list ?
                 this.props.navigation.state.params.list : newList,
-            create: !(this.props.navigation.state.params && this.props.navigation.state.params.list)
+            create: !(this.props.navigation.state.params && this.props.navigation.state.params.list),
+            theme: this.props.theme
         };
         this.saveList = this.saveList.bind(this);
     }
@@ -41,14 +42,14 @@ export default class ListCreate extends Component {
     }
 
     render() {
-        const { saving, list } = this.state;
-        return ( // TODO: abstract into Input Component
-            <View style={styles.container}>
+        const { saving, list, theme } = this.state;
+        return (
+            <View style={theme.container}>
                 <Input
                     placeholder={'Enter list name'}
                     value={list.name}
-                    leftIconContainerStyle={styles.leftIconContainerStyle}
-                    inputContainerStyle={styles.inputContainerStyle}
+                    leftIconContainerStyle={theme.leftInputIconContainerStyle}
+                    inputContainerStyle={theme.inputContainerStyle}
                     onChangeText={name =>
                         this.setState(state => {
                           return {
@@ -65,8 +66,8 @@ export default class ListCreate extends Component {
                 <Input
                     placeholder={'Enter store name'}
                     value={list.store}
-                    leftIconContainerStyle={styles.leftIconContainerStyle}
-                    inputContainerStyle={styles.inputContainerStyle}
+                    leftIconContainerStyle={theme.leftInputIconContainerStyle}
+                    inputContainerStyle={theme.inputContainerStyle}
                     onChangeText={store =>
                         this.setState(state => {
                           return {
@@ -80,7 +81,7 @@ export default class ListCreate extends Component {
                     }
                     leftIcon={<Entypo name={'shopping-bag'} size={20} />}
                 />
-                <Button buttonStyle={styles.button}
+                <Button buttonStyle={theme.formButton}
                     icon={{name: 'save', type: 'entypo'}}
                     title='Save List'
                     loadingRight={saving}
@@ -92,28 +93,4 @@ export default class ListCreate extends Component {
     }
 }
 
-const styles = StyleSheet.create({
-    container: {
-        padding: 10,
-        borderWidth: 1,
-        borderColor: '#90a4ae',
-        maxWidth: '90%',
-        marginLeft: '5%',
-        marginTop: '5%'
-    },
-    leftIconContainerStyle: {
-        paddingRight: '10%'
-    },
-    inputContainerStyle: {
-        borderWidth: 1,
-        borderColor: '#90a4ae',
-        maxWidth: '100%',
-        marginTop: '1%',
-        marginBottom: '1%'
-    },
-    button: {
-        maxWidth: '50%',
-        backgroundColor: '#90a4ae',
-        marginLeft: '25%',
-    }
-});
+export default withTheme(ListCreate);

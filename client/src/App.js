@@ -8,6 +8,8 @@ import ItemPage from './screens/ItemPage';
 import ListCreate from './screens/ListCreate';
 import AuthLoadingScreen from './screens/AuthLoadingScreen';
 import { ClickIcon, BackArrow } from './components/shared';
+import { ThemeProvider } from 'react-native-elements';
+import theme from'./theme';
 
 const backProps = {
     headerBackImage: <BackArrow />,
@@ -79,6 +81,7 @@ const HomeRoutes = createStackNavigator(
             navigationOptions: ({ navigation }) => ({
                 title: navigation.state.params && navigation.state.params.item ?
                     navigation.state.params.item.name : 'Create Item',
+                headerBackTitle: 'back',    
                 ...backProps
             })
         }
@@ -109,4 +112,7 @@ const AppContainer = createAppContainer(createSwitchNavigator(
 ));
 
 export default () =>
-    <AppContainer />
+    <ThemeProvider theme={theme}>
+        <AppContainer />
+    </ThemeProvider>
+    

@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const utils = require('../helpers/util');
 
-
 exports.get = async (id) => {
     try {
         const Item = mongoose.model('Item');

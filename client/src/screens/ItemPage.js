@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Input, Button } from 'react-native-elements';
+import { Input, Button, withTheme } from 'react-native-elements';
 import Entypo from 'react-native-vector-icons/Entypo';
 import apiRequest from '../services/apiRequest';
 
-export default class ItemPage extends Component {
+class ItemPage extends Component {
     constructor(props) {
         super(props)
         const newItem = {
-            price: 0.00,
+            price: '',
             name: '',
             section: '',
             qty: '',
@@ -20,7 +20,8 @@ export default class ItemPage extends Component {
                 this.props.navigation.state.params.item : newItem,
             listId:  this.props.navigation.state.params.listId,
             listName: this.props.navigation.state.params.listName,
-            create: !(this.props.navigation.state.params && this.props.navigation.state.params.item)
+            create: !(this.props.navigation.state.params && this.props.navigation.state.params.item),
+            theme: this.props.theme
         };
         this.saveItem = this.saveItem.bind(this);
     }
@@ -45,7 +46,7 @@ export default class ItemPage extends Component {
 
             // Add item to list if action was a create.
             if (itemResp && create) {
-                const listOptions = { // TODO: Create list/item services for api calls.
+                const listOptions = {
                     url: `lists/${this.state.listId}`,
                     method: 'PUT',
                     auth: true,
@@ -55,7 +56,7 @@ export default class ItemPage extends Component {
                 };
                 await apiRequest(listOptions);
             }
-            this.props.navigation.push('List', {listId: this.state.listId, listName: this.state.listName});
+            this.props.navigation.navigate('List', {listId: this.state.listId, listName: this.state.listName});
         } catch(err) {
             alert(err);
         } finally {
@@ -64,14 +65,14 @@ export default class ItemPage extends Component {
     }
 
     render() {
-        const { saving, item } = this.state;
-        return ( // TODO: abstract into Input Component
-            <View style={styles.container}>
+        const { saving, item, theme } = this.state;
+        return (
+            <View style={theme.container}>
                 <Input
                     placeholder={'Enter item name'}
                     value={item.name}
-                    leftIconContainerStyle={styles.leftIconContainerStyle}
-                    inputContainerStyle={styles.inputContainerStyle}
+                    leftIconContainerStyle={theme.leftInputIconContainerStyle}
+                    inputContainerStyle={theme.inputContainerStyle}
                     onChangeText={name =>
                         this.setState(state => {
                           return {
@@ -89,8 +90,8 @@ export default class ItemPage extends Component {
                     placeholder={'Enter item price'}
                     value={`${item.price}`}
                     keyboardType={'number-pad'}
-                    leftIconContainerStyle={styles.leftIconContainerStyle}
-                    inputContainerStyle={styles.inputContainerStyle}
+                    leftIconContainerStyle={theme.leftInputIconContainerStyle}
+                    inputContainerStyle={theme.inputContainerStyle}
                     onChangeText={price =>
                         this.setState(state => {
                           return {
@@ -107,8 +108,8 @@ export default class ItemPage extends Component {
                 <Input
                     placeholder={'Enter item section'}
                     value={item.section}
-                    leftIconContainerStyle={styles.leftIconContainerStyle}
-                    inputContainerStyle={styles.inputContainerStyle}
+                    leftIconContainerStyle={theme.leftInputIconContainerStyle}
+                    inputContainerStyle={theme.inputContainerStyle}
                     onChangeText={section =>
                         this.setState(state => {
                           return {
@@ -126,8 +127,8 @@ export default class ItemPage extends Component {
                     placeholder={'Enter item Qty'}
                     value={`${item.qty}`}
                     keyboardType={'number-pad'}
-                    leftIconContainerStyle={styles.leftIconContainerStyle}
-                    inputContainerStyle={styles.inputContainerStyle}
+                    leftIconContainerStyle={theme.leftInputIconContainerStyle}
+                    inputContainerStyle={theme.inputContainerStyle}
                     onChangeText={qty =>
                         this.setState(state => {
                           return {
@@ -141,7 +142,7 @@ export default class ItemPage extends Component {
                     }
                     leftIcon={<Entypo name={'calculator'} size={20} />}
                 />
-                <Button buttonStyle={styles.button}
+                <Button buttonStyle={theme.formButton}
                     icon={{name: 'save', type: 'entypo'}}
                     title='Save Item'
                     loadingRight={saving}
@@ -154,29 +155,4 @@ export default class ItemPage extends Component {
 
 }
 
-const styles = StyleSheet.create({
-    container: {
-        marginBottom: 275,
-        padding: 5,
-        borderWidth: 1,
-        borderColor: '#90a4ae',
-        maxWidth: '90%',
-        marginLeft: '5%',
-        marginTop: '5%'
-    },
-    leftIconContainerStyle: {
-        paddingRight: '10%'
-    },
-    inputContainerStyle: {
-        borderWidth: 1,
-        borderColor: '#90a4ae',
-        maxWidth: '100%',
-        marginTop: '1%',
-        marginBottom: '1%'
-    },
-    button: {
-        maxWidth: '50%',
-        backgroundColor: '#90a4ae',
-        marginLeft: '25%',
-    }
-});
+export default withTheme(ItemPage);

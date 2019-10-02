@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { ListItem } from 'react-native-elements'
+import { ListItem, withTheme } from 'react-native-elements'
 import { Loading, NothingHere } from '../components/shared';
 import apiRequest from '../services/apiRequest';
 import AsyncStorage from '@react-native-community/async-storage';
 import Swipeout from 'react-native-swipeout';
 
-export default class ListsPage extends Component {
+class ListsPage extends Component {
     constructor(props) {
         super(props);
+        console.log("props", props);
         this.state = {
             lists: [],
             error: '',
             loading: false,
+            theme: this.props.theme
         };
 
         this.removeList = this.removeList.bind(this);
@@ -21,7 +23,9 @@ export default class ListsPage extends Component {
     }
 
     componentDidMount(){
-        this.getLists();
+        this._subscribe = this.props.navigation.addListener('didFocus', () => {
+            this.getLists();
+        });
     }
 
     async getLists() {
@@ -42,6 +46,7 @@ export default class ListsPage extends Component {
     }
 
     renderListItem(list, index) {
+        const { theme } = this.state;
         const swipeoutButtons = [
             {
                 text: 'Delete',
@@ -58,7 +63,7 @@ export default class ListsPage extends Component {
         return (
             <Swipeout key={index} autoClose={true} right={swipeoutButtons}>
                 <ListItem key={index}
-                    style={styles.listsContainer}
+                    style={theme.listContainer}
                     title={list.name}
                     subtitle={list.store}
                     badge={{
@@ -69,19 +74,18 @@ export default class ListsPage extends Component {
                         }
                     }}
                     chevron={true}
-                    onPress={() => this.props.navigation.navigate('List', 
-                        {listId: list.id, listName: list.name})
-                    }
+                    onPress={() => this.props.navigation.navigate('List', {listId: list.id, listName: list.name})}
                 />
             </Swipeout>
+               
         );
     }
 
     render() {
-        const { lists, loading } = this.state;
+        const { lists, loading, theme } = this.state;
         return (
             <React.Fragment>
-                <View style={styles.container}>
+                <View style={theme.container}>
                     {loading ?
                         <Loading size={'large'} msg={'Loading lists'} /> :
                         lists && lists.length ?
@@ -94,24 +98,6 @@ export default class ListsPage extends Component {
     }
 }
 
-const styles = StyleSheet.create({
-    container: {
-        padding: 10,
-    },
-    listsContainer: {
-        borderWidth: 1,
-        borderRadius: 2,
-        borderColor: '#90a4ae'
-    },
-    item: {
-        fontSize: 18,
-        height: 44,
-        textAlign: 'center',
-    },
-    textHeader: {
-        textAlign: 'center',
-        fontSize: 18,
-        fontWeight: 'bold',
-        paddingTop: '5%'
-    }
-});
+const styles = StyleSheet.create({});
+
+export default withTheme(ListsPage);

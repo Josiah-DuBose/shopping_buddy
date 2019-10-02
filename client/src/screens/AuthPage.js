@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Login, Registration } from '../components';
-import { Button, Text } from 'react-native-elements';
+import { Button, Text, withTheme } from 'react-native-elements';
 
-export default class AuthPage extends Component {
+class AuthPage extends Component {
     constructor(props){
         super(props);
         this.state = {
             showLogin: true,
             title: '',
             buttonText: '',
-            pageText: ''
+            pageText: '',
+            theme: this.props.theme
         };
 
         this.viewToggle = this.viewToggle.bind(this);
@@ -60,14 +61,14 @@ export default class AuthPage extends Component {
     }
 
     render() {
-        const { title, buttonText, buttonIcon, pageText } = this.state;
+        const { title, buttonText, buttonIcon, pageText, theme } = this.state;
         return(
             <React.Fragment>
-                <View style={styles.container}>
+                <View style={theme.container}>
                     <Text style={styles.description}>{title}</Text>
                     { this.pickForm() }
                     <Text style={Object.assign({}, styles.description, styles.secondDes)}>{pageText}</Text>
-                    <Button buttonStyle={styles.button}
+                    <Button buttonStyle={theme.formButton}
                         title={buttonText}
                         rounded={true}
                         icon={buttonIcon}
@@ -80,9 +81,6 @@ export default class AuthPage extends Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        marginTop: '30%'
-    },
     description: {
         fontWeight: 'bold',
         fontSize: 20,
@@ -93,9 +91,6 @@ const styles = StyleSheet.create({
         marginTop: 20,
         paddingBottom: '5%'
     },
-    button: {
-        maxWidth: '50%',
-        backgroundColor: '#90a4ae',
-        marginLeft: '25%'
-    }
 });
+
+export default withTheme(AuthPage);

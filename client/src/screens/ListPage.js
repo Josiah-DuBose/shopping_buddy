@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, SectionList } from 'react-native';
 import { Loading, ListEntry, NothingHere } from '../components/shared';
-import { Text } from 'react-native-elements';
+import { Text, withTheme } from 'react-native-elements';
 import apiRequest from '../services/apiRequest';
 import Swipeout from 'react-native-swipeout';
 
-export default class ListPage extends Component {
+class ListPage extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -14,19 +14,23 @@ export default class ListPage extends Component {
             listId: this.props.navigation.state.params.listId,
             listName: this.props.navigation.state.params.listName,
             list: {items: []},
-            itemUpdated: false
+            listLoaded: false,
+            itemUpdated: false,
+            theme: this.props.theme
         };
         this.itemTotal = this.itemTotal.bind(this);
     }
 
     componentDidMount(){
-        this.getList();
+        this._subscribe = this.props.navigation.addListener('didFocus', () => {
+            this.getList();
+        });
     }
 
     async getList() {
         this.setState({loading: true});
         const list = await apiRequest({url: `lists/${this.state.listId}`, method:'Get', auth: true});
-        this.setState({list: list, loading: false});
+        this.setState({list: list, loading: false, listLoaded: true});
     }
 
     updateItem(item) {
@@ -116,13 +120,17 @@ export default class ListPage extends Component {
                 text: 'Delete',
                 onPress: (() => this.removeItem(item)),
                 backgroundColor: '#f44336'
+            },
+            {
+                text: 'Edit',
+                onPress: (() => this.updateItem(item)),
+                backgroundColor: '#90a4ae'
             }
         ];
         return  (
             <Swipeout autoClose={true} right={swipeoutButtons}>
                 <ListEntry item={item} index={index}
                     onPress={() => this.itemPress(item)}
-                    edit={() => this.updateItem(item)}
                 />
             </Swipeout>
            
@@ -130,26 +138,24 @@ export default class ListPage extends Component {
     }
 
     render() {
-        const {list, loading, itemUpdated} = this.state;
+        const {list, listLoaded, loading, itemUpdated, theme} = this.state;
         return (
             <React.Fragment>
             {
                 loading ? <Loading size={'large'} msg={'Loading list'} /> :
-                <View style={styles.container}>
-                    { list.items.length? 
+                <View style={theme.container}>
+                    { listLoaded && !list.items.length ? <NothingHere label={'items'} /> :
                         <SectionList
-                            style={styles.listsContainer}
                             renderItem={({item, index, section}) => this.renderItem(item, index)}
                             renderSectionHeader={({section: {title}}) => (
-                                <Text style={Object.assign({}, styles.textHeader, styles[title])}>{title}</Text>
+                                <Text style={Object.assign({}, theme.textHeader, theme.sectionStyles[title])}>{title}</Text>
                             )}
                             sections={list.items}
                             keyExtractor={(item, index) => item + index}
                             extraData={itemUpdated}
-                        /> :
-                        <NothingHere label={'items'} />
+                        /> 
                     }
-                    { list.items.length ?
+                    { listLoaded && list.items.length ?
                         <View style={styles.totalContainer}>
                             <Text style={Object.assign({}, styles.totalText, styles.totalLeft)}>Done Total: ${this.itemTotal(true)}</Text>
                             <Text style={Object.assign({}, styles.totalText, styles.totalRight)}>List Total: ${this.itemTotal()}</Text> 
@@ -164,21 +170,6 @@ export default class ListPage extends Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        padding: 10,
-    },
-    listsContainer: {
-        borderWidth: 1,
-        borderRadius: 2,
-        borderColor: '#90a4ae',
-        padding: 15,
-    },
-    'Dry Goods': {
-        borderWidth: 1,
-        borderRadius: 2,
-        borderColor: '#90a4ae',
-        backgroundColor: '#ff8a65'
-    },
     totalContainer: {
         flexDirection: 'row',
     },
@@ -187,9 +178,11 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     totalLeft: {
-        
+
     },
     totalRight: {
-        marginLeft: '28%'
+        marginLeft: '25%'
     }
 });
+
+export default withTheme(ListPage);

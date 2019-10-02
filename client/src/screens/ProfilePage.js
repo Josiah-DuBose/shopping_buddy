@@ -1,17 +1,21 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
-import { Card, Button } from 'react-native-elements'
+import { Card, Button, withTheme, Input } from 'react-native-elements';
+import { View } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Loading } from '../components/shared';
+import Entypo from 'react-native-vector-icons/Entypo';
 
-export default class ProfilePage extends Component {
+class ProfilePage extends Component {
     constructor(props) {
         super(props);
         this.state = {
             user: null,
-            loading: true
+            loading: true,
+            currentUsername: null,
+            theme: this.props.theme
         }
         this.logout = this.logout.bind(this);
+        this.saveUser = this.saveUser.bind(this);
     }
 
     componentDidMount(){
@@ -20,8 +24,12 @@ export default class ProfilePage extends Component {
 
     async loadUser() {
         this.setState({loading: true});
-        const user = await AsyncStorage.getItem('userSession');
-        this.setState({user: JSON.parse(user), loading: false});
+        const user = JSON.parse(await AsyncStorage.getItem('userSession'));
+        this.setState({user: user, currentUsername: user.username, loading: false});
+    }
+
+    async saveUser() {
+
     }
 
     async logout() {
@@ -32,57 +40,61 @@ export default class ProfilePage extends Component {
     }
 
     render() {
-        const {user, loading} = this.state;
+        const {user, currentUsername, loading, theme} = this.state;
         return (
-            <View style={styles.container}>
-            {loading ?
+            <React.Fragment>
+            { loading ?
                 <Loading size={'large'} msg={'Loading User Data'} /> :
-                <React.Fragment>
-                    <Card title={`${user.username}`}>
-                        <View style={styles.userDataContainer}>
-                            <Image
-                                style={styles.image}
-                                resizeMode="cover"
-                                source={{ uri: user.avatar }}
-                            />
-                            <Text style={styles.username}>username: {user.username}</Text>
-                            <Text style={styles.username}>email: {user.email}</Text>
-                        </View>
-                    </Card>
-                    <Button buttonStyle={styles.button}
-                        title='Logout'
-                        rounded={true}
-                        onPress={() => this.logout()}
+                <Card title={`User: ${currentUsername}`}>
+                    <Input
+                        leftIcon={<Entypo name={'user'} size={20} />}
+                        leftIconContainerStyle={theme.leftInputIconContainerStyle}
+                        inputContainerStyle={theme.inputContainerStyle}
+                        placeholder="Username"
+                        value={user.username}
+                        onChangeText={username => this.setState(state => {
+                          return {
+                            ...state,
+                            user: {
+                                ...state.user,
+                                username: username
+                            }
+                          };
+                        })}
                     />
-                </React.Fragment>
+                    <Input
+                        leftIcon={<Entypo name={'email'} size={20} />}
+                        leftIconContainerStyle={theme.leftInputIconContainerStyle}
+                        inputContainerStyle={theme.inputContainerStyle}
+                        placeholder="Email"
+                        value={user.email}
+                        onChangeText={email =>  this.setState(state => {
+                          return {
+                            ...state,
+                            user: {
+                                ...state.user,
+                                email: email
+                            }
+                          };
+                        })}
+                    />
+                    <View style={theme.multiButtonContainer}>
+                        <Button buttonStyle={Object.assign({}, theme.basicButton, theme.leftFormButton)}
+                            title='Save Profile'
+                            rounded={true}
+                            onPress={() => this.saveUser()}
+                        />
+                        <Button buttonStyle={Object.assign({}, theme.basicButton, theme.rightFormButton)}
+                            title='Logout'
+                            rounded={true}
+                            onPress={() => this.logout()}
+                        />
+                    </View>
+                </Card>
             }
-            </View>
+            </React.Fragment>
         );
     }
 }
 
-const styles = StyleSheet.create({
-    container: {
-        padding: 30,
-        marginTop: 65,
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.5,
-        shadowRadius: 1,
-        elevation: 1,
-    },
-    userDataContainer: {
-        paddingBottom: '1%',
-    },
-    username: {
-        fontSize: 16
-    },
-    button: {
-        maxWidth: '50%',
-        backgroundColor: '#90a4ae',
-        marginLeft: '25%',
-        marginTop: '5%'
-    },
-    image: {}
-});
+export default withTheme(ProfilePage);

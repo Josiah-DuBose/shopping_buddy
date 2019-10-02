@@ -23,7 +23,6 @@ exports.list = async () => {
 
 exports.byUser = async (userId) => {
     try {
-        console.log("userId", userId)
         const List = mongoose.model('List');
         const lists = await List.find({user: userId}).populate('items');
         if (lists.length) {
