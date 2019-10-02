@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Loading } from '../components/shared';
 import Entypo from 'react-native-vector-icons/Entypo';
+import userService from '../services/user';
 
 class ProfilePage extends Component {
     constructor(props) {
@@ -11,6 +12,7 @@ class ProfilePage extends Component {
         this.state = {
             user: null,
             loading: true,
+            saving: false,
             currentUsername: null,
             theme: this.props.theme
         }
@@ -29,7 +31,12 @@ class ProfilePage extends Component {
     }
 
     async saveUser() {
-
+        this.setState({saving: true});
+        const userId = await await AsyncStorage.getItem('userID');
+        const { user } = this.state;
+        await userService.saveUser('update', userId, user);
+        this.setState({currentUsername: user.username});
+        this.setState({saving: false});
     }
 
     async logout() {
@@ -40,7 +47,7 @@ class ProfilePage extends Component {
     }
 
     render() {
-        const {user, currentUsername, loading, theme} = this.state;
+        const {user, currentUsername, loading, saving, theme} = this.state;
         return (
             <React.Fragment>
             { loading ?
@@ -51,6 +58,7 @@ class ProfilePage extends Component {
                         leftIconContainerStyle={theme.leftInputIconContainerStyle}
                         inputContainerStyle={theme.inputContainerStyle}
                         placeholder="Username"
+                        disabled={saving}
                         value={user.username}
                         onChangeText={username => this.setState(state => {
                           return {
@@ -67,6 +75,7 @@ class ProfilePage extends Component {
                         leftIconContainerStyle={theme.leftInputIconContainerStyle}
                         inputContainerStyle={theme.inputContainerStyle}
                         placeholder="Email"
+                        disabled={saving}
                         value={user.email}
                         onChangeText={email =>  this.setState(state => {
                           return {
@@ -82,6 +91,8 @@ class ProfilePage extends Component {
                         <Button buttonStyle={Object.assign({}, theme.basicButton, theme.leftFormButton)}
                             title='Save Profile'
                             rounded={true}
+                            disabled={saving}
+                            loading={saving}
                             onPress={() => this.saveUser()}
                         />
                         <Button buttonStyle={Object.assign({}, theme.basicButton, theme.rightFormButton)}

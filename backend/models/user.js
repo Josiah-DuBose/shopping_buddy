@@ -67,8 +67,6 @@ schema.methods.userJSON = function(token){
         username: this.username,
         email: this.email,
         id: this._id,
-        updated: this.updated,
-        active: this.active
     }
     if (token) {
         user.token = schema.methods.generateJWT();

@@ -9,7 +9,6 @@ import Swipeout from 'react-native-swipeout';
 class ListsPage extends Component {
     constructor(props) {
         super(props);
-        console.log("props", props);
         this.state = {
             lists: [],
             error: '',
