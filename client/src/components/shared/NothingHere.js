@@ -20,7 +20,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         flexDirection: 'row',
     }
-
 });
 
-export { NothingHere }
+export { NothingHere };

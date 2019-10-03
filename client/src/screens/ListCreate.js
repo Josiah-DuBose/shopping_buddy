@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
-import { Input, Button, withTheme } from 'react-native-elements';
+import { View, StyleSheet } from 'react-native';
+import { Input, Button, withTheme, Text, Divider } from 'react-native-elements';
 import Entypo from 'react-native-vector-icons/Entypo';
 import apiRequest from '../services/apiRequest';
+import MapView from 'react-native-maps';
 
 class ListCreate extends Component {
     constructor(props) {
@@ -44,6 +45,7 @@ class ListCreate extends Component {
     render() {
         const { saving, list, theme } = this.state;
         return (
+            <React.Fragment>
             <View style={theme.container}>
                 <Input
                     placeholder={'Enter list name'}
@@ -89,8 +91,29 @@ class ListCreate extends Component {
                     onPress={() => this.saveList()}
                 />
             </View>
-        )
+            </React.Fragment>
+        );
     }
 }
 
+const styles = StyleSheet.create({
+    map: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0
+    },
+});
+
 export default withTheme(ListCreate);
+
+
+{/* <Divider style={{ backgroundColor: theme.colors.black }} />
+<Text style={theme.description}>Enter store name above to search for nearby locations.</Text>
+<View style={theme.mapContainer}>
+    <MapView
+        style={styles.map}
+        showsUserLocation={true}
+    />
+</View> */}

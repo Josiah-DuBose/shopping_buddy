@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Input, Text, Button, withTheme} from 'react-native-elements';
 import Entypo from 'react-native-vector-icons/Entypo';
-import AsyncStorage from '@react-native-community/async-storage';
 import userService from '../services/userService';
 
 class Login extends Component {
@@ -69,7 +68,6 @@ class Login extends Component {
             </View>
         );
     }
-
 }
 
 export default withTheme(Login);

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import Login from '../components/Login';
 import Registration from '../components/Registration';
 import { Button, Text, withTheme } from 'react-native-elements';
@@ -68,7 +68,7 @@ class AuthPage extends Component {
                 <View style={theme.container}>
                     <Text style={styles.description}>{title}</Text>
                     { this.pickForm() }
-                    <Text style={Object.assign({}, styles.description, styles.secondDes)}>{pageText}</Text>
+                    <Text style={Object.assign({}, theme.description, theme.secondDes)}>{pageText}</Text>
                     <Button buttonStyle={Object.assign({}, theme.basicButton, theme.centeredButton)}
                         title={buttonText}
                         rounded={true}
@@ -80,18 +80,5 @@ class AuthPage extends Component {
         );
     }
 }
-
-const styles = StyleSheet.create({
-    description: {
-        fontWeight: 'bold',
-        fontSize: 20,
-        textAlign: 'center',
-        color: '#656565'
-    },
-    secondDes: {
-        marginTop: 20,
-        paddingBottom: '5%'
-    },
-});
 
 export default withTheme(AuthPage);
