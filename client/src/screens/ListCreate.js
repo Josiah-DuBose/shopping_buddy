@@ -81,12 +81,12 @@ class ListCreate extends Component {
                     }
                     leftIcon={<Entypo name={'shopping-bag'} size={20} />}
                 />
-                <Button buttonStyle={theme.formButton}
+                <Button buttonStyle={Object.assign({}, theme.basicButton, theme.centeredButton)}
                     icon={{name: 'save', type: 'entypo'}}
                     title='Save List'
                     loadingRight={saving}
                     rounded={true}
-                    onPress={() => this.saveList(this.state.list)}
+                    onPress={() => this.saveList()}
                 />
             </View>
         )

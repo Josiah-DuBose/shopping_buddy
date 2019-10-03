@@ -42,7 +42,7 @@ exports.login = async function (user) {
     };
     const userSession = await apiRequest(options);
     if (userSession) {
-        return manageSession(userSession, token);
+        return manageSession(userSession, true);
     }
 }
 
