@@ -46,3 +46,19 @@ exports.login = async function (user) {
     }
 }
 
+exports.checkToken = async function(userToken) {
+    const options = {
+        url: 'users/check-token',
+        method: 'Post',
+        body: {
+            token: userToken
+        }
+    };
+    const response = await apiRequest(options);
+    if (response && response.token) {
+        return response.token;
+    } else {
+        return false;
+    }
+}
+

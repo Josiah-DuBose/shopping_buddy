@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { Input, Button, withTheme } from 'react-native-elements';
 import Entypo from 'react-native-vector-icons/Entypo';
 import apiRequest from '../services/apiRequest';

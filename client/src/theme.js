@@ -4,6 +4,11 @@ export default {
         'marginLeft': '2%',
         'marginTop': '2%'
     },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
     textHeader: {
         fontSize: 20,
         fontWeight: 'bold',

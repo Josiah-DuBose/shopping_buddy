@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { Loading } from '../components/shared';
 import AsyncStorage from '@react-native-community/async-storage';
-import apiRequest from '../services/apiRequest';
+import userService from '../services/userService';
+import { withTheme } from 'react-native-elements';
 
-export default class AuthLoadingScreen extends Component {
+class AuthLoadingScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading: false
+            loading: false,
+            theme: this.props.theme
         };
     }
 
@@ -16,38 +18,25 @@ export default class AuthLoadingScreen extends Component {
         this.fetchToken();
     }
 
-    fetchToken = async () => {
+    async fetchToken() {
         this.setState({loading: true});
         const userToken = await AsyncStorage.getItem('userToken');
         let authOk = false;
         if (userToken) {
-            const options = {
-                url: 'users/check-token',
-                method: 'Post',
-                body: {
-                    token: userToken
-                }
-            };
-            const response = await apiRequest(options);
-            authOk = response.token;
+            authOk = await userService.checkToken(userToken);
         }
         this.setState({loading: false});
         this.props.navigation.navigate(authOk ? 'Home' : 'Auth');
     };
 
     render() {
+        const { theme } = this.state;
         return (
-            <View style={styles.container}>
-                <Loading size={'large'} msg={'Loading app'}/>
+            <View style={theme.loadingContainer}>
+                <Loading size={'large'} msg={'Loading Shopping Buddy'}/>
             </View>
         );
     }
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
-    }
-});
+export default withTheme(AuthLoadingScreen);
