@@ -83,5 +83,9 @@
 		<string>Roboto-Thin.ttf</string>
 		<string>Roboto-ThinItalic.ttf</string>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+    <string>Shopping Buddy needs your location to show you places</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>Shopping Buddy needs your location to show you places</string>
 </dict>
 </plist>

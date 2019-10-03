@@ -4,6 +4,7 @@ import { Input, Button, withTheme, Text, Divider } from 'react-native-elements';
 import Entypo from 'react-native-vector-icons/Entypo';
 import apiRequest from '../services/apiRequest';
 import MapView from 'react-native-maps';
+import RNGooglePlaces from 'react-native-google-places';
 
 class ListCreate extends Component {
     constructor(props) {
