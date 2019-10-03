@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Login, Registration } from '../components';
+import Login from '../components/Login';
+import Registration from '../components/Registration';
 import { Button, Text, withTheme } from 'react-native-elements';
 
 class AuthPage extends Component {
@@ -49,9 +50,9 @@ class AuthPage extends Component {
     pickForm() {
         const nav = this.props.navigation;
         if(!this.state.showLogin){
-            return( <Registration navigation={nav} viewToggle={ () => this.viewToggle() }/> );
+            return( <Registration navigation={nav} viewToggle={ () => this.viewToggle() }></Registration> );
         } else {
-            return( <Login navigation={nav} viewToggle={ () => this.viewToggle() }/> );
+            return( <Login navigation={nav} viewToggle={ () => this.viewToggle() }></Login> );
         }
     }
 
@@ -68,7 +69,7 @@ class AuthPage extends Component {
                     <Text style={styles.description}>{title}</Text>
                     { this.pickForm() }
                     <Text style={Object.assign({}, styles.description, styles.secondDes)}>{pageText}</Text>
-                    <Button buttonStyle={theme.formButton}
+                    <Button buttonStyle={Object.assign({}, theme.basicButton, theme.centeredButton)}
                         title={buttonText}
                         rounded={true}
                         icon={buttonIcon}

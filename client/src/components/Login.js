@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import { Loading } from './shared';
 import { Input, Text, Button, withTheme} from 'react-native-elements';
 import Entypo from 'react-native-vector-icons/Entypo';
 import AsyncStorage from '@react-native-community/async-storage';
-import apiRequest from '../services/apiRequest';
+import userService from '../services/userService';
 
 class Login extends Component {
     constructor(props) {
@@ -24,24 +23,13 @@ class Login extends Component {
             this.setState({error: 'Must enter password and username'});
             return;
         }
-
         this.setState({error: '', loading: true});
-        const options = {
-            url: 'users/login',
-            method: 'POST',
-            body: {
-                username: this.state.username,
-                password: this.state.password
-            },
-        };
-        const userSession = await apiRequest(options);
-        if (userSession) {
-            await AsyncStorage.setItem('userToken', userSession.token);
-            await AsyncStorage.setItem('userID', userSession.id);
-            delete userSession.token;
-            delete userSession.id
-            await AsyncStorage.setItem('userSession', JSON.stringify(userSession));
-            this.setState({loading: false});
+        const success = await userService.login({
+            username: this.state.username,
+            password: this.state.password
+        });
+        this.setState({loading: false});
+        if (success) {
             this.props.navigation.navigate('Home');
         }
     }
@@ -49,7 +37,7 @@ class Login extends Component {
     render() {
         const { username, password, error, loading, theme } = this.state;
         return (
-            <View style={theme.container}>
+            <View>
                 <Input
                     leftIcon={<Entypo name={'user'} size={20} />}
                     leftIconContainerStyle={theme.leftInputIconContainerStyle}
@@ -70,15 +58,14 @@ class Login extends Component {
                 <Text style={theme.errorText}>
                     {error}
                 </Text>
-                { !loading ?
-                    <Button buttonStyle={theme.formButton}
-                        title='Login'
-                        rounded={true}
-                        icon={{name: 'login', type: 'entypo'}}
-                        onPress={() => this.submitForm()}
-                    /> :
-                    <Loading size={'large'} msg={'Logging in'}/>
-                }
+                <Button buttonStyle={Object.assign({}, theme.basicButton, theme.centeredButton)}
+                    title='Login'
+                    rounded={true}
+                    icon={{name: 'login', type: 'entypo'}}
+                    loading={loading}
+                    disabled={loading}
+                    onPress={() => this.submitForm()}
+                />
             </View>
         );
     }

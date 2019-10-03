@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Loading } from './shared';
-import { Input, Button, Text} from 'react-native-elements';
-import AsyncStorage from '@react-native-community/async-storage';
+import { View } from 'react-native';
+import { Input, Button, Text, withTheme} from 'react-native-elements';
+import userService from '../services/userService';
 import Entypo from 'react-native-vector-icons/Entypo';
 
 class Registration extends Component {
@@ -14,7 +13,8 @@ class Registration extends Component {
             password: '',
             password_confirmation: '',
             error: '',
-            loading: false
+            loading: false,
+            theme: this.props.theme
         };
         this.confirmPass = this.confirmPass.bind(this);
         this.submitForm = this.submitForm.bind(this);
@@ -28,29 +28,17 @@ class Registration extends Component {
             this.setState({error: 'Must fill in all fields.'});
             return;
         }
-
         this.setState({error: '', loading: true});
-
-        const options = {
-            url: 'users/create',
-            method: 'POST',
-            body: {
-                username: this.state.username,
-                email: this.state.email,
-                password: this.state.password
-            },
-        };
-
-        const userSession = await apiRequest(options);
-        if (userSession) {
-            await AsyncStorage.setItem('userToken', userSession.token);
-            await AsyncStorage.setItem('userID', userSession.id);
-            delete userSession.token;
-            delete userSession.id
-            await AsyncStorage.setItem('userSession', JSON.stringify(userSession));
+        const success = await userService.saveUser('create', {
+            username: this.state.username,
+            email: this.state.email,
+            password: this.state.password
+        });
+        this.setState({loading: false});
+        
+        if (success) {
             this.props.navigation.navigate('Home');
         }
-        this.setState({loading: false});
     }
 
     confirmPass(password) {
@@ -63,101 +51,59 @@ class Registration extends Component {
     }
 
     render() {
-        const {
-            username, email, password, password_confirmation, error, loading
-        } = this.state;
+        const { username, email, password, password_confirmation, error, loading, theme } = this.state;
         return (
-            <View style={styles.form}>
-                <View style={styles.section}>
-                    <Input
-                        leftIcon={<Entypo name={'user'} size={20} />}
-                        leftIconContainerStyle={styles.leftIconContainerStyle}
-                        inputContainerStyle={styles.inputContainerStyle}
-                        placeholder="Username"
-                        value={username}
-                        onChangeText={username => this.setState({ username })}
-                    />
-                </View>
-                <View style={styles.section}>
-                    <Input
-                        leftIcon={<Entypo name={'email'} size={20} />}
-                        leftIconContainerStyle={styles.leftIconContainerStyle}
-                        inputContainerStyle={styles.inputContainerStyle}
-                        placeholder="Email"
-                        value={email}
-                        onChangeText={email => this.setState({ email })}
-                    />
-                </View>
-                <View style={styles.section}>
-                    <Input
-                        leftIconContainerStyle={styles.leftIconContainerStyle}
-                        leftIcon={<Entypo name={'lock'} size={20} />}
-                        inputContainerStyle={styles.inputContainerStyle}
-                        secureTextEntry
-                        placeholder="Password"
-                        value={password}
-                        onChangeText={password => this.setState({ password })}
-                    />
-                </View>
-                <View style={styles.section}>
-                    <Input
-                        leftIconContainerStyle={styles.leftIconContainerStyle}
-                        leftIcon={<Entypo name={'lock'} size={20} />}
-                        inputContainerStyle={styles.inputContainerStyle}
-                        secureTextEntry
-                        placeholder="Confirm Password"
-                        value={password_confirmation}
-                        onChangeText={
-                            (password_confirmation) => this.confirmPass(password_confirmation)
-                        }
-                    />
-                </View>
-                <Text style={styles.errorText}>
+            <View>
+                <Input
+                    leftIcon={<Entypo name={'user'} size={20} />}
+                    leftIconContainerStyle={theme.leftInputIconContainerStyle}
+                    inputContainerStyle={theme.inputContainerStyle}
+                    placeholder="Username"
+                    value={username}
+                    onChangeText={username => this.setState({ username })}
+                />
+                <Input
+                    leftIcon={<Entypo name={'email'} size={20} />}
+                    leftIconContainerStyle={theme.leftInputIconContainerStyle}
+                    inputContainerStyle={theme.inputContainerStyle}
+                    placeholder="Email"
+                    value={email}
+                    onChangeText={email => this.setState({ email })}
+                />
+                <Input
+                    leftIcon={<Entypo name={'lock'} size={20} />}
+                    leftIconContainerStyle={theme.leftInputIconContainerStyle}
+                    inputContainerStyle={theme.inputContainerStyle}
+                    secureTextEntry
+                    placeholder="Password"
+                    value={password}
+                    onChangeText={password => this.setState({ password })}
+                />
+                <Input
+                    leftIcon={<Entypo name={'lock'} size={20} />}
+                    leftIconContainerStyle={theme.leftInputIconContainerStyle}
+                    inputContainerStyle={theme.inputContainerStyle}
+                    secureTextEntry
+                    placeholder="Confirm Password"
+                    value={password_confirmation}
+                    onChangeText={
+                        (password_confirmation) => this.confirmPass(password_confirmation)
+                    }
+                />
+                <Text style={theme.errorText}>
                     {error}
                 </Text>
-                { !loading ?
-                    <Button buttonStyle={styles.button}
-                        title='Register'
-                        rounded={true}
-                        icon={{name: 'add-user', type: 'entypo'}}
-                        onPress={() => this.submitForm()}
-                    /> :
-                    <Loading size={'large'} msg={'Creating user'}/>
-                }
+                <Button buttonStyle={Object.assign({}, theme.basicButton, theme.centeredButton)}
+                    title='Register'
+                    rounded={true}
+                    loading={loading}
+                    disabled={loading}
+                    icon={{name: 'add-user', type: 'entypo'}}
+                    onPress={() => this.submitForm()}
+                /> 
             </View>
         );
     }
 }
 
-const styles = StyleSheet.create({
-    form: {
-        width: '96%',
-        marginLeft: '2%',
-        marginTop: '1%'
-    },
-    section: {
-        flexDirection: 'row',
-    },
-    inputContainerStyle: {
-        borderWidth: 1,
-        borderColor: '#90a4ae',
-        maxWidth: '100%',
-        marginTop: '1%',
-        marginBottom: '1%'
-    },
-    leftIconContainerStyle: {
-        paddingRight: '10%'
-    },
-    errorText: {
-        alignSelf: 'center',
-        fontSize: 18,
-        color: 'red'
-    },
-    button: {
-        maxWidth: '50%',
-        backgroundColor: '#90a4ae',
-        marginLeft: '25%',
-    }
-});
-
-export { Registration }
+export default withTheme(Registration);

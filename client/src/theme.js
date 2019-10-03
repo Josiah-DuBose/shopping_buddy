@@ -24,11 +24,12 @@ export default {
     leftInputIconContainerStyle: {
         paddingRight: '10%'
     },
-    formButton: {
-        marginLeft: '25%',
-    },
     basicButton: {
         backgroundColor: '#90a4ae',
+    },
+    centeredButton: {
+        'maxWidth': '50%',
+        'marginLeft': '25%'
     },
     leftFormButton: {
         marginLeft: '24%',

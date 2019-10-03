@@ -14,14 +14,9 @@ exports.get = async (username) => {
         if (!user) {
             throw { message: 'User not found.', code: 404 };
         }
-
         return user.userJSON(true);
     } catch(err) {
-        throw(utils.createError(
-            err.code || 500,
-            'User retrieve error',
-            err.message || err)
-        );
+        throw(utils.createError(err.code || 500,'User retrieve error', err.message || err));
     }
 }
 

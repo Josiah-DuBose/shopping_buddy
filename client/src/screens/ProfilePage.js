@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Loading } from '../components/shared';
 import Entypo from 'react-native-vector-icons/Entypo';
-import userService from '../services/user';
+import userService from '../services/userService';
 
 class ProfilePage extends Component {
     constructor(props) {
@@ -34,7 +34,7 @@ class ProfilePage extends Component {
         this.setState({saving: true});
         const userId = await await AsyncStorage.getItem('userID');
         const { user } = this.state;
-        await userService.saveUser('update', userId, user);
+        await userService.saveUser('update', user, userId);
         this.setState({currentUsername: user.username});
         this.setState({saving: false});
     }

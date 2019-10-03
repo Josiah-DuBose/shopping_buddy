@@ -4,7 +4,7 @@ import config from '../config';
 const API_HOST = config.api.host;
 const API_BASE = config.api.baseUrl;
 
-const request = async function(options) {
+const request = async function(options, routeName) {
     try {
         const reqOptions = {
             method: options.method,
@@ -39,8 +39,8 @@ const request = async function(options) {
         }
     } catch(err) {
         alert(err.detail);
-        if (err.statusCode === 401 && this.props.navigation.state.routeName !== 'Auth') {
-            this.props.navigation.navigate('Auth');
+        if (err.statusCode === 401 && routeName && routeName !== 'Login') {
+            this.props.navigation.navigate('Login');
             alert('Session expired, please log in again.')
         }
     }
