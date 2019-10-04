@@ -142,7 +142,7 @@ class ItemPage extends Component {
                     }
                     leftIcon={<Entypo name={'calculator'} size={20} />}
                 />
-                <Button buttonStyle={theme.formButton}
+                <Button buttonStyle={Object.assign({}, theme.basicButton, theme.centeredButton)}
                     icon={{name: 'save', type: 'entypo'}}
                     title='Save Item'
                     loadingRight={saving}
@@ -152,7 +152,6 @@ class ItemPage extends Component {
             </View>
         )
     }
-
 }
 
 export default withTheme(ItemPage);

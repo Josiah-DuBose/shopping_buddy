@@ -13,7 +13,6 @@ export default {
         marginLeft: '2%',
         marginTop: '2%',
         display: 'flex',
-        flexFlow: 'column',
         height: 300,
     },
     loadingContainer: {
