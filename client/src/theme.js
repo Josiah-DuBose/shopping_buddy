@@ -1,12 +1,13 @@
 export default {
     colors: {
         lightGrey: '#90a4ae',
+        lightRed: '#e57373',
         black: '#212121'
     },
     container: {
         maxWidth: '96%',
+        maxHeight: '96%',
         marginLeft: '2%',
-        marginTop: '2%',
     },
     mapContainer: {
         maxWidth: '96%',
@@ -21,9 +22,8 @@ export default {
         alignItems: 'center'
     },
     textHeader: {
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: 'bold',
-        padding: '2%',
         textAlign: 'center'
     },
     description: {
@@ -37,8 +37,15 @@ export default {
         paddingBottom: '5%'
     },
     listContainer: {
-        borderBottomWidth: 1,
-        borderColor: '#90a4ae'
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.36,
+        shadowRadius: 6.68,
+        padding: 2,
+        elevation: 11,
     },
     inputContainerStyle: {
         borderWidth: 1,

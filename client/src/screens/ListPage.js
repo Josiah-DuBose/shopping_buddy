@@ -115,21 +115,22 @@ class ListPage extends Component {
     }
 
     renderItem(item, index) {
+        const { theme } = this.state;
         const swipeoutButtons = [
             {
                 text: 'Delete',
                 onPress: (() => this.removeItem(item)),
-                backgroundColor: '#f44336'
+                backgroundColor: theme.colors.lightRed
             },
             {
                 text: 'Edit',
                 onPress: (() => this.updateItem(item)),
-                backgroundColor: '#90a4ae'
+                backgroundColor: theme.colors.lightGrey
             }
         ];
         return  (
             <Swipeout autoClose={true} right={swipeoutButtons}>
-                <ListEntry item={item} index={index}
+                <ListEntry item={item} index={index} style={theme.listContainer}
                     onPress={() => this.itemPress(item)}
                 />
             </Swipeout>
@@ -174,14 +175,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     totalText: {
-        fontSize: 15,
+        fontSize: 17,
         fontWeight: 'bold',
     },
     totalLeft: {
 
     },
     totalRight: {
-        marginLeft: '25%'
+        marginLeft: '23%'
     }
 });
 

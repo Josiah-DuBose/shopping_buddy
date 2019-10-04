@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { ListItem, withTheme } from 'react-native-elements'
 import { Loading, NothingHere } from '../components/shared';
 import apiRequest from '../services/apiRequest';
@@ -50,26 +50,26 @@ class ListsPage extends Component {
             {
                 text: 'Delete',
                 onPress: (() => this.removeList(list)),
-                backgroundColor: '#f44336'
+                backgroundColor: theme.colors.lightRed
             },
             {
                 text: 'Edit',
                 onPress: (() => this.updateList(list)),
-                backgroundColor: '#90a4ae'
+                backgroundColor: theme.colors.lightGrey
             }
         ];
 
         return (
             <Swipeout key={index} autoClose={true} right={swipeoutButtons}>
                 <ListItem key={index}
-                    style={theme.listContainer}
+                    style={theme.listContainer} 
                     title={list.name}
                     subtitle={list.store}
                     badge={{
-                        value: ([].concat(...list.items.map(set => set.data))).length,
-                        textStyle: { color: 'black' },
+                        value: `Items: ${([].concat(...list.items.map(set => set.data))).length}`,
+                        textStyle: { color: theme.colors.black },
                         badgeStyle: {
-                            backgroundColor: '#90a4ae'
+                            backgroundColor: theme.colors.lightGrey
                         }
                     }}
                     chevron={true}
@@ -96,7 +96,5 @@ class ListsPage extends Component {
         );
     }
 }
-
-const styles = StyleSheet.create({});
 
 export default withTheme(ListsPage);

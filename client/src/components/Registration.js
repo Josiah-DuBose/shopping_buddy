@@ -106,4 +106,4 @@ class Registration extends Component {
     }
 }
 
-export default withTheme(Registration);
+export default (Registration);
