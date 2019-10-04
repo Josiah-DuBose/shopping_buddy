@@ -76,7 +76,6 @@ class ListsPage extends Component {
                     onPress={() => this.props.navigation.navigate('List', {listId: list.id, listName: list.name})}
                 />
             </Swipeout>
-               
         );
     }
 
