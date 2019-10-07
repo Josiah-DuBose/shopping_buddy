@@ -66,7 +66,7 @@ class AuthPage extends Component {
         return(
             <React.Fragment>
                 <View style={theme.container}>
-                    <Text style={styles.description}>{title}</Text>
+                    <Text style={theme.description}>{title}</Text>
                     { this.pickForm() }
                     <Text style={Object.assign({}, theme.description, theme.secondDes)}>{pageText}</Text>
                     <Button buttonStyle={Object.assign({}, theme.basicButton, theme.centeredButton)}

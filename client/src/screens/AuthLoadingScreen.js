@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, Image } from 'react-native';
 import { Loading } from '../components/shared';
 import AsyncStorage from '@react-native-community/async-storage';
 import userService from '../services/userService';
@@ -33,7 +33,11 @@ class AuthLoadingScreen extends Component {
         const { theme } = this.state;
         return (
             <View style={theme.loadingContainer}>
-                <Loading size={'large'} msg={'Loading Shopping Buddy'}/>
+                <Image 
+                    source={require('../../assets/images/ShoppingBuddy_Logo.png')} 
+                    style={{ width: 200, height: 200 }}>
+                </Image>
+                <Loading size={'large'}/>
             </View>
         );
     }

@@ -13,6 +13,7 @@ const routes = require('./routes');
 require('./models/user');
 require('./models/list');
 require('./models/item');
+require('./models/store');
 
 //Connect to DB;
 mongoose.connect(process.env.DB_URI, {useNewUrlParser: true});
