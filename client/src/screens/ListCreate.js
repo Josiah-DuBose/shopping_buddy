@@ -48,10 +48,22 @@ class ListCreate extends Component {
 
     async searchStore() {
         console.log("state", this.state);
+        this.setState({saving: true});
+        const store = this.state.list.store;
+        const latitude = this.state.position.latitude;
+        const longitude = this.state.position.longitude;
+        const searchOptions = {
+            url: `stores/find/${store}/${latitude}/${longitude}`,
+            method: 'GET',
+            auth: true
+        }
+
+        const response = await apiRequest(searchOptions);
+        console.log("response", response);
+        this.setState({saving: false});
     }
 
     async saveList() {
-        console.log("state", this.state)
         this.setState({saving: true});
         const create = this.state.create;
         const list = this.state.list;
@@ -73,7 +85,6 @@ class ListCreate extends Component {
 
     render() {
         const { saving, loading, list, theme, position } = this.state;
-        console.log("position", position);
         return (
             <React.Fragment>
                 { loading ? <Loading size={'large'} msg={'Loading list'} /> :
