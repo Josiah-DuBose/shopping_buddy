@@ -126,24 +126,24 @@ class ListCreate extends Component {
                             }
                             leftIcon={<Entypo name={'shopping-bag'} size={20} />}
                         />
-                        <View style={theme.multiButtonContainer}>
-                            <Button buttonStyle={Object.assign({}, theme.basicButton, theme.leftFormButton)}
-                                icon={{name: 'map', type: 'entypo'}}
-                                title='Search Stores'
-                                rounded={true}
-                                disabled={saving}
-                                loading={saving}
-                                onPress={this.searchStore}
-                            />
-                            <Button buttonStyle={Object.assign({}, theme.basicButton, theme.centeredButton)}
-                                icon={{name: 'save', type: 'entypo'}}
-                                title='Save List'
-                                loadingRight={saving}
-                                disabled={saving}
-                                rounded={true}
-                                onPress={() => this.saveList()}
-                            />
-                        </View>
+                    </View>
+                    <View style={theme.multiButtonContainer}>
+                        <Button buttonStyle={Object.assign({}, theme.basicButton, theme.leftFormButton)}
+                            icon={{name: 'map', type: 'entypo'}}
+                            title='Search Stores'
+                            rounded={true}
+                            disabled={saving}
+                            loading={saving}
+                            onPress={this.searchStore}
+                        />
+                        <Button buttonStyle={Object.assign({}, theme.basicButton, theme.centeredButton)}
+                            icon={{name: 'save', type: 'entypo'}}
+                            title='Save List'
+                            loadingRight={saving}
+                            disabled={saving}
+                            rounded={true}
+                            onPress={() => this.saveList()}
+                        />
                     </View>
                     <Divider style={{ 
                             backgroundColor: theme.colors.black,
