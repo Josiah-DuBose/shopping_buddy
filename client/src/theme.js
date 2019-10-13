@@ -65,10 +65,7 @@ export default {
         'marginLeft': '25%'
     },
     leftFormButton: {
-        marginLeft: '24%',
-    },
-    rightFormButton: {
-        marginLeft: '5%',
+        marginLeft: '9%',
     },
     multiButtonContainer: {
         flexDirection: 'row'

@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Input, Button, withTheme, Text, Divider } from 'react-native-elements';
-import { Loading } from '../components/shared';
+import { Loading, Maps } from '../components/shared';
 import Entypo from 'react-native-vector-icons/Entypo';
 import apiRequest from '../services/apiRequest';
-import MapView from 'react-native-maps';
 import * as _ from 'lodash';
 
 class ListCreate extends Component {
@@ -21,7 +20,8 @@ class ListCreate extends Component {
                 this.props.navigation.state.params.list : newList,
             create: !(this.props.navigation.state.params && this.props.navigation.state.params.list),
             theme: this.props.theme,
-            position: {}
+            position: {},
+            searchResults: []
         };
         this.saveList = this.saveList.bind(this);
         this.searchStore = this.searchStore.bind(this);
@@ -60,7 +60,7 @@ class ListCreate extends Component {
 
         const response = await apiRequest(searchOptions);
         console.log("response", response);
-        this.setState({saving: false});
+        this.setState({saving: false, searchResults: response});
     }
 
     async saveList() {
@@ -84,7 +84,7 @@ class ListCreate extends Component {
     }
 
     render() {
-        const { saving, loading, list, theme, position } = this.state;
+        const { saving, loading, list, theme, position, searchResults } = this.state;
         return (
             <React.Fragment>
                 { loading ? <Loading size={'large'} msg={'Loading list'} /> :
@@ -145,27 +145,9 @@ class ListCreate extends Component {
                             onPress={() => this.saveList()}
                         />
                     </View>
-                    <Divider style={{ 
-                            backgroundColor: theme.colors.black,
-                            marginTop: '2%'
-                        }} 
-                    />
+                    <Divider style={{backgroundColor: theme.colors.black, marginTop: '2%'}} />
                     <Text style={theme.description}>Enter store name above to search for nearby locations.</Text>
-                    <View style={theme.mapContainer}>
-                        {position.longitude && position.latitude ? 
-                            <MapView
-                                region={{
-                                    latitude: position.latitude,
-                                    longitude: position.longitude,
-                                    latitudeDelta: 0.0922,
-                                    longitudeDelta: 0.0421,
-                                }}
-                                style={theme.mapContainer}
-                                showsUserLocation={true}
-                            /> 
-                            : null
-                        }
-                    </View>
+                    <Maps position={position} searchResults={searchResults} theme={theme} />
                 </React.Fragment>
                 }
             </React.Fragment>
