@@ -1,9 +1,8 @@
 import React from 'react';
-import { Marker } from 'react-native-maps';
 import { View } from 'react-native';
 import MapView from 'react-native-maps';
 
-const Maps =({position, searchResults, theme, onClick}) => {
+const Maps =({position, searchResults, theme, onPress}) => {
     return ( 
         <View style={theme.mapContainer}>
             { position && position.longitude && position.latitude ? 
@@ -19,10 +18,11 @@ const Maps =({position, searchResults, theme, onClick}) => {
                 >
                 { searchResults ? 
                     searchResults.map((marker, index) => (
-                        <Marker key={index}
+                        <MapView.Marker key={index}
                             coordinate={marker.latlng}
                             title={marker.name}
                             description={marker.address}
+                            onPress={onPress}
                         />
                     )) : null
                 }

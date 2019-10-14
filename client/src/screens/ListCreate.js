@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { Input, Button, withTheme, Text, Divider } from 'react-native-elements';
 import { Loading, Maps } from '../components/shared';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -11,7 +11,8 @@ class ListCreate extends Component {
         super(props);
         const newList = {
             name: '',
-            store: '',
+            storeName: '',
+            storeLocation: {},
         };
         this.state = {
             saving: false,
@@ -21,10 +22,12 @@ class ListCreate extends Component {
             create: !(this.props.navigation.state.params && this.props.navigation.state.params.list),
             theme: this.props.theme,
             position: {},
-            searchResults: []
+            searchResults: [],
         };
+
         this.saveList = this.saveList.bind(this);
         this.searchStore = this.searchStore.bind(this);
+        this.markerPress = this.markerPress.bind(this);
     }
 
     componentDidMount(){
@@ -47,9 +50,8 @@ class ListCreate extends Component {
     }
 
     async searchStore() {
-        console.log("state", this.state);
         this.setState({saving: true});
-        const store = this.state.list.store;
+        const store = this.state.list.storeName;
         const latitude = this.state.position.latitude;
         const longitude = this.state.position.longitude;
         const searchOptions = {
@@ -59,7 +61,6 @@ class ListCreate extends Component {
         }
 
         const response = await apiRequest(searchOptions);
-        console.log("response", response);
         this.setState({saving: false, searchResults: response});
     }
 
@@ -74,13 +75,29 @@ class ListCreate extends Component {
             user: true,
             body: {
                 name: list.name,
-                store: list.store
+                store: {
+                    name: list.storeName,
+                    location: list.storeLocation
+                }
             }
         };
         
         await apiRequest(listOptions);
         this.setState({saving: false});
         this.props.navigation.push('Lists');
+    }
+
+    async markerPress(event) {
+        const coord = await event.nativeEvent.coordinate;
+        this.setState(state => {
+            return {
+                ...state,
+                list: {
+                    ...state.list,
+                   storeLocation: coord
+                }
+            };
+        });
     }
 
     render() {
@@ -97,29 +114,29 @@ class ListCreate extends Component {
                             inputContainerStyle={theme.inputContainerStyle}
                             onChangeText={name =>
                                 this.setState(state => {
-                                return {
-                                    ...state,
-                                    list: {
-                                        ...state.list,
-                                        name: name
-                                    }
-                                };
+                                    return {
+                                        ...state,
+                                        list: {
+                                            ...state.list,
+                                            name: name
+                                        }
+                                    };
                                 })
                             }
                             leftIcon={<Entypo name={'edit'} size={20} />}
                         />
                         <Input
                             placeholder={'Enter store name'}
-                            value={list.store}
+                            value={list.storeName}
                             leftIconContainerStyle={theme.leftInputIconContainerStyle}
                             inputContainerStyle={theme.inputContainerStyle}
-                            onChangeText={store =>
+                            onChangeText={name =>
                                 this.setState(state => {
                                 return {
                                     ...state,
                                     list: {
                                         ...state.list,
-                                        store: store
+                                        storeName: name
                                     }
                                 };
                                 })
@@ -133,7 +150,7 @@ class ListCreate extends Component {
                             title='Search Stores'
                             rounded={true}
                             disabled={saving}
-                            loading={saving}
+                            loadingRight={saving}
                             onPress={this.searchStore}
                         />
                         <Button buttonStyle={Object.assign({}, theme.basicButton, theme.centeredButton)}
@@ -147,22 +164,12 @@ class ListCreate extends Component {
                     </View>
                     <Divider style={{backgroundColor: theme.colors.black, marginTop: '2%'}} />
                     <Text style={theme.description}>Enter store name above to search for nearby locations.</Text>
-                    <Maps position={position} searchResults={searchResults} theme={theme} />
+                    <Maps position={position} searchResults={searchResults} theme={theme} onPress={this.markerPress.bind(this)}/>
                 </React.Fragment>
                 }
             </React.Fragment>
         );
     }
 }
-
-const styles = StyleSheet.create({
-    map: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0
-    },
-});
 
 export default withTheme(ListCreate);
