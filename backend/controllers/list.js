@@ -4,7 +4,7 @@ const utils = require('../helpers/util');
 exports.get = async (id) => {
     try {
         const List = mongoose.model('List');
-        const list = await List.findOne({_id: id}).populate('items');
+        const list = await List.findOne({_id: id}).populate('items').populate('store');
         return list.listJSON();
     } catch(err) {
         throw(utils.createError(500, 'List retrieve error', err));
@@ -14,7 +14,7 @@ exports.get = async (id) => {
 exports.list = async () => {
     try {
         const List = mongoose.model('List');
-        const lists = await List.find({}).populate('items');
+        const lists = await List.find({}).populate('items').populate('store');
         return lists.map(list => list.listJSON());
     } catch(err) {
         throw(utils.createError(500, 'Lists retrieve error', err));
@@ -24,7 +24,7 @@ exports.list = async () => {
 exports.byUser = async (userId) => {
     try {
         const List = mongoose.model('List');
-        const lists = await List.find({user: userId}).populate('items');
+        const lists = await List.find({user: userId}).populate('items').populate('store');
         if (lists.length) {
             return lists.map(list => list.listJSON());
         }
@@ -37,13 +37,20 @@ exports.byUser = async (userId) => {
 exports.create = async (req) => {
     try {
         const List = mongoose.model('List');
+        const Store = mongoose.model('Store');
+        const store = await Store.create({
+            name: req.body.store.name,
+            location: req.body.store.location,
+            user: req.body.user
+        });
+        console.log("store", store);
         const list = await List.create({
             total: 0.00,
             items: [],
             name: req.body.name,
-            store: req.body.store,
+            store: store._id,
             user: req.body.user
-        });
+        }).populate('store');
         return list.listJSON();
     } catch(err) {
         throw(utils.createError(500, 'List create error', err));
@@ -63,7 +70,7 @@ exports.updateOne = async (req, id) => {
                 new: true,
                 useFindAndModify: false
             }
-        ).populate('items');
+        ).populate('items').populate('store');
         return list.listJSON();
     } catch(err) {
         throw(utils.createError(500, 'Item update error', err));

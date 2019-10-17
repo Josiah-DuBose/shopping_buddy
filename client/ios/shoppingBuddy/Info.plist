@@ -82,8 +82,8 @@
 		<string>Roboto-ThinItalic.ttf</string>
 	</array>
 	<key>NSLocationAlwaysUsageDescription</key>
-    <string>Shopping Buddy would like to use your location</string>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>Shopping Buddy would like to use your location</string>
+	<string>Shopping Buddy would like to use your location</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Shopping Buddy would like to use your location</string>
 </dict>
 </plist>

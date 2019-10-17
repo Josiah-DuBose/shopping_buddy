@@ -20,9 +20,22 @@ const schema = new mongoose.Schema({
         ref: 'User'
     },
     store: {
-        type: String
+        type: Schema.Types.ObjectId,
+        ref: 'Store'
     }
 });
+
+// schema.pre('remove', async function(next) {
+//     const Item = mongoose.model('Item');
+//     const Store = mongoose.model('Store');
+//     try {
+//         await Store.deleteOne({_id: this.store});
+//         await Item.deleteMany({_id: {$in: this.items}}); 
+//         next();
+//     } catch(err) {
+//         console.error(`Error removing related docs: ${err}`);
+//     }
+// });
 
 schema.methods.listJSON = function() {
     return {

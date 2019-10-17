@@ -6,15 +6,17 @@ const schema = new mongoose.Schema({
         type: String
     },
     location: {
-        name: {type: String},
-        coordinates: [Number]
+        latitude: {
+            type: Number
+        },
+        longitude: {
+            Number
+        }
     },
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
 });
-
-schema.index({loc: '2dsphere'});
 
 mongoose.model('Store', schema);

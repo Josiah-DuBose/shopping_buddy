@@ -17,15 +17,15 @@ class ListCreate extends Component {
         this.state = {
             saving: false,
             loading: false,
-            list: this.props.navigation.state.params && this.props.navigation.state.params.list ?
-                this.props.navigation.state.params.list : newList,
-            create: !(this.props.navigation.state.params && this.props.navigation.state.params.list),
-            theme: this.props.theme,
+            list: _.get(this.props, 'navigation.state.params.list') || newList,
+            create: !_.get(this.props, 'navigation.state.params.list'),
+            theme: _.get(this.props, 'theme'),
             position: {},
             searchResults: [],
         };
 
         this.saveList = this.saveList.bind(this);
+        this.validList = this.validList.bind(this);
         this.searchStore = this.searchStore.bind(this);
         this.markerPress = this.markerPress.bind(this);
     }
@@ -64,10 +64,22 @@ class ListCreate extends Component {
         this.setState({saving: false, searchResults: response});
     }
 
+    validList() {
+        const { list } = this.state; 
+        return list.name && list.storeName && !_.isEmpty(list.storeLocation);
+    }
+
     async saveList() {
         this.setState({saving: true});
+        
+        if (!this.validList()) {
+            alert('fill in all fields and select a store');
+            this.setState({saving: false});
+            return 
+        };
+
         const create = this.state.create;
-        const list = this.state.list;
+        const { list } = this.state;
         const listOptions = {
             url: create ? `lists/create` : `lists/${list.id}`,
             method: create ? 'POST' : 'PUT',

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, Image } from 'react-native';
 import Login from '../components/Login';
 import Registration from '../components/Registration';
 import { Button, Text, withTheme } from 'react-native-elements';
@@ -12,7 +12,8 @@ class AuthPage extends Component {
             title: '',
             buttonText: '',
             pageText: '',
-            theme: this.props.theme
+            theme: this.props.theme,
+            navigation: this.props.navigation
         };
 
         this.viewToggle = this.viewToggle.bind(this);
@@ -48,11 +49,11 @@ class AuthPage extends Component {
     }
 
     pickForm() {
-        const nav = this.props.navigation;
+        const {navigation, theme} = this.state;
         if(!this.state.showLogin){
-            return( <Registration navigation={nav} viewToggle={ () => this.viewToggle() }></Registration> );
+            return( <Registration theme={theme} navigation={navigation} viewToggle={ () => this.viewToggle() }></Registration> );
         } else {
-            return( <Login navigation={nav} viewToggle={ () => this.viewToggle() }></Login> );
+            return( <Login theme={theme} navigation={navigation} viewToggle={ () => this.viewToggle() }></Login> );
         }
     }
 
@@ -66,7 +67,19 @@ class AuthPage extends Component {
         return(
             <React.Fragment>
                 <View style={theme.container}>
-                    <Text style={theme.description}>{title}</Text>
+                    <View style={{ justifyContent: 'center',}}>
+                        <Image 
+                            source={
+                                require('../../assets/images/ShoppingBuddy_Logo.png')
+                            } 
+                            style={{ 
+                                width: 400, 
+                                height: 200, 
+                                marginLeft: '3%',
+                                marginTop: '20%'
+                            }}>
+                        </Image>
+                    </View>
                     { this.pickForm() }
                     <Text style={Object.assign({}, theme.description, theme.secondDes)}>{pageText}</Text>
                     <Button buttonStyle={Object.assign({}, theme.basicButton, theme.centeredButton)}
