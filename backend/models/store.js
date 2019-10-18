@@ -10,7 +10,7 @@ const schema = new mongoose.Schema({
             type: Number
         },
         longitude: {
-            Number
+            type: Number
         }
     },
     user: {

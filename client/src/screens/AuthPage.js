@@ -63,7 +63,7 @@ class AuthPage extends Component {
     }
 
     render() {
-        const { title, buttonText, buttonIcon, pageText, theme } = this.state;
+        const { buttonText, buttonIcon, pageText, theme } = this.state;
         return(
             <React.Fragment>
                 <View style={theme.container}>
@@ -74,9 +74,10 @@ class AuthPage extends Component {
                             } 
                             style={{ 
                                 width: 400, 
-                                height: 200, 
+                                height: 400, 
                                 marginLeft: '3%',
-                                marginTop: '20%'
+                                marginTop: '20%',
+                                resizeMode: 'contain'
                             }}>
                         </Image>
                     </View>

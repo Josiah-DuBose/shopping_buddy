@@ -36,21 +36,25 @@ exports.byUser = async (userId) => {
 
 exports.create = async (req) => {
     try {
-        const List = mongoose.model('List');
+        // Create record for store.
         const Store = mongoose.model('Store');
         const store = await Store.create({
             name: req.body.store.name,
             location: req.body.store.location,
             user: req.body.user
         });
-        console.log("store", store);
+
+        // Create List
+        const List = mongoose.model('List');
         const list = await List.create({
             total: 0.00,
             items: [],
             name: req.body.name,
             store: store._id,
             user: req.body.user
-        }).populate('store');
+        });
+
+        list.populate('store');
         return list.listJSON();
     } catch(err) {
         throw(utils.createError(500, 'List create error', err));
@@ -61,15 +65,9 @@ exports.updateOne = async (req, id) => {
     try {
         const List = mongoose.model('List');
         const updateBody = req.body.newItem ? 
-            {
-                $push: { items: req.body.newItem }
-            } :
-            Object.assign({}, req.body);
-        let list = await List.findOneAndUpdate({_id: id}, updateBody,
-            {
-                new: true,
-                useFindAndModify: false
-            }
+            { $push: { items: req.body.newItem } } : Object.assign({}, req.body);
+        const list = await List.findOneAndUpdate({ _id: id }, updateBody,
+            { new: true, useFindAndModify: false }
         ).populate('items').populate('store');
         return list.listJSON();
     } catch(err) {
@@ -80,7 +78,7 @@ exports.updateOne = async (req, id) => {
 exports.deleteOne = async (id) => {
     try {
         const List = mongoose.model('List');
-        const resp = await List.remove({_id: id});
+        const resp = await List.deleteOne({_id: id});
         return resp;
     } catch(err) {
         throw(utils.createError(500, 'List delete error', err));

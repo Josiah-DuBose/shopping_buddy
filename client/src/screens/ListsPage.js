@@ -45,6 +45,7 @@ class ListsPage extends Component {
     }
 
     renderListItem(list, index) {
+        console.log("list", list);
         const { theme } = this.state;
         const swipeoutButtons = [
             {
@@ -64,7 +65,7 @@ class ListsPage extends Component {
                 <ListItem key={index}
                     style={theme.listContainer} 
                     title={list.name}
-                    subtitle={list.store}
+                    subtitle={list.store.name}
                     badge={{
                         value: `Items: ${([].concat(...list.items.map(set => set.data))).length}`,
                         textStyle: { color: theme.colors.black },

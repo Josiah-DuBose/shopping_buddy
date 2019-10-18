@@ -31,7 +31,7 @@ class AuthLoadingScreen extends Component {
             <View style={theme.loadingContainer}>
                 <Image 
                     source={require('../../assets/images/ShoppingBuddy_Logo.png')} 
-                    style={{ width: 200, height: 200 }}>
+                    style={{ width: 400, height: 400, resizeMode: 'contain' }}>
                 </Image>
             </View>
         );
