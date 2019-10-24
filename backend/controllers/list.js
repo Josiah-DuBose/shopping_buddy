@@ -64,7 +64,7 @@ exports.updateOne = async (req, id) => {
         console.log("store", request.store);
         if (_.get(request, 'store')) {
             let storeResp;
-            const storeFound = await storeController.findOne(request.store.place_id);
+            const storeFound = await storeController.get(request.store.place_id);
             if (storeFound) {
                 storeResp = await storeController.updateOne(request.store);
                 request.store = storeResp._id;

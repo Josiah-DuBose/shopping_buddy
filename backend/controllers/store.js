@@ -64,7 +64,7 @@ exports.updateOne = async (id, req) => {
     }
 }
 
-exports.findOne = async (id) => {
+exports.get = async (id) => {
     try {
         const Store = mongoose.model('Store');
         const store = await Store.findOne({place_id: id});
