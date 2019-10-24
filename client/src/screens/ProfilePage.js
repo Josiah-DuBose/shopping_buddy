@@ -32,11 +32,14 @@ class ProfilePage extends Component {
 
     async saveUser() {
         this.setState({saving: true});
-        const userId = await await AsyncStorage.getItem('userID');
+        const userId = await AsyncStorage.getItem('userID');
         const { user } = this.state;
-        await userService.saveUser('update', user, userId);
-        this.setState({currentUsername: user.username});
-        this.setState({saving: false});
+        try {   
+            await userService.saveUser('update', user, userId);
+            this.setState({currentUsername: user.username});
+        } catch (err) {alert(err)}
+        finally {this.setState({saving: false});}
+        
     }
 
     async logout() {

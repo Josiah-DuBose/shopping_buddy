@@ -10,8 +10,8 @@ const Maps =({position, searchResults, theme, onPress}) => {
                     region={{
                         latitude: position.latitude,
                         longitude: position.longitude,
-                        latitudeDelta: 0.0922,
-                        longitudeDelta: 0.0421,
+                        latitudeDelta: 0.009,
+                        longitudeDelta: 0.004,
                     }}
                     style={theme.mapContainer}
                     showsUserLocation={true}

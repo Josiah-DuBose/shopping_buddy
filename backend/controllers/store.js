@@ -18,7 +18,7 @@ const mapPlacesResponse = (places) => {
             place_id: place.place_id,
             price_level: place.price_level,
             address: place.vicinity,
-            opening_hours: place.opening_hours,
+            open_now: place.opening_hours.open_now,
             viewport: place.viewport,
             rating: place.rating,
             user_ratings_total: place.user_ratings_total
@@ -40,5 +40,36 @@ exports.findStores = async (req) => {
         }
     } catch(err) {
         throw(utils.createError(500, err.message || 'Store search error', err));
+    }
+}
+
+exports.create = async (req) => {
+    try {
+        const Store = mongoose.model('Store');
+        console.log("store", req);
+        const store = await Store.create({...req});
+        return store
+    } catch(err) {
+        throw(utils.createError(500, 'Store create error', err));
+    }
+}
+
+exports.updateOne = async (id, req) => {
+    try {
+        const Store = mongoose.model('Store');
+        const store = await Store.findOneAndUpdate({_id: id},{...req}, {new: true});
+        return store;
+    } catch(err) {
+        throw(utils.createError(500, 'Store create error', err));
+    }
+}
+
+exports.findOne = async (id) => {
+    try {
+        const Store = mongoose.model('Store');
+        const store = await Store.findOne({place_id: id});
+        return store;
+    } catch(err) {
+        throw(utils.createError(500, 'Store finOne error', err));
     }
 }

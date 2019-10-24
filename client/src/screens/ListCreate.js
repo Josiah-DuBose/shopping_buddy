@@ -10,20 +10,22 @@ class ListCreate extends Component {
     constructor(props) {
         super(props);
         const newList = {
-            name: '',
-            storeName: '',
-            storeLocation: {},
+            name: ''
+        };
+        const newStore = {
+            name: ''
         };
         this.state = {
             saving: false,
             loading: false,
             list: _.get(this.props, 'navigation.state.params.list') || newList,
+            store: _.get(this.props, 'navigation.state.params.list.store') || newStore,
             create: !_.get(this.props, 'navigation.state.params.list'),
             theme: _.get(this.props, 'theme'),
             position: {},
             searchResults: [],
         };
-
+        console.log("this.state.list", this.state);
         this.saveList = this.saveList.bind(this);
         this.validList = this.validList.bind(this);
         this.searchStore = this.searchStore.bind(this);
@@ -55,11 +57,11 @@ class ListCreate extends Component {
 
     async searchStore() {
         this.setState({saving: true});
-        const store = this.state.list.storeName;
+        const storeName = this.state.store.name;
         const latitude = this.state.position.latitude;
         const longitude = this.state.position.longitude;
         const searchOptions = {
-            url: `stores/find/${store}/${latitude}/${longitude}`,
+            url: `stores/find/${storeName}/${latitude}/${longitude}`,
             method: 'GET',
             auth: true
         }
@@ -69,21 +71,18 @@ class ListCreate extends Component {
     }
 
     validList() {
-        const { list } = this.state; 
-        return list.name && list.storeName && !_.isEmpty(list.storeLocation);
+        const { list, store } = this.state; 
+        return list.name && !_.isEmpty(store);
     }
 
     async saveList() {
-        this.setState({saving: true});
-        
         if (!this.validList()) {
             alert('fill in all fields and select a store');
-            this.setState({saving: false});
             return 
         };
 
-        const create = this.state.create;
-        const { list } = this.state;
+        this.setState({saving: true});
+        const { list, create, store } = this.state;
         const listOptions = {
             url: create ? `lists/create` : `lists/${list.id}`,
             method: create ? 'POST' : 'PUT',
@@ -92,32 +91,35 @@ class ListCreate extends Component {
             body: {
                 name: list.name,
                 store: {
-                    name: list.storeName,
-                    location: list.storeLocation
+                    ...store
                 }
             }
         };
-        
-        await apiRequest(listOptions);
-        this.setState({saving: false});
-        this.props.navigation.push('Lists');
+        console.log("options", listOptions);
+        try {
+            await apiRequest(listOptions);
+            this.setState({saving: false})
+            this.props.navigation.push('Lists');
+        } catch(err) { this.setState({saving: false}) }
     }
 
     async markerPress(event) {
+        const { searchResults } = this.state;
         const coord = await event.nativeEvent.coordinate;
+        const storeData = _.find(searchResults, (
+            store => store.latlng.latitude === coord.latitude && store.latlng.longitude === coord.longitude
+        ));
+
         this.setState(state => {
             return {
                 ...state,
-                list: {
-                    ...state.list,
-                   storeLocation: coord
-                }
+                store: storeData
             };
         });
     }
 
     render() {
-        const { saving, loading, list, theme, position, searchResults } = this.state;
+        const { saving, loading, list, theme, position, searchResults, store } = this.state;
         return (
             <React.Fragment>
                 { loading ? <Loading size={'large'} msg={'Loading list'} /> :
@@ -143,18 +145,18 @@ class ListCreate extends Component {
                         />
                         <Input
                             placeholder={'Enter store name'}
-                            value={list.storeName}
+                            value={store.name}
                             leftIconContainerStyle={theme.leftInputIconContainerStyle}
                             inputContainerStyle={theme.inputContainerStyle}
                             onChangeText={name =>
                                 this.setState(state => {
-                                return {
-                                    ...state,
-                                    list: {
-                                        ...state.list,
-                                        storeName: name
-                                    }
-                                };
+                                    return {
+                                        ...state,
+                                        store: {
+                                            ...state.store,
+                                            name: name
+                                        }
+                                    };
                                 })
                             }
                             leftIcon={<Entypo name={'shopping-bag'} size={20} />}

@@ -1,9 +1,9 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import apiRequest from './apiRequest';
 
-const manageSession = async (userSession, token) => {
+const manageSession = async (userSession, updateToken) => {
     try {
-        if (token) {
+        if (updateToken) {
             await AsyncStorage.setItem('userToken', userSession.token);
             delete userSession.token;
         }
@@ -18,16 +18,16 @@ const manageSession = async (userSession, token) => {
 }
 
 exports.saveUser = async function (type, body, id) {
-    const token = type === 'create';
+    const updateToken = type === 'create';
     const options = {
-        url: create ? `users/create` : `users/${id}`,
-        method: create ? 'POST' : 'PUT',
+        url: updateToken ? `users/create` : `users/${id}`,
+        method: updateToken ? 'POST' : 'PUT',
         body: body
     };
 
     const userSession = await apiRequest(options);
     if (userSession) {
-        return manageSession(userSession, token);
+        return manageSession(userSession, updateToken);
     }
 };
 

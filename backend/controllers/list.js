@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const utils = require('../helpers/util');
+const storeController = require('./store');
 
 exports.get = async (id) => {
     try {
@@ -37,12 +38,7 @@ exports.byUser = async (userId) => {
 exports.create = async (req) => {
     try {
         // Create record for store.
-        const Store = mongoose.model('Store');
-        const store = await Store.create({
-            name: req.body.store.name,
-            location: req.body.store.location,
-            user: req.body.user
-        });
+        const storeResp = await storeController.create(req.body.store);
 
         // Create List
         const List = mongoose.model('List');
@@ -50,7 +46,7 @@ exports.create = async (req) => {
             total: 0.00,
             items: [],
             name: req.body.name,
-            store: store._id,
+            store: storeResp._id,
             user: req.body.user
         });
 
@@ -63,9 +59,24 @@ exports.create = async (req) => {
 
 exports.updateOne = async (req, id) => {
     try {
+        const request = req.body;
+        // Update record for store if store data sent.
+        console.log("store", request.store);
+        if (_.get(request, 'store')) {
+            let storeResp;
+            const storeFound = await storeController.findOne(request.store.place_id);
+            if (storeFound) {
+                storeResp = await storeController.updateOne(request.store);
+                request.store = storeResp._id;
+            } else {
+                storeResp = await storeController.create(request.store);
+                request.store = storeResp._id;
+            }
+        }
+        
         const List = mongoose.model('List');
-        const updateBody = req.body.newItem ? 
-            { $push: { items: req.body.newItem } } : Object.assign({}, req.body);
+        const updateBody = request.newItem ? 
+            { $push: { items: req.body.newItem } } : {...req.body};
         const list = await List.findOneAndUpdate({ _id: id }, updateBody,
             { new: true, useFindAndModify: false }
         ).populate('items').populate('store');
