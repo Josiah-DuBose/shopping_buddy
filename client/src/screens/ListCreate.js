@@ -25,7 +25,6 @@ class ListCreate extends Component {
             position: {},
             searchResults: [],
         };
-        console.log("this.state.list", this.state);
         this.saveList = this.saveList.bind(this);
         this.validList = this.validList.bind(this);
         this.searchStore = this.searchStore.bind(this);
@@ -83,7 +82,6 @@ class ListCreate extends Component {
 
         this.setState({saving: true});
         const { list, create, store } = this.state;
-        console.log("create", create)
         const listOptions = {
             url: create ? `lists/create` : `lists/${list.id}`,
             method: create ? 'POST' : 'PUT',
@@ -96,7 +94,6 @@ class ListCreate extends Component {
                 }
             }
         };
-        console.log("options", listOptions);
         try {
             await apiRequest(listOptions);
             this.setState({saving: false})
