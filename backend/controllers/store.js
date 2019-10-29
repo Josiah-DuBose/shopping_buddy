@@ -11,17 +11,17 @@ const mapPlacesResponse = (places) => {
         {
             name: place.name,
             latlng: {
-                latitude: place.geometry.location.lat,
-                longitude: place.geometry.location.lng
+                latitude: _.get(place, 'geometry.location.lat') || 0,
+                longitude: _.get(place, 'geometry.location.lng') || 0
             },
-            icon: place.icon,
-            place_id: place.place_id,
-            price_level: place.price_level,
-            address: place.vicinity,
-            open_now: place.opening_hours.open_now,
-            viewport: place.viewport,
-            rating: place.rating,
-            user_ratings_total: place.user_ratings_total
+            icon: place.icon || '',
+            place_id: place.place_id || '',
+            price_level: place.price_level || '',
+            address: place.vicinity || '',
+            open_now: _.get(place, 'opening_hours.open_now') || false,
+            viewport: place.viewport || '',
+            rating: place.rating || 0,
+            user_ratings_total: place.user_ratings_total || 0
         }
     ));
 }
@@ -46,9 +46,8 @@ exports.findStores = async (req) => {
 exports.create = async (req) => {
     try {
         const Store = mongoose.model('Store');
-        console.log("store", req);
         const store = await Store.create({...req});
-        return store
+        return store; 
     } catch(err) {
         throw(utils.createError(500, 'Store create error', err));
     }

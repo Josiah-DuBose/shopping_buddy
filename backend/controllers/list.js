@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const utils = require('../helpers/util');
+const _ = require('lodash');
 const storeController = require('./store');
 
 exports.get = async (id) => {
@@ -57,11 +58,9 @@ exports.create = async (req) => {
     }
 }
 
-exports.updateOne = async (req, id) => {
+exports.updateOne = async (request, id) => {
     try {
-        const request = req.body;
         // Update record for store if store data sent.
-        console.log("store", request.store);
         if (_.get(request, 'store')) {
             let storeResp;
             const storeFound = await storeController.get(request.store.place_id);
@@ -76,7 +75,7 @@ exports.updateOne = async (req, id) => {
         
         const List = mongoose.model('List');
         const updateBody = request.newItem ? 
-            { $push: { items: req.body.newItem } } : {...req.body};
+            { $push: { items: request.newItem } } : {...request};
         const list = await List.findOneAndUpdate({ _id: id }, updateBody,
             { new: true, useFindAndModify: false }
         ).populate('items').populate('store');

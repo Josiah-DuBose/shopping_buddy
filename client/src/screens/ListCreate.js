@@ -83,6 +83,7 @@ class ListCreate extends Component {
 
         this.setState({saving: true});
         const { list, create, store } = this.state;
+        console.log("create", create)
         const listOptions = {
             url: create ? `lists/create` : `lists/${list.id}`,
             method: create ? 'POST' : 'PUT',
