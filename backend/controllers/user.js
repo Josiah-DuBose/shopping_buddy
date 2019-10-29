@@ -20,7 +20,7 @@ exports.get = async (username) => {
     }
 }
 
-exports.list = async (req) => {
+exports.list = async () => {
     try {
         const User = mongoose.model('User');
         const users = await User.find({}, {hash: 0, salt: 0, __v: 0});

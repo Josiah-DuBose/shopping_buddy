@@ -2,7 +2,7 @@ import React from 'react';
 import { View, ActivityIndicator, Text, StyleSheet } from 'react-native';
 
 const Loading = ({ size, msg }) => {
-    const loadingMsg = msg || 'Loading';
+    const loadingMsg = msg || '';
     return (
         <View style={styles.spinnerContainer}>
             <ActivityIndicator size={size}/>
@@ -16,8 +16,6 @@ const Loading = ({ size, msg }) => {
 const styles = StyleSheet.create({
     spinnerContainer: {
         flex: -1,
-        marginTop: 12,
-        marginBottom: 12
     },
     description: {
         textAlign: 'center',

@@ -64,7 +64,7 @@ class ListsPage extends Component {
                 <ListItem key={index}
                     style={theme.listContainer} 
                     title={list.name}
-                    subtitle={list.store}
+                    subtitle={list.storeName}
                     badge={{
                         value: `Items: ${([].concat(...list.items.map(set => set.data))).length}`,
                         textStyle: { color: theme.colors.black },

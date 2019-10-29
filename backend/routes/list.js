@@ -45,7 +45,7 @@ router.route('/:id').delete(isAuthenticated, async (req, res, next) => {
 
 router.route('/:id').put(isAuthenticated, async (req, res, next) => {
     try {
-        const response = await listController.updateOne(req, req.params['id']);
+        const response = await listController.updateOne(req.body, req.params['id']);
         res.json(response);
     } catch(err) {
         console.error(err);

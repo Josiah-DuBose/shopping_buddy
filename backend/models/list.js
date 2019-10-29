@@ -20,7 +20,22 @@ const schema = new mongoose.Schema({
         ref: 'User'
     },
     store: {
-        type: String
+        type: Schema.Types.ObjectId,
+        ref: 'Store'
+    }
+});
+
+schema.pre('deleteOne', async function(next) {
+    const Item = mongoose.model('Item');
+    const Store = mongoose.model('Store');
+    const List = mongoose.model('List');
+    try {
+        const list  = await List.findOne({_id: this._conditions._id});
+        await Store.deleteOne({_id: list.store});
+        await Item.deleteMany({_id: {$in: list.items}}); 
+        next();
+    } catch(err) {
+        console.error(`Error removing related docs: ${err}`);
     }
 });
 
@@ -29,7 +44,8 @@ schema.methods.listJSON = function() {
         items: schema.methods.formattedList(this.items),
         name: this.name,
         id: this.id,
-        store: this.store
+        storeName: this.store.name,
+        storeLocation: this.store.location
     }
 };
 

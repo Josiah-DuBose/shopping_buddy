@@ -2,6 +2,7 @@
     "name": "shopping-buddy-api",
     "main": "server.js",
     "dependencies": {
+        "@google/maps": "^1.0.1",
         "body-parser": "^1.19.0",
         "confidence": "^4.0.2",
         "cross-env": "^5.2.0",
@@ -15,7 +16,8 @@
         "nodemon": "^1.19.1",
         "passport": "^0.4.0",
         "passport-local": "^1.0.0",
-        "path": "^0.12.7"
+        "path": "^0.12.7",
+        "request": "^2.88.0"
     },
     "scripts": {
         "dev": "cross-env NODE_ENV=development nodemon server.js"
