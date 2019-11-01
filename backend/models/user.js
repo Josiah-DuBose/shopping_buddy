@@ -35,6 +35,10 @@ const schema = new mongoose.Schema({
     ],
     avatar: {
         type: String
+    },
+    admin: {
+        type: Boolean,
+        default: false
     }
 });
 

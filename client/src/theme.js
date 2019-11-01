@@ -5,9 +5,9 @@ export default {
         black: '#212121'
     },
     container: {
-        maxWidth: '96%',
-        maxHeight: '96%',
-        marginLeft: '2%',
+        // maxWidth: '96%',
+        // maxHeight: '96%',
+        // marginLeft: '2%'
     },
     mapContainer: {
         maxWidth: '96%',
@@ -37,15 +37,7 @@ export default {
         paddingBottom: '5%'
     },
     listContainer: {
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 5,
-        },
-        shadowOpacity: 0.36,
-        shadowRadius: 6.68,
-        padding: 2,
-        elevation: 11,
+      
     },
     inputContainerStyle: {
         borderWidth: 1,

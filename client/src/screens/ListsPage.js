@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import { ListItem, withTheme } from 'react-native-elements'
+import { ListItem, withTheme, Card } from 'react-native-elements'
 import { Loading, NothingHere } from '../components/shared';
 import apiRequest from '../services/apiRequest';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -60,9 +60,9 @@ class ListsPage extends Component {
         ];
 
         return (
-            <Swipeout key={index} autoClose={true} right={swipeoutButtons}>
+            <Swipeout style={{backgroundColor: 'white'}} key={index} autoClose={true} right={swipeoutButtons}>
                 <ListItem key={index}
-                    style={theme.listContainer} 
+                    style={theme.listContainer}
                     title={list.name}
                     subtitle={list.storeName}
                     badge={{
